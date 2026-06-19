@@ -1,28 +1,27 @@
 "use client";
 
-import type { EventName, EventProperties } from "@/lib/analytics";
+import type { EventProperties } from "@/lib/analytics";
 
-// Client-side analytics hook.
-// Fires a POST to /api/track, which calls trackEvent server-side.
-// To swap to PostHog: replace the fetch with posthog.capture — call sites unchanged.
+// Client-side hook for recommendation_clicked only.
+// All other events fire server-side via trackEvent() in src/services/analytics.ts.
+// To swap to PostHog: replace the fetch call — call sites unchanged.
 export function useAnalytics() {
-  function track<T extends EventName>(
-    name: T,
-    properties: EventProperties<T>,
+  function trackRecommendationClicked(
+    properties: EventProperties<"recommendation_clicked">,
     sessionId?: string
   ) {
     if (process.env.NODE_ENV === "development") {
-      console.debug("[analytics]", name, properties);
+      console.debug("[analytics] recommendation_clicked", properties);
     }
 
-    fetch("/api/track", {
+    fetch("/api/track/recommendation-clicked", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, properties, sessionId }),
+      body: JSON.stringify({ properties, sessionId }),
     }).catch(() => {
       // fire-and-forget — analytics must never break the UI
     });
   }
 
-  return { track };
+  return { trackRecommendationClicked };
 }
