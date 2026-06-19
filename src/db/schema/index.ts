@@ -1,3 +1,6 @@
-// Re-export all schema tables here.
-// Day 2+: add new table files to this barrel — client.ts picks them up automatically.
-export * from "./stays";
+export * from "./destinations";
+export * from "./properties";
+export * from "./sessions";
+export * from "./recommendationRequests";
+export * from "./recommendationResults";
+export * from "./events";
