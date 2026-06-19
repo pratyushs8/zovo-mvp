@@ -43,5 +43,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# drizzle — commit migration files only after reviewing them
-/drizzle
+# drizzle — migration snapshots are generated, not hand-edited; commit SQL files after review
+/drizzle/meta/*.snapshot.json
