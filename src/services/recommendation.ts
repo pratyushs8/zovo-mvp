@@ -1,8 +1,12 @@
-import type { TravelerPersona, TripVibe } from "@/types";
+import type { PersonaKey, StayPriority, SocialEnergy, RoomType, BudgetLevel } from "@/types";
 
 export interface RecommendationRequest {
-  persona: TravelerPersona;
-  vibe: TripVibe;
+  sessionId: string;
+  personaKey: PersonaKey;
+  priority: StayPriority;
+  socialEnergy: SocialEnergy;
+  roomType: RoomType;
+  budget?: BudgetLevel;
 }
 
 export interface StayResult {
@@ -12,9 +16,7 @@ export interface StayResult {
   bookingUrl: string;
 }
 
-// Day 2+: implement ranking logic here using OpenAI + db query.
-// Keeping this as a plain async function so it's easy to call from the API
-// route and straightforward to unit-test.
+// Day 3+: implement scoring and ranking logic here.
 export async function recommendStays(_req: RecommendationRequest): Promise<StayResult[]> {
   throw new Error("recommendStays: not yet implemented");
 }
