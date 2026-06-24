@@ -1,3 +1,14 @@
+// ─── Archetype ────────────────────────────────────────────────────────────────
+
+export type Archetype =
+  | "mountain_adventure_hub"
+  | "remote_mountain_quiet"
+  | "cultural_hill_town"
+  | "beach_social"
+  | "heritage_cultural_city"
+  | "urban_metro"
+  | "nature_retreat";
+
 // ─── Persona ──────────────────────────────────────────────────────────────────
 
 export type PersonaKey =
@@ -39,3 +50,19 @@ export type SocialEnergy = "very_social" | "balanced" | "mostly_private";
 export type RoomType = "dorm" | "private" | "flexible";
 
 export type BudgetLevel = "lowest" | "moderate" | "flexible";
+
+// ─── Property seed ────────────────────────────────────────────────────────────
+
+// Canonical shape for a property entry in src/config/properties.ts.
+// This is the import format — the seed maps it to DB rows.
+export interface PropertySeed {
+  name: string;
+  destinationSlug: string;
+  location: string;
+  priceInr: number;
+  archetype: Archetype;
+  scoring: ScoringVector;
+  tags: string[];
+  summary: string;
+  bookingUrl: string;
+}
