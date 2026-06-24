@@ -18,13 +18,15 @@ import {
   TOP_N_DIMENSIONS,
   MISS_GAP_THRESHOLD,
   MAX_RESULTS,
+  STRENGTH_STRONG_MAX_GAP,
+  STRENGTH_MODERATE_MAX_GAP,
 } from "@/config/ranking";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 export function classifyStrength(gap: number): MatchStrength {
-  if (gap <= 0.2) return "strong";
-  if (gap <= 0.4) return "moderate";
+  if (gap <= STRENGTH_STRONG_MAX_GAP)   return "strong";
+  if (gap <= STRENGTH_MODERATE_MAX_GAP) return "moderate";
   return "weak";
 }
 

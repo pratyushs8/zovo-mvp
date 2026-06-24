@@ -96,7 +96,7 @@ const socialEnergy: OverrideQuestion<SocialEnergy> = {
   options: [
     { value: "very_social",    label: "Very social — I'm here to meet people", scoringOverride: { social: 1.0, calm: 0.0 } },
     { value: "balanced",       label: "Balanced — open to it, not seeking it", scoringOverride: { social: 0.5, calm: 0.5 } },
-    { value: "mostly_private", label: "Mostly private — I need my own space",  scoringOverride: { social: 0.1, calm: 0.9 } },
+    { value: "mostly_private", label: "Mostly private — I need my own space",  scoringOverride: { social: 0.1 } },
   ],
 };
 

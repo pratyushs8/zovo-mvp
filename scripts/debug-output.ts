@@ -18,6 +18,17 @@
 import type { RankingPayload, RankedProperty } from "@/types/ranking";
 import type { ScoringVector, PersonaKey, StayPriority, SocialEnergy, RoomType, BudgetLevel } from "@/types";
 import type { TestScenario } from "./scenarios";
+import {
+  WORKATION_PROP_STRICT,
+  DIAG_SPREAD_FLAT_THRESHOLD,
+  DIAG_FILTER_AGGRESSIVE_FRACTION,
+  DIAG_METADATA_SUSPECT_USER_VALUE,
+  DIAG_METADATA_SUSPECT_GAP,
+  DIAG_THIN_POOL_THRESHOLD,
+  DIAG_LOW_SCORE_CEILING,
+  DIAG_HOMOGENEOUS_SCORE_CAP,
+  DIAG_HOMOGENEOUS_MIN_POOL,
+} from "@/config/ranking";
 
 // ─── Schema ───────────────────────────────────────────────────────────────────
 
@@ -250,16 +261,7 @@ function toDebugResult(ranked: RankedProperty): DebugResult {
   };
 }
 
-// ─── Diagnostic thresholds ────────────────────────────────────────────────────
-// Centralised so they're easy to adjust during Day 6 validation.
-
-const SPREAD_FLAT_THRESHOLD        = 0.04;  // top results span < 4 pts — ranking is fragile
-const FILTER_AGGRESSIVE_FRACTION   = 0.40;  // > 40% removed AND not high confidence
-const METADATA_SUSPECT_USER_VALUE  = 0.60;  // user must care about a dim to flag it
-const METADATA_SUSPECT_GAP         = 0.40;  // gap must be at least "moderate+weak" to flag
-const THIN_POOL_THRESHOLD          = 10;    // fewer than 10 survivors = coverage problem
-const LOW_SCORE_CEILING            = 0.65;  // top score < 0.65 with a full pool = no good match
-const HOMOGENEOUS_SCORE_CAP        = 0.72;  // homogeneous is only a concern if top score < this
+// Diagnostic thresholds are imported from src/config/ranking.ts — edit there.
 
 function computeDiagnostics(payload: RankingPayload): DebugDiagnostics {
   const results = payload.results;
@@ -271,8 +273,8 @@ function computeDiagnostics(payload: RankingPayload): DebugDiagnostics {
     ? r3(Math.min(...scores.slice(1).map((s, i) => scores[i] - s)))
     : 0;
   // Suppress flat-spread signal on thin pools — compressed spread is expected there.
-  const thinPool = payload.poolSize < THIN_POOL_THRESHOLD;
-  const spreadFlat = !thinPool && scores.length >= 3 && scoreSpread < SPREAD_FLAT_THRESHOLD;
+  const thinPool = payload.poolSize < DIAG_THIN_POOL_THRESHOLD;
+  const spreadFlat = !thinPool && scores.length >= 3 && scoreSpread < DIAG_SPREAD_FLAT_THRESHOLD;
 
   const weightLogic: WeightLogicDiagnostic = {
     scoreSpread,
@@ -288,7 +290,7 @@ function computeDiagnostics(payload: RankingPayload): DebugDiagnostics {
   const filteredFraction = totalInPool > 0 ? r3(payload.hardFilteredCount / totalInPool) : 0;
   const relaxedModeUsed  = payload.rankingExplanation.relaxedModeUsed;
   const tooAggressive    = payload.rankingExplanation.hardFilterTriggered
-    && filteredFraction > FILTER_AGGRESSIVE_FRACTION
+    && filteredFraction > DIAG_FILTER_AGGRESSIVE_FRACTION
     && payload.confidence !== "high";
 
   const hardFilter: HardFilterDiagnostic = {
@@ -302,7 +304,7 @@ function computeDiagnostics(payload: RankingPayload): DebugDiagnostics {
       : relaxedModeUsed
       ? "Strict filter found no survivors — relaxed threshold was used. Check workation tagging for destination properties; they may be under-tagged."
       : tooAggressive
-      ? `Filter removed ${(filteredFraction * 100).toFixed(0)}% of pool with only ${payload.confidence} confidence. Consider whether WORKATION_PROP_STRICT (${0.2}) is too high for this destination.`
+      ? `Filter removed ${(filteredFraction * 100).toFixed(0)}% of pool with only ${payload.confidence} confidence. Consider whether WORKATION_PROP_STRICT (${WORKATION_PROP_STRICT}) is too high for this destination.`
       : `Filter removed ${(filteredFraction * 100).toFixed(0)}% of pool — within expected range.`,
   };
 
@@ -314,7 +316,7 @@ function computeDiagnostics(payload: RankingPayload): DebugDiagnostics {
   const suspects: MetadataSuspect[] = [];
   for (const r of results.slice(0, 3)) {
     for (const [dim, bd] of Object.entries(r.breakdown)) {
-      if (bd.userValue >= METADATA_SUSPECT_USER_VALUE && bd.gap >= METADATA_SUSPECT_GAP) {
+      if (bd.userValue >= DIAG_METADATA_SUSPECT_USER_VALUE && bd.gap >= DIAG_METADATA_SUSPECT_GAP) {
         suspects.push({
           resultRank:    r.rank,
           propertyName:  r.property.name,
@@ -336,11 +338,11 @@ function computeDiagnostics(payload: RankingPayload): DebugDiagnostics {
   };
 
   // ── Coverage ──────────────────────────────────────────────────────────────
-  const lowScoreCeiling = payload.topScore < LOW_SCORE_CEILING && !thinPool && !relaxedModeUsed;
+  const lowScoreCeiling = payload.topScore < DIAG_LOW_SCORE_CEILING && !thinPool && !relaxedModeUsed;
   const archetypes = [...new Set(results.map((r) => r.property.archetype as string))];
   const homogeneous = archetypes.length === 1
-    && payload.topScore < HOMOGENEOUS_SCORE_CAP
-    && payload.poolSize >= 5;
+    && payload.topScore < DIAG_HOMOGENEOUS_SCORE_CAP
+    && payload.poolSize >= DIAG_HOMOGENEOUS_MIN_POOL;
 
   const coverage: CoverageDiagnostic = {
     poolSize: payload.poolSize,

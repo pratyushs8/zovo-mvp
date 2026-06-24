@@ -19,7 +19,10 @@
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "tsx src/db/seed.ts",
     "validate:properties": "tsx src/scripts/validate-properties.ts",
-    "validate:scenarios": "tsx --tsconfig tsconfig.json scripts/validate-scenarios.ts"
+    "validate:scenarios": "tsx --tsconfig tsconfig.json scripts/validate-scenarios.ts",
+    "audit:properties": "tsx --tsconfig tsconfig.json scripts/audit-properties.ts",
+    "patch:check": "tsx --tsconfig tsconfig.json scripts/patch-check.ts",
+    "review:metadata": "npm run audit:properties --silent; npm run validate:properties --silent && npm run patch:check --silent && npm run validate:scenarios -- --summary-only"
   },
   "dependencies": {
     "@types/pg": "^8.20.0",

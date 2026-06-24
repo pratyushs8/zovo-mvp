@@ -75,10 +75,12 @@ describe("buildUserVector — Q3 social energy override", () => {
     expect(vector.calm).toBe(0.0);
   });
 
-  test("mostly_private sets social:0.1 and calm:0.9", () => {
+  test("mostly_private sets social:0.1 (calm left to Q2/persona)", () => {
+    // Q3 only overrides social — calm is the responsibility of Q2 (priority) or
+    // the persona baseline. This keeps Q2 calm_quiet effective for quiet users
+    // while preventing mostly_private from force-overriding a budget user's calm.
     const vector = buildUserVector(req({ socialEnergy: "mostly_private" }));
     expect(vector.social).toBe(0.1);
-    expect(vector.calm).toBe(0.9);
   });
 
   // Q3 writes social/calm AFTER Q2 — it wins on those dimensions.

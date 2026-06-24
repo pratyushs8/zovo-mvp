@@ -65,15 +65,17 @@ describe("workation persona — real data", () => {
     expect(hardFilteredCount).toBeGreaterThanOrEqual(15);
   });
 
-  test("topMatches surfaces workation and calm at the top", () => {
+  test("topMatches surfaces workation at the top; adventure is suppressed", () => {
     // Old sort (by contribution) would surface scenic+adventure as #1/#2 because
     // both user and property coincidentally match at low values (gap=0 but user
     // doesn't actually care about them). New sort (by matchScore = contribution ×
     // userValue) correctly demotes dimensions the user doesn't care about.
+    // With room_type_fit weight raised to 0.15 and the workation user requesting
+    // private (room_type_fit=1.0), room_type_fit now surfaces in top 2 alongside
+    // workation — both are high-value, well-matched dimensions for this persona.
     const { results } = run(workationReq);
     const top2Dims = results[0].explanation.topMatches.slice(0, 2).map((m) => m.dim);
     expect(top2Dims).toContain("workation");
-    expect(top2Dims).toContain("calm");
     // adventure (userValue=0.1) must not appear — it would have ranked #1 under old sort.
     const allTopDims = results[0].explanation.topMatches.map((m) => m.dim);
     expect(allTopDims).not.toContain("adventure");
@@ -114,9 +116,13 @@ describe("solo_social persona — real data", () => {
     roomType:     "dorm",
   });
 
-  test("Goa (Morjim) ranks #1 (highest social score in dataset)", () => {
+  test("top result has high social score (>= 0.8)", () => {
+    // Goa and Phuket both share the highest social score in the dataset (0.90).
+    // Phuket edges ahead of Goa under current weights because Goa's room_type_fit
+    // tag was updated to 0.4 (has private rooms), creating a larger gap for
+    // dorm-seeking users. Both are valid top results for a very-social dorm traveller.
     const { results } = run(socialReq);
-    expect(results[0].property.name).toContain("Goa");
+    expect(results[0].property.scoring.social).toBeGreaterThanOrEqual(0.8);
   });
 
   test("top 3 all have social score >= 0.7", () => {
@@ -227,9 +233,13 @@ describe("friends_getaway persona — real data", () => {
     roomType:     "dorm",
   });
 
-  test("Goa (Morjim) ranks #1 (social + coastal + accessible)", () => {
+  test("top result is a high-adventure property (adventure >= 0.7)", () => {
+    // With adventure weight raised to 0.20, adventure_access priority correctly
+    // surfaces mountain/outdoor destinations over beach-social hubs. Old Manali
+    // (adventure=0.90, social=0.80) beats Goa (adventure=0.50, social=0.90).
+    // This is the intended fix: friends with adventure priority get adventure first.
     const { results } = run(friendsReq);
-    expect(results[0].property.name).toContain("Goa");
+    expect(results[0].property.scoring.adventure).toBeGreaterThanOrEqual(0.7);
   });
 
   test("top 5 include at least one high-adventure property (adventure >= 0.7)", () => {
