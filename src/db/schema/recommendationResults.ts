@@ -1,4 +1,5 @@
-import { pgTable, serial, integer, smallint, timestamp, index } from "drizzle-orm/pg-core";
+import { pgTable, serial, integer, smallint, jsonb, timestamp, index } from "drizzle-orm/pg-core";
+import type { ScoringVector } from "@/types";
 import { recommendationRequests } from "./recommendationRequests";
 import { properties } from "./properties";
 
@@ -13,6 +14,11 @@ export const recommendationResults = pgTable(
       .notNull()
       .references(() => properties.id),
     rank: smallint("rank").notNull(),
+    // Snapshot of the property's ScoringVector at ranking time.
+    // The property's scoring column is mutable (reseeds overwrite it);
+    // this preserves the exact vector that produced the rank for post-hoc analysis.
+    // Nullable: Day 5 recommendStays() MUST populate this on every insert.
+    scoreSnapshot: jsonb("score_snapshot").$type<ScoringVector>(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (t) => [
