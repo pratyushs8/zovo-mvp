@@ -143,6 +143,28 @@ Before finalising a property's scores, run these sanity checks:
 
 ---
 
+## Archetype exceptions
+
+Some cross-dimension consistency rules do not apply uniformly across all archetypes. Known exceptions:
+
+### `urban_metro` — workation and calm are decoupled
+
+The rule `workation ≥ 0.8 → calm ≥ 0.6` assumes that working well requires a quiet environment. This holds for hill town and nature retreat properties. It does not hold for urban metros.
+
+Delhi, Bangalore, Hyderabad, Mumbai, and Kolkata have strong workation infrastructure (reliable broadband, coworking spaces, stable power) but are genuinely noisy urban environments (`calm: 0.2–0.3`). A remote worker choosing a metro base has already accepted the noise tradeoff — they are there for connectivity and city access, not quiet.
+
+**For `urban_metro` archetype properties only:** `workation` and `calm` may be independently high and low. Do not flag this as a consistency violation.
+
+| Property | workation | calm | Why the gap is correct |
+|---|---|---|---|
+| Zostel Delhi | 0.8 | 0.2 | Metro connectivity; constant urban noise |
+| Zostel Bangalore (Koramangala) | 0.9 | 0.2 | Best wifi in network; Koramangala is a busy commercial strip |
+| Zostel Hyderabad | 0.8 | 0.3 | HITEC City infrastructure; city ambient noise |
+
+All other archetypes: the rule stands. A hill town with `workation: 0.8` should have `calm ≥ 0.6`.
+
+---
+
 ## Tag vocabulary vs. scoring dimensions
 
 Tags and scoring dimensions are related but not the same thing. This table maps between them.

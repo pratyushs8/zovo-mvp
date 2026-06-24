@@ -39,7 +39,7 @@
       "scenic": 0.9,
       "workation": 0.2,
       "adventure": 0.8,
-      "budget_fit": 0.3,
+      "budget_fit": 0.5,
       "room_type_fit": 0.2
     },
     "tags": [
@@ -173,7 +173,7 @@
       "scenic": 0.8,
       "workation": 0.4,
       "adventure": 0.7,
-      "budget_fit": 0.3,
+      "budget_fit": 0.5,
       "room_type_fit": 0.4
     },
     "tags": [
@@ -283,7 +283,7 @@
       "scenic": 1,
       "workation": 0.1,
       "adventure": 0.5,
-      "budget_fit": 0.3,
+      "budget_fit": 0.5,
       "room_type_fit": 0.6
     },
     "tags": [
@@ -337,7 +337,7 @@
       "scenic": 1,
       "workation": 0.1,
       "adventure": 0.3,
-      "budget_fit": 0.3,
+      "budget_fit": 0.5,
       "room_type_fit": 0.6
     },
     "tags": [
@@ -364,7 +364,7 @@
       "scenic": 1,
       "workation": 0.2,
       "adventure": 0.7,
-      "budget_fit": 0.6,
+      "budget_fit": 0.7,
       "room_type_fit": 0.5
     },
     "tags": [
@@ -392,7 +392,7 @@
       "scenic": 1,
       "workation": 0.2,
       "adventure": 0.8,
-      "budget_fit": 0.6,
+      "budget_fit": 0.7,
       "room_type_fit": 0.4
     },
     "tags": [
@@ -419,7 +419,7 @@
       "scenic": 1,
       "workation": 0.2,
       "adventure": 0.3,
-      "budget_fit": 0.6,
+      "budget_fit": 0.7,
       "room_type_fit": 0.6
     },
     "tags": [
@@ -501,7 +501,7 @@
       "scenic": 0.7,
       "workation": 0.5,
       "adventure": 0.3,
-      "budget_fit": 0.3,
+      "budget_fit": 0.5,
       "room_type_fit": 0.5
     },
     "tags": [
@@ -528,7 +528,7 @@
       "scenic": 0.8,
       "workation": 0.4,
       "adventure": 0.3,
-      "budget_fit": 0.6,
+      "budget_fit": 0.7,
       "room_type_fit": 0.6
     },
     "tags": [
@@ -609,7 +609,7 @@
       "scenic": 0.9,
       "workation": 0.4,
       "adventure": 0.3,
-      "budget_fit": 0.3,
+      "budget_fit": 0.5,
       "room_type_fit": 0.6
     },
     "tags": [
@@ -636,7 +636,7 @@
       "scenic": 0.9,
       "workation": 0.1,
       "adventure": 0.5,
-      "budget_fit": 0.3,
+      "budget_fit": 0.5,
       "room_type_fit": 0.1
     },
     "tags": [
@@ -744,7 +744,7 @@
       "scenic": 0.9,
       "workation": 0.3,
       "adventure": 0.7,
-      "budget_fit": 0.1,
+      "budget_fit": 0.2,
       "room_type_fit": 0.5
     },
     "tags": [
@@ -1038,7 +1038,7 @@
       "scenic": 0.1,
       "workation": 0.9,
       "adventure": 0.1,
-      "budget_fit": 0.6,
+      "budget_fit": 0.7,
       "room_type_fit": 0.4
     },
     "tags": [
@@ -1256,7 +1256,7 @@
       "scenic": 0.8,
       "workation": 0.4,
       "adventure": 0.2,
-      "budget_fit": 0.6,
+      "budget_fit": 0.7,
       "room_type_fit": 0.6
     },
     "tags": [
@@ -1283,7 +1283,7 @@
       "scenic": 0.8,
       "workation": 0.3,
       "adventure": 0.8,
-      "budget_fit": 0.6,
+      "budget_fit": 0.7,
       "room_type_fit": 0.3
     },
     "tags": [
@@ -1338,7 +1338,7 @@
       "scenic": 0.8,
       "workation": 0.3,
       "adventure": 0.4,
-      "budget_fit": 0.3,
+      "budget_fit": 0.5,
       "room_type_fit": 0.4
     },
     "tags": [
