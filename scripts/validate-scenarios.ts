@@ -28,10 +28,12 @@
 import * as fs   from "fs";
 import * as path from "path";
 
-import { PROPERTIES }      from "@/config/properties";
-import { WEIGHTS }         from "@/config/weights";
-import { buildUserVector } from "@/lib/buildUserVector";
-import { rankProperties }  from "@/lib/rankProperties";
+import { PROPERTIES }        from "@/config/properties";
+import { WEIGHTS }           from "@/config/weights";
+import { buildUserVector }   from "@/lib/buildUserVector";
+import { rankProperties }    from "@/lib/rankProperties";
+import { toDebugOutput }     from "./debug-output";
+import type { DebugOutput }  from "./debug-output";
 import {
   WORKATION_USER_THRESHOLD,
   WORKATION_PROP_STRICT,
@@ -378,11 +380,12 @@ if (selected.length === 0) {
 }
 
 interface RunRecord {
-  scenario:   TestScenario;
-  run:        ValidationRun;
-  payload:    RankingPayload;
-  userVector: ScoringVector;
-  assertions: AssertionResult[];
+  scenario:    TestScenario;
+  run:         ValidationRun;
+  debugOutput: DebugOutput;
+  payload:     RankingPayload;
+  userVector:  ScoringVector;
+  assertions:  AssertionResult[];
 }
 
 const records:     RunRecord[]   = [];
@@ -406,9 +409,10 @@ for (let i = 0; i < selected.length; i++) {
     CANDIDATES,
   );
 
-  const assertions = checkAssertions(s, payload);
-  const run        = buildRun(s, payload, assertions);
-  records.push({ scenario: s, run, payload, userVector, assertions });
+  const assertions  = checkAssertions(s, payload);
+  const run         = buildRun(s, payload, assertions);
+  const debugOutput = toDebugOutput(s, payload, assertions, CANDIDATES.length);
+  records.push({ scenario: s, run, debugOutput, payload, userVector, assertions });
   allRuns.push(run);
 
   const topResult  = payload.results[0]?.property.name.replace("Zostel ", "") ?? "(none)";
@@ -428,22 +432,23 @@ for (let i = 0; i < selected.length; i++) {
     printScenario(s, i + 1, selected.length, payload, userVector, assertions);
   }
 
-  // Save individual JSON record if --save
+  // Save individual debug JSON record if --save
   if (saveMode) {
     const dir = path.join(process.cwd(), "validation-runs");
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
     const ts   = new Date().toISOString().replace(/[:.]/g, "-");
     const file = path.join(dir, `${s.id}-${ts}.json`);
-    fs.writeFileSync(file, JSON.stringify({ scenario: s, run }, null, 2));
+    fs.writeFileSync(file, JSON.stringify(debugOutput, null, 2));
   }
 }
 
 // ── Summary ────────────────────────────────────────────────────────────────
 
 if (jsonMode) {
-  // Emit full JSON array — pipe to jq, save to file, or diff against a prior run.
+  // Emit DebugOutput[] — curated PM-reviewable format.
+  // Pipe to jq, save to a file, or diff against a prior run.
   console.log(JSON.stringify(
-    records.map(({ scenario, run, assertions }) => ({ scenario, run, assertions })),
+    records.map(({ debugOutput }) => debugOutput),
     null, 2,
   ));
 } else {
@@ -452,7 +457,11 @@ if (jsonMode) {
 
 if (saveMode) {
   const dir = path.join(process.cwd(), "validation-runs");
-  const allFile = path.join(dir, `all-${new Date().toISOString().replace(/[:.]/g, "-")}.json`);
-  fs.writeFileSync(allFile, JSON.stringify({ runAt: new Date().toISOString(), scenarios: allRuns }, null, 2));
-  console.log(`${DIM}JSON saved → ${allFile}${R}\n`);
+  const ts  = new Date().toISOString().replace(/[:.]/g, "-");
+  const allFile = path.join(dir, `all-${ts}.json`);
+  fs.writeFileSync(allFile, JSON.stringify(
+    { runAt: new Date().toISOString(), results: records.map(({ debugOutput }) => debugOutput) },
+    null, 2,
+  ));
+  if (!jsonMode) console.log(`${DIM}JSON saved → ${allFile}${R}\n`);
 }
