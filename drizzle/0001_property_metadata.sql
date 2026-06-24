@@ -35,3 +35,10 @@ ALTER TABLE "recommendation_requests"
 ALTER TABLE "recommendation_requests"
   ALTER COLUMN "social_energy" DROP DEFAULT,
   ALTER COLUMN "room_type" DROP DEFAULT;
+
+--> statement-breakpoint
+ALTER TABLE "recommendation_results"
+  ADD COLUMN "score_snapshot" jsonb NOT NULL DEFAULT '{}'::jsonb;
+
+ALTER TABLE "recommendation_results"
+  ALTER COLUMN "score_snapshot" DROP DEFAULT;
