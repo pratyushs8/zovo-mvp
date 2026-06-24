@@ -27,12 +27,12 @@ import type { DimensionWeights } from "@/config/scoring";
 //   user vector when scenic_views is the stated priority.
 // budget_fit (0.10) — unchanged.
 export const WEIGHTS: DimensionWeights = {
-  social:        0.15,
-  calm:          0.15,
-  scenic:        0.10,
-  workation:     0.15,
-  adventure:     0.20,
-  budget_fit:    0.10,
+  social: 0.15,
+  calm: 0.15,
+  scenic: 0.1,
+  workation: 0.15,
+  adventure: 0.2,
+  budget_fit: 0.1,
   room_type_fit: 0.15,
 } satisfies DimensionWeights;
 
@@ -42,6 +42,6 @@ const _weightSum = Object.values(WEIGHTS).reduce((a, b) => a + b, 0);
 if (Math.abs(_weightSum - 1.0) > 0.001) {
   throw new Error(
     `WEIGHTS must sum to 1.0 — got ${_weightSum.toFixed(4)}. ` +
-    `Adjust weights.ts before proceeding.`,
+      `Adjust weights.ts before proceeding.`
   );
 }

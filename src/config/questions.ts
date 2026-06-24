@@ -45,9 +45,7 @@ export interface OverrideQuestion<T extends string> {
   options: OverrideQuestionOption<T>[];
 }
 
-export type IntakeQuestion<T extends string = string> =
-  | PersonaQuestion
-  | OverrideQuestion<T>;
+export type IntakeQuestion<T extends string = string> = PersonaQuestion | OverrideQuestion<T>;
 
 // ─── Questions ────────────────────────────────────────────────────────────────
 
@@ -60,11 +58,11 @@ const tripType: PersonaQuestion = {
   requestField: "personaKey",
   resolveVia: "persona_lookup",
   options: [
-    { value: "solo_social",       label: "Solo social escape" },
-    { value: "solo_quiet",        label: "Quiet solo reset" },
-    { value: "friends_getaway",   label: "Friends getaway" },
-    { value: "couple_retreat",    label: "Couple retreat" },
-    { value: "workation",         label: "Workation" },
+    { value: "solo_social", label: "Solo social escape" },
+    { value: "solo_quiet", label: "Quiet solo reset" },
+    { value: "friends_getaway", label: "Friends getaway" },
+    { value: "couple_retreat", label: "Couple retreat" },
+    { value: "workation", label: "Workation" },
     { value: "budget_backpacker", label: "Budget backpacking" },
   ],
 };
@@ -77,12 +75,16 @@ const stayPriority: OverrideQuestion<StayPriority> = {
   requestField: "priority",
   resolveVia: "scoring_override",
   options: [
-    { value: "social_vibe",      label: "Social vibe",        scoringOverride: { social: 0.9, calm: 0.1 } },
-    { value: "calm_quiet",       label: "Calm and quiet",     scoringOverride: { calm: 0.9, social: 0.1 } },
-    { value: "scenic_views",     label: "Scenic views",       scoringOverride: { scenic: 0.9 } },
-    { value: "adventure_access", label: "Adventure access",   scoringOverride: { adventure: 0.9 } },
-    { value: "work_setup",       label: "Good work setup",    scoringOverride: { workation: 1.0, calm: 0.8 } },
-    { value: "best_value",       label: "Best value",         scoringOverride: { budget_fit: 1.0 } },
+    { value: "social_vibe", label: "Social vibe", scoringOverride: { social: 0.9, calm: 0.1 } },
+    { value: "calm_quiet", label: "Calm and quiet", scoringOverride: { calm: 0.9, social: 0.1 } },
+    { value: "scenic_views", label: "Scenic views", scoringOverride: { scenic: 0.9 } },
+    { value: "adventure_access", label: "Adventure access", scoringOverride: { adventure: 0.9 } },
+    {
+      value: "work_setup",
+      label: "Good work setup",
+      scoringOverride: { workation: 1.0, calm: 0.8 },
+    },
+    { value: "best_value", label: "Best value", scoringOverride: { budget_fit: 1.0 } },
   ],
 };
 
@@ -94,9 +96,21 @@ const socialEnergy: OverrideQuestion<SocialEnergy> = {
   requestField: "socialEnergy",
   resolveVia: "scoring_override",
   options: [
-    { value: "very_social",    label: "Very social — I'm here to meet people", scoringOverride: { social: 1.0, calm: 0.0 } },
-    { value: "balanced",       label: "Balanced — open to it, not seeking it", scoringOverride: { social: 0.5, calm: 0.5 } },
-    { value: "mostly_private", label: "Mostly private — I need my own space",  scoringOverride: { social: 0.1 } },
+    {
+      value: "very_social",
+      label: "Very social — I'm here to meet people",
+      scoringOverride: { social: 1.0, calm: 0.0 },
+    },
+    {
+      value: "balanced",
+      label: "Balanced — open to it, not seeking it",
+      scoringOverride: { social: 0.5, calm: 0.5 },
+    },
+    {
+      value: "mostly_private",
+      label: "Mostly private — I need my own space",
+      scoringOverride: { social: 0.1 },
+    },
   ],
 };
 
@@ -108,9 +122,9 @@ const roomType: OverrideQuestion<RoomType> = {
   requestField: "roomType",
   resolveVia: "scoring_override",
   options: [
-    { value: "dorm",     label: "Dorm — fine with sharing", scoringOverride: { room_type_fit: 0.0 } },
-    { value: "private",  label: "Private room",             scoringOverride: { room_type_fit: 1.0 } },
-    { value: "flexible", label: "Either is fine",           scoringOverride: { room_type_fit: 0.5 } },
+    { value: "dorm", label: "Dorm — fine with sharing", scoringOverride: { room_type_fit: 0.0 } },
+    { value: "private", label: "Private room", scoringOverride: { room_type_fit: 1.0 } },
+    { value: "flexible", label: "Either is fine", scoringOverride: { room_type_fit: 0.5 } },
   ],
 };
 
@@ -122,9 +136,13 @@ const budget: OverrideQuestion<BudgetLevel> = {
   requestField: "budget",
   resolveVia: "scoring_override",
   options: [
-    { value: "lowest",   label: "Lowest price possible",            scoringOverride: { budget_fit: 1.0 } },
-    { value: "moderate", label: "Moderate — value matters",         scoringOverride: { budget_fit: 0.5 } },
-    { value: "flexible", label: "Flexible if the stay feels right", scoringOverride: { budget_fit: 0.0 } },
+    { value: "lowest", label: "Lowest price possible", scoringOverride: { budget_fit: 1.0 } },
+    { value: "moderate", label: "Moderate — value matters", scoringOverride: { budget_fit: 0.5 } },
+    {
+      value: "flexible",
+      label: "Flexible if the stay feels right",
+      scoringOverride: { budget_fit: 0.0 },
+    },
   ],
 };
 

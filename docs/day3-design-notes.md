@@ -10,14 +10,14 @@ Implemented in `src/config/`, `src/lib/schemas/`, and `src/types/`.
 Six starter personas. Each has a key, label, description, and a full `ScoringVector`
 across 7 dimensions. Defined in `src/config/personas.ts`.
 
-| Key | Label | Dominant signal |
-|---|---|---|
-| `solo_social` | Solo Social Explorer | `social=0.9`, dorm |
-| `solo_quiet` | Quiet Solo Traveler | `calm=0.9`, `scenic=0.8` |
-| `friends_getaway` | Friends Getaway | `adventure=0.8`, `social=0.8` |
-| `couple_retreat` | Couple Retreat | `room_type_fit=1.0`, private |
-| `workation` | Workation Traveler | `workation=1.0`, `calm=0.8` |
-| `budget_backpacker` | Budget Backpacker | `budget_fit=1.0`, dorm |
+| Key                 | Label                | Dominant signal               |
+| ------------------- | -------------------- | ----------------------------- |
+| `solo_social`       | Solo Social Explorer | `social=0.9`, dorm            |
+| `solo_quiet`        | Quiet Solo Traveler  | `calm=0.9`, `scenic=0.8`      |
+| `friends_getaway`   | Friends Getaway      | `adventure=0.8`, `social=0.8` |
+| `couple_retreat`    | Couple Retreat       | `room_type_fit=1.0`, private  |
+| `workation`         | Workation Traveler   | `workation=1.0`, `calm=0.8`   |
+| `budget_backpacker` | Budget Backpacker    | `budget_fit=1.0`, dorm        |
 
 No two personas share the same dominant dimension. `solo_social` and `budget_backpacker`
 look similar but split sharply on `budget_fit`. `solo_quiet` and `workation` split on
@@ -32,23 +32,25 @@ a finite, curated set that the recommendation engine scores against.
 
 Five questions. Defined in `src/config/questions.ts`. Rendered in this order.
 
-| # | Key | Label | Required |
-|---|---|---|---|
-| Q1 | `trip_type` | What kind of trip is this? | Yes |
-| Q2 | `stay_priority` | What matters most for this stay? | Yes |
-| Q3 | `social_energy` | How social do you want to be? | Yes |
-| Q4 | `room_type` | Which room type do you prefer? | Yes |
-| Q5 | `budget` | What's your budget comfort level? | No |
+| #   | Key             | Label                             | Required |
+| --- | --------------- | --------------------------------- | -------- |
+| Q1  | `trip_type`     | What kind of trip is this?        | Yes      |
+| Q2  | `stay_priority` | What matters most for this stay?  | Yes      |
+| Q3  | `social_energy` | How social do you want to be?     | Yes      |
+| Q4  | `room_type`     | Which room type do you prefer?    | Yes      |
+| Q5  | `budget`        | What's your budget comfort level? | No       |
 
 ### Mandatory vs optional decisions
 
 **All four mandatory questions are mandatory because:**
+
 - Q1 sets the full 7-dimension baseline. Without it, nothing can be scored.
 - Q2 overrides the dominant vibe dimension. A persona without a priority signal is ambiguous.
 - Q3 is the only reliable differentiator between `solo_social` and `solo_quiet` — the two most common solo traveler profiles.
 - Q4 directly overrides `room_type_fit` and the user's answer here should always win over the persona default.
 
 **Q5 (budget) is optional because:**
+
 - Most personas already encode a strong budget signal (`budget_backpacker=1.0`, `couple_retreat=0.2`).
 - Forcing a budget question on a confirmed `budget_backpacker` is redundant.
 - Skipping it defaults to the persona's `budget_fit` value, which is a reasonable fallback.
@@ -67,15 +69,15 @@ Q2–Q5 overrides are merged on top of that baseline by the Day 4 scoring functi
 Seven dimensions, each a float 0.0–1.0. Defined in `src/config/scoring.ts`.
 Both users and properties carry a `ScoringVector`. The engine compares them.
 
-| Dimension | What it measures | Can hard-filter? |
-|---|---|---|
-| `social` | Preference for communal interaction | No |
-| `calm` | Preference for quiet, low-stimulation environments | No |
-| `scenic` | Preference for natural landscape over urban setting | No |
-| `workation` | Need for wifi and quiet workspace | **Yes** |
-| `adventure` | Appetite for physical activity and outdoor pursuits | No |
-| `budget_fit` | Price sensitivity (1 = cost is primary constraint) | No |
-| `room_type_fit` | 0 = dorm preferred, 1 = private room required | No |
+| Dimension       | What it measures                                    | Can hard-filter? |
+| --------------- | --------------------------------------------------- | ---------------- |
+| `social`        | Preference for communal interaction                 | No               |
+| `calm`          | Preference for quiet, low-stimulation environments  | No               |
+| `scenic`        | Preference for natural landscape over urban setting | No               |
+| `workation`     | Need for wifi and quiet workspace                   | **Yes**          |
+| `adventure`     | Appetite for physical activity and outdoor pursuits | No               |
+| `budget_fit`    | Price sensitivity (1 = cost is primary constraint)  | No               |
+| `room_type_fit` | 0 = dorm preferred, 1 = private room required       | No               |
 
 `workation` is the only hard-filterable dimension. A user with `workation ≥ 0.8`
 matched to a property with `workation ≤ 0.2` should be excluded from results,
@@ -123,11 +125,11 @@ The scoring vector is **never sent by the client**. It is derived server-side fr
 
 ## Intentionally deferred
 
-| Item | Reason |
-|---|---|
-| Destination filtering (Q6) | No geographic data in Schema v1; adds routing complexity for marginal signal |
-| Property price data | No price column yet; `budget_fit` is tag-derived for now |
-| `recommendation_results` write path | Table exists; deferring until ranking function is live in Day 4 |
-| Persona tuning / weight adjustment | Weights are hand-set; data-driven tuning needs usage data first |
-| Multi-language / locale | Single market for MVP |
-| Session deduplication | No device fingerprinting; sessions are ephemeral per page load for now |
+| Item                                | Reason                                                                       |
+| ----------------------------------- | ---------------------------------------------------------------------------- |
+| Destination filtering (Q6)          | No geographic data in Schema v1; adds routing complexity for marginal signal |
+| Property price data                 | No price column yet; `budget_fit` is tag-derived for now                     |
+| `recommendation_results` write path | Table exists; deferring until ranking function is live in Day 4              |
+| Persona tuning / weight adjustment  | Weights are hand-set; data-driven tuning needs usage data first              |
+| Multi-language / locale             | Single market for MVP                                                        |
+| Session deduplication               | No device fingerprinting; sessions are ephemeral per page load for now       |

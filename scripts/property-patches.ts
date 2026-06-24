@@ -40,23 +40,23 @@ export type AuditSource =
   | "audit_tag_score_gap"
   | "audit_workation_limbo"
   | "audit_price_tag_mismatch"
-  | "scenario_diagnostic"   // a PM review finding from validate-scenarios
-  | "manual_review"         // direct inspection / user research
-  | "user_feedback";        // report from a real user
+  | "scenario_diagnostic" // a PM review finding from validate-scenarios
+  | "manual_review" // direct inspection / user research
+  | "user_feedback"; // report from a real user
 
 export interface PropertyPatch {
   /** Exact property name as it appears in properties.json. */
-  property:    string;
+  property: string;
   /** Which field was changed. Use a DimensionKey for scoring changes. */
-  field:       PatchField;
+  field: PatchField;
   /** Value before this patch was applied (informational). */
-  from:        number | string | string[];
+  from: number | string | string[];
   /** Value after this patch was applied (informational). */
-  to:          number | string | string[];
+  to: number | string | string[];
   /** Why this change was made. Required — leave it blank and patch:check fails. */
-  reason:      string;
+  reason: string;
   /** Which check or process surfaced the issue. */
-  source:      AuditSource;
+  source: AuditSource;
   /** ISO date the patch was applied (YYYY-MM-DD). */
   appliedDate: string;
 }
@@ -65,67 +65,70 @@ export interface PropertyPatch {
 // Entries are ordered by appliedDate ascending. Add new entries at the bottom.
 
 export const PATCHES: PropertyPatch[] = [
-
   // ── 2026-06-24: Day 6 metadata corrections ────────────────────────────────
   // Confirmed by Zostel product team: Goa (Morjim) and Kasol both offer
   // private rooms at 2× the dorm starting price. room_type_fit now represents
   // experience character (hostel-vibe vs private-vibe), not room availability.
 
   {
-    property:    "Zostel Goa (Morjim)",
-    field:       "room_type_fit",
-    from:        0.1,
-    to:          0.4,
-    reason:      "Property has private rooms. Score updated from near-zero to 0.4 to reflect " +
-                 "mixed hostel/private character. Remains below 0.5 because the dominant atmosphere " +
-                 "is still social dorm culture.",
-    source:      "scenario_diagnostic",
+    property: "Zostel Goa (Morjim)",
+    field: "room_type_fit",
+    from: 0.1,
+    to: 0.4,
+    reason:
+      "Property has private rooms. Score updated from near-zero to 0.4 to reflect " +
+      "mixed hostel/private character. Remains below 0.5 because the dominant atmosphere " +
+      "is still social dorm culture.",
+    source: "scenario_diagnostic",
     appliedDate: "2026-06-24",
   },
 
   {
-    property:    "Zostel Kasol",
-    field:       "room_type_fit",
-    from:        0.2,
-    to:          0.4,
-    reason:      "Property has private rooms. Same rationale as Goa — updated from dorm-only " +
-                 "tagging to mixed, retaining hostel-culture character below 0.5.",
-    source:      "scenario_diagnostic",
+    property: "Zostel Kasol",
+    field: "room_type_fit",
+    from: 0.2,
+    to: 0.4,
+    reason:
+      "Property has private rooms. Same rationale as Goa — updated from dorm-only " +
+      "tagging to mixed, retaining hostel-culture character below 0.5.",
+    source: "scenario_diagnostic",
     appliedDate: "2026-06-24",
   },
 
   {
-    property:    "Zostel Munnar",
-    field:       "workation",
-    from:        0.4,
-    to:          0.6,
-    reason:      "Confirmed reliable wifi and dedicated workspace by Zostel team. Previous 0.4 " +
-                 "underrepresented actual work infrastructure. Stays below 0.7 because it's " +
-                 "primarily a nature retreat, not a purpose-built work hub.",
-    source:      "scenario_diagnostic",
+    property: "Zostel Munnar",
+    field: "workation",
+    from: 0.4,
+    to: 0.6,
+    reason:
+      "Confirmed reliable wifi and dedicated workspace by Zostel team. Previous 0.4 " +
+      "underrepresented actual work infrastructure. Stays below 0.7 because it's " +
+      "primarily a nature retreat, not a purpose-built work hub.",
+    source: "scenario_diagnostic",
     appliedDate: "2026-06-24",
   },
 
   {
-    property:    "Zostel Kodaikanal",
-    field:       "workation",
-    from:        0.4,
-    to:          0.6,
-    reason:      "Same confirmation as Munnar — reliable wifi + workspace available. " +
-                 "Moderately improved to reflect actual infrastructure without overstating it.",
-    source:      "scenario_diagnostic",
+    property: "Zostel Kodaikanal",
+    field: "workation",
+    from: 0.4,
+    to: 0.6,
+    reason:
+      "Same confirmation as Munnar — reliable wifi + workspace available. " +
+      "Moderately improved to reflect actual infrastructure without overstating it.",
+    source: "scenario_diagnostic",
     appliedDate: "2026-06-24",
   },
 
   {
-    property:    "Zostel Kodaikanal (Vilpatti)",
-    field:       "workation",
-    from:        0.3,
-    to:          0.55,
-    reason:      "Confirmed wifi availability. Slightly lower than main Kodaikanal property " +
-                 "because Vilpatti is more remote and connectivity may be less consistent.",
-    source:      "scenario_diagnostic",
+    property: "Zostel Kodaikanal (Vilpatti)",
+    field: "workation",
+    from: 0.3,
+    to: 0.55,
+    reason:
+      "Confirmed wifi availability. Slightly lower than main Kodaikanal property " +
+      "because Vilpatti is more remote and connectivity may be less consistent.",
+    source: "scenario_diagnostic",
     appliedDate: "2026-06-24",
   },
-
 ];

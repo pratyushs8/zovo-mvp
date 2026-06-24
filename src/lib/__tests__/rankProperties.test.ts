@@ -17,27 +17,27 @@ let _nextId = 1;
 
 function makeProperty(
   scoring: Partial<ScoringVector>,
-  overrides: Partial<Omit<CandidateProperty, "scoring">> = {},
+  overrides: Partial<Omit<CandidateProperty, "scoring">> = {}
 ): CandidateProperty {
   const id = overrides.id ?? _nextId++;
   return {
     id,
-    name:            overrides.name            ?? `Property ${id}`,
+    name: overrides.name ?? `Property ${id}`,
     destinationSlug: overrides.destinationSlug ?? "anywhere",
     destinationName: overrides.destinationName ?? "Anywhere",
-    location:        overrides.location        ?? "Test Location",
-    priceInr:        overrides.priceInr        ?? 500,
-    archetype:       (overrides.archetype      ?? "mountain_adventure_hub") as Archetype,
-    tags:            overrides.tags            ?? [],
-    summary:         overrides.summary         ?? "",
-    bookingUrl:      overrides.bookingUrl       ?? `https://zostel.com/test/${id}`,
+    location: overrides.location ?? "Test Location",
+    priceInr: overrides.priceInr ?? 500,
+    archetype: (overrides.archetype ?? "mountain_adventure_hub") as Archetype,
+    tags: overrides.tags ?? [],
+    summary: overrides.summary ?? "",
+    bookingUrl: overrides.bookingUrl ?? `https://zostel.com/test/${id}`,
     scoring: {
-      social:        0.5,
-      calm:          0.5,
-      scenic:        0.5,
-      workation:     0.5,
-      adventure:     0.5,
-      budget_fit:    0.5,
+      social: 0.5,
+      calm: 0.5,
+      scenic: 0.5,
+      workation: 0.5,
+      adventure: 0.5,
+      budget_fit: 0.5,
       room_type_fit: 0.5,
       ...scoring,
     },
@@ -47,26 +47,25 @@ function makeProperty(
 // A user vector builder — defaults to a neutral mid-range vector.
 function userVector(overrides: Partial<ScoringVector> = {}): ScoringVector {
   return {
-    social:        0.5,
-    calm:          0.5,
-    scenic:        0.5,
-    workation:     0.5,
-    adventure:     0.5,
-    budget_fit:    0.5,
+    social: 0.5,
+    calm: 0.5,
+    scenic: 0.5,
+    workation: 0.5,
+    adventure: 0.5,
+    budget_fit: 0.5,
     room_type_fit: 0.5,
     ...overrides,
   };
 }
 
-function input(
-  user: ScoringVector,
-  destinationSlug?: string,
-): RankingInput {
+function input(user: ScoringVector, destinationSlug?: string): RankingInput {
   return { userVector: user, destinationSlug };
 }
 
 // Reset auto-increment id before each test so fixture ids are predictable.
-beforeEach(() => { _nextId = 1; });
+beforeEach(() => {
+  _nextId = 1;
+});
 
 // ─── scoreProperty ────────────────────────────────────────────────────────────
 
@@ -91,10 +90,7 @@ describe("scoreProperty", () => {
     const u = userVector();
     const p = makeProperty({});
     const { score, breakdown } = scoreProperty(u, p);
-    const sumOfContributions = Object.values(breakdown).reduce(
-      (s, d) => s + d.contribution,
-      0,
-    );
+    const sumOfContributions = Object.values(breakdown).reduce((s, d) => s + d.contribution, 0);
     expect(sumOfContributions).toBeCloseTo(score, 10);
   });
 
@@ -113,7 +109,7 @@ describe("scoreProperty", () => {
 
 describe("applyHardFilter", () => {
   test("does not trigger when user workation is below the threshold", () => {
-    const u  = userVector({ workation: WORKATION_USER_THRESHOLD - 0.1 });
+    const u = userVector({ workation: WORKATION_USER_THRESHOLD - 0.1 });
     const pool = [
       makeProperty({ workation: 0.0 }),
       makeProperty({ workation: 0.1 }),
@@ -127,8 +123,8 @@ describe("applyHardFilter", () => {
 
   test("strict mode: removes properties at or below WORKATION_PROP_STRICT", () => {
     const u = userVector({ workation: WORKATION_USER_THRESHOLD });
-    const excluded = makeProperty({ workation: WORKATION_PROP_STRICT });        // <= strict → out
-    const admitted = makeProperty({ workation: WORKATION_PROP_STRICT + 0.1 });  // > strict → in
+    const excluded = makeProperty({ workation: WORKATION_PROP_STRICT }); // <= strict → out
+    const admitted = makeProperty({ workation: WORKATION_PROP_STRICT + 0.1 }); // > strict → in
     const result = applyHardFilter([excluded, admitted], u);
     expect(result.survivors).toEqual([admitted]);
     expect(result.hardFilteredCount).toBe(1);
@@ -138,9 +134,9 @@ describe("applyHardFilter", () => {
   test("relaxed mode activates when strict produces 0 survivors", () => {
     const u = userVector({ workation: 1.0 });
     // All properties at or below the strict threshold.
-    const zero    = makeProperty({ workation: 0.0 });                            // excluded by both
-    const border  = makeProperty({ workation: WORKATION_PROP_RELAXED });         // excluded (= relaxed threshold)
-    const relaxed = makeProperty({ workation: WORKATION_PROP_STRICT });          // admitted under relaxed only
+    const zero = makeProperty({ workation: 0.0 }); // excluded by both
+    const border = makeProperty({ workation: WORKATION_PROP_RELAXED }); // excluded (= relaxed threshold)
+    const relaxed = makeProperty({ workation: WORKATION_PROP_STRICT }); // admitted under relaxed only
 
     const result = applyHardFilter([zero, border, relaxed], u);
     expect(result.relaxedModeActivated).toBe(true);
@@ -156,7 +152,7 @@ describe("applyHardFilter", () => {
   });
 
   test("returns empty survivors if all properties fail even the relaxed threshold", () => {
-    const u    = userVector({ workation: 1.0 });
+    const u = userVector({ workation: 1.0 });
     const dead = makeProperty({ workation: WORKATION_PROP_RELAXED }); // <= relaxed → excluded
     const result = applyHardFilter([dead], u);
     expect(result.survivors).toHaveLength(0);
@@ -167,7 +163,13 @@ describe("applyHardFilter", () => {
 
 describe("rankProperties — solo social traveler", () => {
   test("socially strong properties rank in the top 3", () => {
-    const u = userVector({ social: 1.0, calm: 0.0, adventure: 0.6, budget_fit: 0.7, room_type_fit: 0.0 });
+    const u = userVector({
+      social: 1.0,
+      calm: 0.0,
+      adventure: 0.6,
+      budget_fit: 0.7,
+      room_type_fit: 0.0,
+    });
     const highSocial = [
       makeProperty({ social: 0.9, calm: 0.1 }, { name: "Party Beach" }),
       makeProperty({ social: 0.8, calm: 0.1 }, { name: "Social Hub" }),
@@ -205,7 +207,7 @@ describe("rankProperties — solo social traveler", () => {
 describe("rankProperties — quiet solo traveler", () => {
   test("high-calm properties rank above high-social properties", () => {
     const u = userVector({ social: 0.1, calm: 0.9, room_type_fit: 1.0 });
-    const quietProp  = makeProperty({ social: 0.1, calm: 0.9 }, { name: "Quiet Retreat" });
+    const quietProp = makeProperty({ social: 0.1, calm: 0.9 }, { name: "Quiet Retreat" });
     const socialProp = makeProperty({ social: 0.9, calm: 0.1 }, { name: "Party Beach" });
     const { results } = rankProperties(input(u), [quietProp, socialProp]);
     expect(results[0].property.name).toBe("Quiet Retreat");
@@ -230,7 +232,7 @@ describe("rankProperties — quiet solo traveler", () => {
 describe("rankProperties — room type is a soft preference, not a hard filter", () => {
   test("dorm user: dorm-heavy property outscores private-heavy when all else equal", () => {
     const u = userVector({ room_type_fit: 0.0 });
-    const dormProp    = makeProperty({ room_type_fit: 0.0 }, { name: "Dorm House" });
+    const dormProp = makeProperty({ room_type_fit: 0.0 }, { name: "Dorm House" });
     const privateProp = makeProperty({ room_type_fit: 1.0 }, { name: "Private Villa" });
     const { results } = rankProperties(input(u), [dormProp, privateProp]);
     expect(results[0].property.name).toBe("Dorm House");
@@ -238,7 +240,7 @@ describe("rankProperties — room type is a soft preference, not a hard filter",
 
   test("private user: private-heavy property outscores dorm-heavy when all else equal", () => {
     const u = userVector({ room_type_fit: 1.0 });
-    const dormProp    = makeProperty({ room_type_fit: 0.0 }, { name: "Dorm House" });
+    const dormProp = makeProperty({ room_type_fit: 0.0 }, { name: "Dorm House" });
     const privateProp = makeProperty({ room_type_fit: 1.0 }, { name: "Private Villa" });
     const { results } = rankProperties(input(u), [dormProp, privateProp]);
     expect(results[0].property.name).toBe("Private Villa");
@@ -247,10 +249,7 @@ describe("rankProperties — room type is a soft preference, not a hard filter",
   test("private-heavy properties are NOT excluded — they still appear in results", () => {
     // Room type is soft: a private user with no private-only options should still get results.
     const u = userVector({ room_type_fit: 1.0 });
-    const dormOnly = [
-      makeProperty({ room_type_fit: 0.0 }),
-      makeProperty({ room_type_fit: 0.1 }),
-    ];
+    const dormOnly = [makeProperty({ room_type_fit: 0.0 }), makeProperty({ room_type_fit: 0.1 })];
     const { results } = rankProperties(input(u), dormOnly);
     expect(results.length).toBeGreaterThan(0);
     expect(results[0].hardFilterExempted).toBe(false); // room type never hard-filters
@@ -264,7 +263,7 @@ describe("rankProperties — destination pre-filter", () => {
     const u = userVector();
     const manali1 = makeProperty({}, { destinationSlug: "manali", name: "Manali A" });
     const manali2 = makeProperty({}, { destinationSlug: "manali", name: "Manali B" });
-    const goa     = makeProperty({}, { destinationSlug: "goa",    name: "Goa A" });
+    const goa = makeProperty({}, { destinationSlug: "goa", name: "Goa A" });
     const { results } = rankProperties(input(u, "manali"), [manali1, manali2, goa]);
     const names = results.map((r) => r.property.name);
     expect(names).toContain("Manali A");
@@ -275,7 +274,7 @@ describe("rankProperties — destination pre-filter", () => {
   test("without destinationSlug, all properties are candidates", () => {
     const u = userVector();
     const manali = makeProperty({}, { destinationSlug: "manali" });
-    const goa    = makeProperty({}, { destinationSlug: "goa" });
+    const goa = makeProperty({}, { destinationSlug: "goa" });
     const { results } = rankProperties(input(u), [manali, goa]);
     expect(results).toHaveLength(2);
   });
@@ -294,25 +293,25 @@ describe("rankProperties — destination pre-filter", () => {
 describe("rankProperties — group vs solo", () => {
   test("friends_getaway vector scores an adventure+social property higher than solo_quiet vector", () => {
     const groupUser = userVector({ social: 0.8, adventure: 0.8, calm: 0.1 });
-    const soloUser  = userVector({ social: 0.1, adventure: 0.3, calm: 0.9 });
+    const soloUser = userVector({ social: 0.1, adventure: 0.3, calm: 0.9 });
     const adventureProp = makeProperty({ social: 0.8, adventure: 0.9, calm: 0.1 });
 
     const { score: groupScore } = scoreProperty(groupUser, adventureProp);
-    const { score: soloScore  } = scoreProperty(soloUser,  adventureProp);
+    const { score: soloScore } = scoreProperty(soloUser, adventureProp);
     expect(groupScore).toBeGreaterThan(soloScore);
   });
 
   test("top 3 results differ meaningfully between group and solo personas", () => {
     const groupUser = userVector({ social: 0.8, adventure: 0.8, calm: 0.1 });
-    const soloUser  = userVector({ social: 0.1, adventure: 0.3, calm: 0.9 });
+    const soloUser = userVector({ social: 0.1, adventure: 0.3, calm: 0.9 });
     const candidates = [
       makeProperty({ social: 0.9, adventure: 0.9, calm: 0.1 }, { name: "Group Party Hub" }),
       makeProperty({ social: 0.1, adventure: 0.2, calm: 0.9 }, { name: "Quiet Retreat" }),
       makeProperty({ social: 0.8, adventure: 0.7, calm: 0.2 }, { name: "Lively Hostel" }),
       makeProperty({ social: 0.2, adventure: 0.3, calm: 0.8 }, { name: "Forest Cabin" }),
     ];
-    const groupTop  = rankProperties(input(groupUser), candidates).results[0].property.name;
-    const soloTop   = rankProperties(input(soloUser),  candidates).results[0].property.name;
+    const groupTop = rankProperties(input(groupUser), candidates).results[0].property.name;
+    const soloTop = rankProperties(input(soloUser), candidates).results[0].property.name;
     expect(groupTop).not.toBe(soloTop);
   });
 });
@@ -323,7 +322,7 @@ describe("rankProperties — fallback behavior", () => {
   test("hard filter relaxed fallback activates when strict filter wipes pool", () => {
     const u = userVector({ workation: 1.0 });
     // All candidates at or below the strict threshold — strict gives 0 survivors.
-    const relaxedOnly = makeProperty({ workation: WORKATION_PROP_STRICT });  // > relaxed, <= strict
+    const relaxedOnly = makeProperty({ workation: WORKATION_PROP_STRICT }); // > relaxed, <= strict
     const { fallback, results } = rankProperties(input(u), [relaxedOnly]);
     expect(fallback).toBe("hard_filter_relaxed");
     expect(results[0].hardFilterExempted).toBe(true);
@@ -331,11 +330,7 @@ describe("rankProperties — fallback behavior", () => {
 
   test("thin_pool fallback when fewer than 5 properties survive", () => {
     const u = userVector();
-    const candidates = [
-      makeProperty({}),
-      makeProperty({}),
-      makeProperty({}),
-    ];
+    const candidates = [makeProperty({}), makeProperty({}), makeProperty({})];
     const { fallback, results } = rankProperties(input(u), candidates);
     expect(fallback).toBe("thin_pool");
     expect(results).toHaveLength(3);
@@ -354,7 +349,7 @@ describe("rankProperties — fallback behavior", () => {
     const u = userVector({ social: 0.9 });
     // Six strong-match candidates → full pool, high score, no fallback.
     const candidates = Array.from({ length: 6 }, (_, i) =>
-      makeProperty({ social: 0.9 }, { name: `Prop ${i}` }),
+      makeProperty({ social: 0.9 }, { name: `Prop ${i}` })
     );
     const { fallback } = rankProperties(input(u), candidates);
     expect(fallback).toBeNull();
@@ -364,7 +359,7 @@ describe("rankProperties — fallback behavior", () => {
     // Room type is soft so a quiet user with only social candidates still gets results.
     const u = userVector({ social: 0.1, calm: 0.9 });
     const allSocial = Array.from({ length: 3 }, (_, i) =>
-      makeProperty({ social: 0.9, calm: 0.1 }, { name: `Social ${i}` }),
+      makeProperty({ social: 0.9, calm: 0.1 }, { name: `Social ${i}` })
     );
     const { results, fallback } = rankProperties(input(u), allSocial);
     // No hard filter triggered → results are returned, just poorly matched.
@@ -381,8 +376,8 @@ describe("rankProperties — determinism", () => {
     const candidates = Array.from({ length: 8 }, (_, i) =>
       makeProperty(
         { social: 0.5 + i * 0.04, calm: 0.5 - i * 0.04 },
-        { id: i + 1, name: `Prop ${i}` },
-      ),
+        { id: i + 1, name: `Prop ${i}` }
+      )
     );
 
     const run1 = rankProperties(input(u), candidates).results.map((r) => r.property.id);
@@ -396,7 +391,7 @@ describe("rankProperties — determinism", () => {
   test("ties in score are broken by ascending property id", () => {
     const u = userVector();
     // Both properties have identical scoring vectors → identical scores.
-    const first  = makeProperty({}, { id: 1 });
+    const first = makeProperty({}, { id: 1 });
     const second = makeProperty({}, { id: 2 });
     const { results } = rankProperties(input(u), [second, first]); // pass in reverse id order
     expect(results[0].property.id).toBe(1); // lower id wins the tie
@@ -416,12 +411,12 @@ describe("rankProperties — determinism", () => {
 
 describe("classifyStrength", () => {
   test.each([
-    [0.0,  "strong"],
-    [0.2,  "strong"],
+    [0.0, "strong"],
+    [0.2, "strong"],
     [0.21, "moderate"],
-    [0.4,  "moderate"],
+    [0.4, "moderate"],
     [0.41, "weak"],
-    [1.0,  "weak"],
+    [1.0, "weak"],
   ])("gap %s → %s", (gap, expected) => {
     expect(classifyStrength(gap)).toBe(expected);
   });
@@ -467,7 +462,7 @@ describe("explainProperty", () => {
   test("filterTrace.passMode is passed_strict for a normally admitted workation property", () => {
     const u = userVector({ workation: 1.0 });
     const strict = makeProperty({ workation: WORKATION_PROP_STRICT + 0.1 }, { id: 1 }); // passes strict
-    const exempt = makeProperty({ workation: WORKATION_PROP_STRICT },        { id: 2 }); // only relaxed
+    const exempt = makeProperty({ workation: WORKATION_PROP_STRICT }, { id: 2 }); // only relaxed
     const { results } = rankProperties(input(u), [strict, exempt]);
     const strictResult = results.find((r) => r.property.id === 1)!;
     expect(strictResult.explanation.filterTrace.passMode).toBe("passed_strict");
@@ -480,7 +475,7 @@ describe("explainRanking", () => {
   test("confidenceReason is top_score_high when pool is full and top score >= 0.70", () => {
     const u = userVector({ social: 0.9 });
     const candidates = Array.from({ length: 6 }, (_, i) =>
-      makeProperty({ social: 0.9 }, { name: `P${i}` }),
+      makeProperty({ social: 0.9 }, { name: `P${i}` })
     );
     const { rankingExplanation } = rankProperties(input(u), candidates);
     expect(rankingExplanation.confidenceReason).toBe("top_score_high");
@@ -489,10 +484,7 @@ describe("explainRanking", () => {
 
   test("confidenceReason is thin_pool when fewer than 5 survivors", () => {
     const u = userVector({ social: 0.8 });
-    const candidates = [
-      makeProperty({ social: 0.8 }),
-      makeProperty({ social: 0.8 }),
-    ];
+    const candidates = [makeProperty({ social: 0.8 }), makeProperty({ social: 0.8 })];
     const { rankingExplanation } = rankProperties(input(u), candidates);
     expect(rankingExplanation.confidenceReason).toBe("thin_pool");
   });
@@ -513,11 +505,13 @@ describe("explainRanking", () => {
   });
 
   test("hardFilterTriggered reflects whether user workation met the threshold", () => {
-    const triggered    = userVector({ workation: WORKATION_USER_THRESHOLD });
+    const triggered = userVector({ workation: WORKATION_USER_THRESHOLD });
     const notTriggered = userVector({ workation: WORKATION_USER_THRESHOLD - 0.1 });
     const p = makeProperty({ workation: 0.9 });
 
-    expect(rankProperties(input(triggered),    [p]).rankingExplanation.hardFilterTriggered).toBe(true);
-    expect(rankProperties(input(notTriggered), [p]).rankingExplanation.hardFilterTriggered).toBe(false);
+    expect(rankProperties(input(triggered), [p]).rankingExplanation.hardFilterTriggered).toBe(true);
+    expect(rankProperties(input(notTriggered), [p]).rankingExplanation.hardFilterTriggered).toBe(
+      false
+    );
   });
 });

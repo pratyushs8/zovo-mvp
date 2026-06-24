@@ -28,40 +28,40 @@ A summary is not a marketing tagline. It is not a destination guide excerpt. It 
 
 ### 1. Score the property, not the destination
 
-Write about what is *at* or *immediately around* the property. What the traveler sees, hears, and can do within walking distance. Not the city's reputation or the region's general appeal.
+Write about what is _at_ or _immediately around_ the property. What the traveler sees, hears, and can do within walking distance. Not the city's reputation or the region's general appeal.
 
-| ✗ Don't write | ✓ Write instead |
-|---|---|
-| "Jaisalmer is a golden fort city in the Thar Desert." | "Golden Fort city with a Zostel that organises camel safaris and overnight desert camps." |
-| "Rishikesh is the adventure capital of India." | "Ganges-side base for rafting, bungee, and cliff jumping — daily activity signups from the property." |
+| ✗ Don't write                                         | ✓ Write instead                                                                                       |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| "Jaisalmer is a golden fort city in the Thar Desert." | "Golden Fort city with a Zostel that organises camel safaris and overnight desert camps."             |
+| "Rishikesh is the adventure capital of India."        | "Ganges-side base for rafting, bungee, and cliff jumping — daily activity signups from the property." |
 
 ### 2. Name one concrete thing
 
 Every summary must contain at least one specific, verifiable detail — a river name, a trek name, a distance, a price point, a physical feature. Vague impressions are not allowed.
 
-| ✗ Don't write | ✓ Write instead |
-|---|---|
-| "Beautiful mountain views and a great social vibe." | "Apple orchards in the foreground, Kinner Kailash directly across." |
-| "Perfect for those who want peace and quiet." | "Zero phone signal and complete stillness — Pulga rewards the extra hour of trekking." |
+| ✗ Don't write                                       | ✓ Write instead                                                                        |
+| --------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| "Beautiful mountain views and a great social vibe." | "Apple orchards in the foreground, Kinner Kailash directly across."                    |
+| "Perfect for those who want peace and quiet."       | "Zero phone signal and complete stillness — Pulga rewards the extra hour of trekking." |
 
 ### 3. Signal the strongest persona fit
 
 Where the property has a clear dominant use case, name it implicitly. Don't use persona key names (`solo_social`, `workation`), but encode the signal in plain language.
 
-| Persona | How to signal it |
-|---|---|
-| `solo_social` | mention common areas, group activity, meeting people: "common room runs late", "fills up every evening" |
-| `solo_quiet` | mention absence of crowds, silence, or solitude: "no crowds, no noise", "almost no other tourists" |
-| `workation` | mention wifi reliability or working environment: "most consistently reviewed wifi", "good wifi, slow mornings" |
-| `couple_retreat` | mention private-room lean, scenery, or romantic setting: "most couple-friendly", "lake view" |
-| `friends_getaway` | mention group energy, activities, or shared experience: "daily activity signups", "lakeside social scene" |
-| `budget_backpacker` | state the price or relative value explicitly: "₹319", "undercuts most Indian hill stations" |
+| Persona             | How to signal it                                                                                               |
+| ------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `solo_social`       | mention common areas, group activity, meeting people: "common room runs late", "fills up every evening"        |
+| `solo_quiet`        | mention absence of crowds, silence, or solitude: "no crowds, no noise", "almost no other tourists"             |
+| `workation`         | mention wifi reliability or working environment: "most consistently reviewed wifi", "good wifi, slow mornings" |
+| `couple_retreat`    | mention private-room lean, scenery, or romantic setting: "most couple-friendly", "lake view"                   |
+| `friends_getaway`   | mention group energy, activities, or shared experience: "daily activity signups", "lakeside social scene"      |
+| `budget_backpacker` | state the price or relative value explicitly: "₹319", "undercuts most Indian hill stations"                    |
 
 ### 4. No hype words
 
 These words are banned. They add no information and reduce trust:
 
-> *stunning, breathtaking, amazing, incredible, perfect, magical, paradise, gem, hidden gem, must-visit, world-class, vibrant, lively, charming, picturesque, idyllic, serene*
+> _stunning, breathtaking, amazing, incredible, perfect, magical, paradise, gem, hidden gem, must-visit, world-class, vibrant, lively, charming, picturesque, idyllic, serene_
 
 If you reach for one of these, replace it with a specific physical detail.
 
@@ -69,10 +69,10 @@ If you reach for one of these, replace it with a specific physical detail.
 
 Summaries appear on recommendation cards alongside other properties. Voice must be consistent and neutral.
 
-| ✗ | ✓ |
-|---|---|
-| "You'll love the mountain views from your room." | "Mountain views from the rooms and rooftop." |
-| "We think this is the best base for Annapurna." | "Natural base before or after an Annapurna circuit." |
+| ✗                                                | ✓                                                    |
+| ------------------------------------------------ | ---------------------------------------------------- |
+| "You'll love the mountain views from your room." | "Mountain views from the rooms and rooftop."         |
+| "We think this is the best base for Annapurna."  | "Natural base before or after an Annapurna circuit." |
 
 ### 6. Tense and voice
 

@@ -61,7 +61,8 @@ export const DIMENSIONS: Record<DimensionKey, ScoringDimension> = {
   budget_fit: {
     key: "budget_fit",
     label: "Budget fit",
-    description: "Price sensitivity. 1 = cost is the primary constraint; 0 = price is not a factor.",
+    description:
+      "Price sensitivity. 1 = cost is the primary constraint; 0 = price is not a factor.",
     canHardFilter: false,
   },
   room_type_fit: {

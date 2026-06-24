@@ -17,12 +17,12 @@ import type {
 // ─── Request ──────────────────────────────────────────────────────────────────
 
 export interface RecommendationRequest {
-  sessionId:   string;
-  personaKey:  PersonaKey;
-  priority:    StayPriority;
+  sessionId: string;
+  personaKey: PersonaKey;
+  priority: StayPriority;
   socialEnergy: SocialEnergy;
-  roomType:    RoomType;
-  budget?:     BudgetLevel;
+  roomType: RoomType;
+  budget?: BudgetLevel;
 }
 
 // ─── Response ─────────────────────────────────────────────────────────────────
@@ -30,31 +30,31 @@ export interface RecommendationRequest {
 // A single ranked property in the response. score and breakdown are included
 // for the Day 6 debug panel; the production UI can ignore them.
 export interface StayResult {
-  id:                 number;
-  name:               string;
-  location:           string;
-  bookingUrl:         string;
-  rank:               number;
-  score:              number;          // 0.0–1.0
-  breakdown:          ScoringBreakdown;
+  id: number;
+  name: string;
+  location: string;
+  bookingUrl: string;
+  rank: number;
+  score: number; // 0.0–1.0
+  breakdown: ScoringBreakdown;
   hardFilterExempted: boolean;
-  lowConfidence:      boolean;
-  explanation:        PropertyExplanation;
+  lowConfidence: boolean;
+  explanation: PropertyExplanation;
 }
 
 // Top-level response envelope from POST /api/recommend.
 export interface RecommendationResponse {
-  results:            StayResult[];
-  confidence:         ConfidenceLevel;
-  fallback:           FallbackMode;
-  hardFilteredCount:  number;
-  poolSize:           number;
+  results: StayResult[];
+  confidence: ConfidenceLevel;
+  fallback: FallbackMode;
+  hardFilteredCount: number;
+  poolSize: number;
   rankingExplanation: RankingExplanation;
 }
 
 // ─── Error ────────────────────────────────────────────────────────────────────
 
 export interface RecommendationErrorResponse {
-  error: string;             // machine-readable error key
+  error: string; // machine-readable error key
   detail?: Record<string, unknown>; // validation field errors when error === "validation_failed"
 }

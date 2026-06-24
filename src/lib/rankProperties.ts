@@ -36,7 +36,7 @@ export {
 
 export function applyHardFilter(
   pool: CandidateProperty[],
-  userVector: ScoringVector,
+  userVector: ScoringVector
 ): FilterResult {
   if (userVector.workation < WORKATION_USER_THRESHOLD) {
     return {
@@ -47,9 +47,7 @@ export function applyHardFilter(
     };
   }
 
-  const strictSurvivors = pool.filter(
-    (c) => c.scoring.workation > WORKATION_PROP_STRICT,
-  );
+  const strictSurvivors = pool.filter((c) => c.scoring.workation > WORKATION_PROP_STRICT);
 
   if (strictSurvivors.length > 0) {
     return {
@@ -61,12 +59,8 @@ export function applyHardFilter(
   }
 
   // Zero strict survivors — activate relaxed mode.
-  const relaxedSurvivors = pool.filter(
-    (c) => c.scoring.workation > WORKATION_PROP_RELAXED,
-  );
-  const exempted = relaxedSurvivors.filter(
-    (c) => c.scoring.workation <= WORKATION_PROP_STRICT,
-  );
+  const relaxedSurvivors = pool.filter((c) => c.scoring.workation > WORKATION_PROP_RELAXED);
+  const exempted = relaxedSurvivors.filter((c) => c.scoring.workation <= WORKATION_PROP_STRICT);
 
   return {
     survivors: relaxedSurvivors,
@@ -81,7 +75,7 @@ export function applyHardFilter(
 export function scoreProperty(
   userVector: ScoringVector,
   candidate: CandidateProperty,
-  weights: DimensionWeights = WEIGHTS,
+  weights: DimensionWeights = WEIGHTS
 ): { score: number; breakdown: ScoringBreakdown } {
   let total = 0;
   const breakdown = {} as ScoringBreakdown;
@@ -103,7 +97,7 @@ export function scoreProperty(
 function resolveConfidence(
   topScore: number,
   poolSize: number,
-  maxResults: number,
+  maxResults: number
 ): ConfidenceLevel {
   if (poolSize === 0) return "low";
   if (poolSize < maxResults) return "moderate";
@@ -116,7 +110,7 @@ function resolveFallback(
   poolSize: number,
   topScore: number,
   relaxedModeActivated: boolean,
-  maxResults: number,
+  maxResults: number
 ): FallbackMode {
   if (poolSize === 0) return "empty";
   if (relaxedModeActivated) return "hard_filter_relaxed";
@@ -132,7 +126,7 @@ function resolveFallback(
 //         explanation generation.
 export function rankProperties(
   input: RankingInput,
-  candidates: CandidateProperty[],
+  candidates: CandidateProperty[]
 ): RankingPayload {
   const { userVector } = input;
   const maxResults = MAX_RESULTS;
@@ -190,10 +184,12 @@ export function rankProperties(
   scored.sort((a, b) => {
     if (b.score !== a.score) return b.score - a.score;
     const msA = DIMENSION_KEYS.reduce(
-      (sum, d) => sum + a.breakdown[d].contribution * a.breakdown[d].userValue, 0,
+      (sum, d) => sum + a.breakdown[d].contribution * a.breakdown[d].userValue,
+      0
     );
     const msB = DIMENSION_KEYS.reduce(
-      (sum, d) => sum + b.breakdown[d].contribution * b.breakdown[d].userValue, 0,
+      (sum, d) => sum + b.breakdown[d].contribution * b.breakdown[d].userValue,
+      0
     );
     if (msB !== msA) return msB - msA;
     return a.property.id - b.property.id;
@@ -202,7 +198,12 @@ export function rankProperties(
   // Stage 5: slice to maxResults, assign rank and confidence flags.
   const topScore = scored[0].score;
   const isLowConfidence = topScore < LOW_CONFIDENCE_THRESHOLD;
-  const finalFallback = resolveFallback(survivors.length, topScore, relaxedModeActivated, maxResults);
+  const finalFallback = resolveFallback(
+    survivors.length,
+    topScore,
+    relaxedModeActivated,
+    maxResults
+  );
   const finalConfidence = resolveConfidence(topScore, survivors.length, maxResults);
 
   // Stage 6: generate per-property explanations.
@@ -214,10 +215,7 @@ export function rankProperties(
       // Placeholder — explanation populated immediately below.
       explanation: undefined as unknown as RankedProperty["explanation"],
     };
-    partial.explanation = explainProperty(
-      partial as RankedProperty,
-      hardFilterTriggered,
-    );
+    partial.explanation = explainProperty(partial as RankedProperty, hardFilterTriggered);
     return partial as RankedProperty;
   });
 

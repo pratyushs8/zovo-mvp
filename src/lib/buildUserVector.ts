@@ -20,9 +20,7 @@ export function buildUserVector(req: RecommendationRequest): ScoringVector {
 
     // Safe: every OverrideQuestion<T> option carries a Partial<ScoringVector>.
     const q = question as OverrideQuestion<string>;
-    const answer = req[q.requestField as keyof RecommendationRequest] as
-      | string
-      | undefined;
+    const answer = req[q.requestField as keyof RecommendationRequest] as string | undefined;
     if (answer == null) continue;
 
     const option = q.options.find((o) => o.value === answer);

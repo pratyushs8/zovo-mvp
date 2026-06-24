@@ -13,7 +13,7 @@ export const WORKATION_USER_THRESHOLD = 0.8;
 //   ≤ RELAXED → no workation value; excluded even under relaxed filter
 // Strict inequality (>) is intentional — properties tagged exactly at STRICT
 // are leisure-only by rubric and should not reach workation users.
-export const WORKATION_PROP_STRICT  = 0.2;
+export const WORKATION_PROP_STRICT = 0.2;
 export const WORKATION_PROP_RELAXED = 0.1;
 
 // ─── Confidence ───────────────────────────────────────────────────────────────
@@ -22,8 +22,8 @@ export const WORKATION_PROP_RELAXED = 0.1;
 // Calibrated against the 50-property dataset (top scores ~0.71–0.90).
 // HIGH fires for most well-matched personas. LOW is a conservative floor —
 // "weak_match" fallback only activates below it; rare with current property set.
-export const HIGH_CONFIDENCE_THRESHOLD = 0.70;
-export const LOW_CONFIDENCE_THRESHOLD  = 0.55;
+export const HIGH_CONFIDENCE_THRESHOLD = 0.7;
+export const LOW_CONFIDENCE_THRESHOLD = 0.55;
 
 // ─── Results ──────────────────────────────────────────────────────────────────
 
@@ -41,7 +41,7 @@ export const MISS_GAP_THRESHOLD = 0.2;
 
 // Gap thresholds for the strength label on each dimension match.
 // gap ≤ STRONG → "strong"  |  gap ≤ MODERATE → "moderate"  |  else → "weak"
-export const STRENGTH_STRONG_MAX_GAP   = 0.2;
+export const STRENGTH_STRONG_MAX_GAP = 0.2;
 export const STRENGTH_MODERATE_MAX_GAP = 0.4;
 
 // ─── Diagnostics (PM review / debug-output.ts) ────────────────────────────────
@@ -52,12 +52,12 @@ export const STRENGTH_MODERATE_MAX_GAP = 0.4;
 export const DIAG_SPREAD_FLAT_THRESHOLD = 0.04;
 
 // hard_filter flag: fraction of pool removed AND confidence is not high.
-export const DIAG_FILTER_AGGRESSIVE_FRACTION = 0.40;
+export const DIAG_FILTER_AGGRESSIVE_FRACTION = 0.4;
 
 // metadata flag: only raised for dimensions the user cares about (value ≥ this).
-export const DIAG_METADATA_SUSPECT_USER_VALUE = 0.60;
+export const DIAG_METADATA_SUSPECT_USER_VALUE = 0.6;
 // metadata flag: gap must be at least this large to qualify as a suspect.
-export const DIAG_METADATA_SUSPECT_GAP = 0.40;
+export const DIAG_METADATA_SUSPECT_GAP = 0.4;
 
 // coverage flag: pool smaller than this → thin_pool, not a ranking signal.
 export const DIAG_THIN_POOL_THRESHOLD = 10;

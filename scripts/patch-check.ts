@@ -17,15 +17,15 @@
 import { PROPERTIES } from "@/config/properties";
 import { PATCHES } from "./property-patches";
 
-const R    = "\x1b[0m";
+const R = "\x1b[0m";
 const BOLD = "\x1b[1m";
-const RED  = "\x1b[31m";
-const GRN  = "\x1b[32m";
-const CYN  = "\x1b[36m";
-const DIM  = "\x1b[2m";
+const RED = "\x1b[31m";
+const GRN = "\x1b[32m";
+const CYN = "\x1b[36m";
+const DIM = "\x1b[2m";
 
 function main(): void {
-  const errors:   string[] = [];
+  const errors: string[] = [];
   const warnings: string[] = [];
 
   const propertyNames = new Set(PROPERTIES.map((p) => p.name));
@@ -53,7 +53,9 @@ function main(): void {
     // 4. No exact duplicate entries
     const key = `${patch.property}::${patch.field}::${patch.appliedDate}`;
     if (seen.has(key)) {
-      warnings.push(`${label}: duplicate entry for same property + field + date — consider consolidating`);
+      warnings.push(
+        `${label}: duplicate entry for same property + field + date — consider consolidating`
+      );
     }
     seen.add(key);
   }
@@ -75,7 +77,9 @@ function main(): void {
     }
     console.log(`  ${DIM}Properties with recorded patches:${R}`);
     for (const [name, count] of [...byProperty.entries()].sort()) {
-      console.log(`    ${name.replace("Zostel ", "")}  ${DIM}(${count} change${count > 1 ? "s" : ""})${R}`);
+      console.log(
+        `    ${name.replace("Zostel ", "")}  ${DIM}(${count} change${count > 1 ? "s" : ""})${R}`
+      );
     }
     console.log();
     process.exit(0);

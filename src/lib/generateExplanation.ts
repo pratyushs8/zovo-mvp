@@ -25,7 +25,7 @@ import {
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 export function classifyStrength(gap: number): MatchStrength {
-  if (gap <= STRENGTH_STRONG_MAX_GAP)   return "strong";
+  if (gap <= STRENGTH_STRONG_MAX_GAP) return "strong";
   if (gap <= STRENGTH_MODERATE_MAX_GAP) return "moderate";
   return "weak";
 }
@@ -37,7 +37,7 @@ export function classifyStrength(gap: number): MatchStrength {
 // vector, not of the individual property.
 export function explainProperty(
   ranked: RankedProperty,
-  hardFilterTriggered: boolean,
+  hardFilterTriggered: boolean
 ): PropertyExplanation {
   const { breakdown, hardFilterExempted, property } = ranked;
 
@@ -95,7 +95,7 @@ function resolveConfidenceReason(
   poolSize: number,
   topScore: number,
   fallback: FallbackMode,
-  maxResults: number,
+  maxResults: number
 ): ConfidenceReason {
   if (poolSize === 0) return "empty_pool";
   if (fallback === "hard_filter_relaxed") return "hard_filter_relaxed";
@@ -109,19 +109,19 @@ function resolveConfidenceReason(
 // Takes explicit params instead of the full RankingPayload to avoid a circular
 // module dependency (rankProperties → generateExplanation → rankProperties).
 export function explainRanking(params: {
-  userVector:        ScoringVector;
-  poolSize:          number;
+  userVector: ScoringVector;
+  poolSize: number;
   hardFilteredCount: number;
-  topScore:          number;
-  fallback:          FallbackMode;
-  confidence:        ConfidenceLevel;
+  topScore: number;
+  fallback: FallbackMode;
+  confidence: ConfidenceLevel;
 }): RankingExplanation {
   const { userVector, poolSize, hardFilteredCount, topScore, fallback, confidence } = params;
 
   return {
     hardFilterTriggered: userVector.workation >= WORKATION_USER_THRESHOLD,
     hardFilteredCount,
-    relaxedModeUsed:     fallback === "hard_filter_relaxed",
+    relaxedModeUsed: fallback === "hard_filter_relaxed",
     poolSize,
     fallback,
     confidence,

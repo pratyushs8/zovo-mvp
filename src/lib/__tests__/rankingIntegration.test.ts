@@ -29,11 +29,11 @@ function run(req: RecommendationRequest, destinationSlug?: string) {
 
 function req(overrides: Partial<RecommendationRequest>): RecommendationRequest {
   return {
-    sessionId:    "integration-test",
-    personaKey:   "solo_social",
-    priority:     "social_vibe",
+    sessionId: "integration-test",
+    personaKey: "solo_social",
+    priority: "social_vibe",
     socialEnergy: "balanced",
-    roomType:     "flexible",
+    roomType: "flexible",
     ...overrides,
   };
 }
@@ -42,10 +42,10 @@ function req(overrides: Partial<RecommendationRequest>): RecommendationRequest {
 
 describe("workation persona — real data", () => {
   const workationReq = req({
-    personaKey:   "workation",
-    priority:     "work_setup",
+    personaKey: "workation",
+    priority: "work_setup",
     socialEnergy: "mostly_private",
-    roomType:     "private",
+    roomType: "private",
   });
 
   test("Pondicherry ranks #1 (best calm+workation combination in dataset)", () => {
@@ -98,7 +98,7 @@ describe("workation persona — real data", () => {
     // (wk:0.8 but calm:0.7) for a user who wants calm + workation.
     const allCandidates = candidates();
     const userVector = buildUserVector(workationReq);
-    const bangalore   = allCandidates.find((c) => c.name.includes("Bangalore"))!;
+    const bangalore = allCandidates.find((c) => c.name.includes("Bangalore"))!;
     const pondicherry = allCandidates.find((c) => c.name.includes("Pondicherry"))!;
     const bScore = scoreProperty(userVector, bangalore).score;
     const pScore = scoreProperty(userVector, pondicherry).score;
@@ -110,10 +110,10 @@ describe("workation persona — real data", () => {
 
 describe("solo_social persona — real data", () => {
   const socialReq = req({
-    personaKey:   "solo_social",
-    priority:     "social_vibe",
+    personaKey: "solo_social",
+    priority: "social_vibe",
     socialEnergy: "very_social",
-    roomType:     "dorm",
+    roomType: "dorm",
   });
 
   test("top result has high social score (>= 0.8)", () => {
@@ -137,9 +137,7 @@ describe("solo_social persona — real data", () => {
     // very-social user; they must not appear in the top 3.
     const { results } = run(socialReq);
     for (const r of results.slice(0, 3)) {
-      const isMismatch =
-        r.property.scoring.calm   >= 0.8 &&
-        r.property.scoring.social <= 0.2;
+      const isMismatch = r.property.scoring.calm >= 0.8 && r.property.scoring.social <= 0.2;
       expect(isMismatch).toBe(false);
     }
   });
@@ -160,10 +158,10 @@ describe("solo_social persona — real data", () => {
 
 describe("couple_retreat persona — real data", () => {
   const coupleReq = req({
-    personaKey:   "couple_retreat",
-    priority:     "calm_quiet",
+    personaKey: "couple_retreat",
+    priority: "calm_quiet",
     socialEnergy: "mostly_private",
-    roomType:     "private",
+    roomType: "private",
   });
 
   test("Kalpa ranks #1 (top calm+scenic+private combination)", () => {
@@ -196,11 +194,11 @@ describe("couple_retreat persona — real data", () => {
 
 describe("budget_backpacker persona — real data", () => {
   const budgetReq = req({
-    personaKey:   "budget_backpacker",
-    priority:     "best_value",
+    personaKey: "budget_backpacker",
+    priority: "best_value",
     socialEnergy: "balanced",
-    roomType:     "dorm",
-    budget:       "lowest",
+    roomType: "dorm",
+    budget: "lowest",
   });
 
   test("Jodhpur ranks #1 (budget_fit:1.0, good social score)", () => {
@@ -227,10 +225,10 @@ describe("budget_backpacker persona — real data", () => {
 
 describe("friends_getaway persona — real data", () => {
   const friendsReq = req({
-    personaKey:   "friends_getaway",
-    priority:     "adventure_access",
+    personaKey: "friends_getaway",
+    priority: "adventure_access",
     socialEnergy: "very_social",
-    roomType:     "dorm",
+    roomType: "dorm",
   });
 
   test("top result is a high-adventure property (adventure >= 0.7)", () => {
@@ -252,9 +250,7 @@ describe("friends_getaway persona — real data", () => {
     // Properties with social <= 0.2 and calm >= 0.9 are wrong for a group.
     const { results } = run(friendsReq);
     for (const r of results.slice(0, 3)) {
-      const isQuietRetreat =
-        r.property.scoring.social <= 0.2 &&
-        r.property.scoring.calm   >= 0.9;
+      const isQuietRetreat = r.property.scoring.social <= 0.2 && r.property.scoring.calm >= 0.9;
       expect(isQuietRetreat).toBe(false);
     }
   });
@@ -264,7 +260,15 @@ describe("friends_getaway persona — real data", () => {
 
 describe("destination filter — real data", () => {
   test("Manali destination returns only Manali properties", () => {
-    const { results } = run(req({ personaKey: "solo_social", priority: "social_vibe", socialEnergy: "very_social", roomType: "dorm" }), "manali");
+    const { results } = run(
+      req({
+        personaKey: "solo_social",
+        priority: "social_vibe",
+        socialEnergy: "very_social",
+        roomType: "dorm",
+      }),
+      "manali"
+    );
     for (const r of results) {
       expect(r.property.destinationSlug).toBe("manali");
     }
@@ -273,7 +277,15 @@ describe("destination filter — real data", () => {
   test("Manali pool has exactly 3 properties (matches data file)", () => {
     const manaliCount = PROPERTIES.filter((p) => p.destinationSlug === "manali").length;
     expect(manaliCount).toBe(3);
-    const { poolSize, fallback } = run(req({ personaKey: "solo_social", priority: "social_vibe", socialEnergy: "very_social", roomType: "dorm" }), "manali");
+    const { poolSize, fallback } = run(
+      req({
+        personaKey: "solo_social",
+        priority: "social_vibe",
+        socialEnergy: "very_social",
+        roomType: "dorm",
+      }),
+      "manali"
+    );
     expect(poolSize).toBe(3);
     expect(fallback).toBe("thin_pool");
   });
@@ -283,9 +295,23 @@ describe("destination filter — real data", () => {
 
 describe("persona divergence — real data", () => {
   test("workation and couple_retreat produce non-overlapping top 3", () => {
-    const workation = run(req({ personaKey: "workation", priority: "work_setup", socialEnergy: "mostly_private", roomType: "private" }));
-    const couple    = run(req({ personaKey: "couple_retreat", priority: "calm_quiet", socialEnergy: "mostly_private", roomType: "private" }));
-    const wkNames     = new Set(workation.results.slice(0, 3).map((r) => r.property.name));
+    const workation = run(
+      req({
+        personaKey: "workation",
+        priority: "work_setup",
+        socialEnergy: "mostly_private",
+        roomType: "private",
+      })
+    );
+    const couple = run(
+      req({
+        personaKey: "couple_retreat",
+        priority: "calm_quiet",
+        socialEnergy: "mostly_private",
+        roomType: "private",
+      })
+    );
+    const wkNames = new Set(workation.results.slice(0, 3).map((r) => r.property.name));
     const coupleNames = couple.results.slice(0, 3).map((r) => r.property.name);
     const overlap = coupleNames.filter((n) => wkNames.has(n));
     // At most 1 overlap allowed — the two personas have fundamentally different priorities.
@@ -293,13 +319,29 @@ describe("persona divergence — real data", () => {
   });
 
   test("solo_social and solo_quiet produce opposite top results", () => {
-    const social = run(req({ personaKey: "solo_social", priority: "social_vibe", socialEnergy: "very_social", roomType: "dorm" }));
-    const quiet  = run(req({ personaKey: "solo_quiet",  priority: "calm_quiet",  socialEnergy: "mostly_private", roomType: "private" }));
+    const social = run(
+      req({
+        personaKey: "solo_social",
+        priority: "social_vibe",
+        socialEnergy: "very_social",
+        roomType: "dorm",
+      })
+    );
+    const quiet = run(
+      req({
+        personaKey: "solo_quiet",
+        priority: "calm_quiet",
+        socialEnergy: "mostly_private",
+        roomType: "private",
+      })
+    );
     // The social #1 should have higher social score than the quiet #1.
-    expect(social.results[0].property.scoring.social)
-      .toBeGreaterThan(quiet.results[0].property.scoring.social);
+    expect(social.results[0].property.scoring.social).toBeGreaterThan(
+      quiet.results[0].property.scoring.social
+    );
     // The quiet #1 should have higher calm score than the social #1.
-    expect(quiet.results[0].property.scoring.calm)
-      .toBeGreaterThan(social.results[0].property.scoring.calm);
+    expect(quiet.results[0].property.scoring.calm).toBeGreaterThan(
+      social.results[0].property.scoring.calm
+    );
   });
 });

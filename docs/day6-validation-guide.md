@@ -45,15 +45,15 @@ score = Σ  W[d] × (1 − |U[d] − P[d]|)
 
 ### Current weights
 
-| Dimension      | Weight | Notes |
-|----------------|--------|-------|
-| `adventure`    | 0.20   | Strongest discriminator — activity-seeking users |
-| `social`       | 0.15   | Social-beach pull balanced against other dims |
-| `calm`         | 0.15   | Quiet-environment signal; anti-correlated with social |
-| `workation`    | 0.15   | Soft gradient above the hard filter floor (>0.2) |
-| `room_type_fit`| 0.15   | Hostel-vibe vs private-vibe character; NOT availability |
-| `scenic`       | 0.10   | High concentration (72% of properties ≥ 0.8) — limited discrimination |
-| `budget_fit`   | 0.10   | Absolute price ranking within the pool |
+| Dimension       | Weight | Notes                                                                 |
+| --------------- | ------ | --------------------------------------------------------------------- |
+| `adventure`     | 0.20   | Strongest discriminator — activity-seeking users                      |
+| `social`        | 0.15   | Social-beach pull balanced against other dims                         |
+| `calm`          | 0.15   | Quiet-environment signal; anti-correlated with social                 |
+| `workation`     | 0.15   | Soft gradient above the hard filter floor (>0.2)                      |
+| `room_type_fit` | 0.15   | Hostel-vibe vs private-vibe character; NOT availability               |
+| `scenic`        | 0.10   | High concentration (72% of properties ≥ 0.8) — limited discrimination |
+| `budget_fit`    | 0.10   | Absolute price ranking within the pool                                |
 
 ### The hard filter
 
@@ -117,12 +117,12 @@ Scenarios live in `scripts/scenarios.ts`. Each scenario is a `TestScenario` obje
 
 ### Categories
 
-| Category | Purpose | Count |
-|---|---|---|
-| `canonical` | One clean case per persona — baseline reference | 6 |
-| `edge_case` | Realistic but non-obvious combinations | 7 |
-| `destination_pinned` | `destinationSlug` active; tests destination filter | 4 |
-| `stress` | Extreme vector or near-empty pool | 2 |
+| Category             | Purpose                                            | Count |
+| -------------------- | -------------------------------------------------- | ----- |
+| `canonical`          | One clean case per persona — baseline reference    | 6     |
+| `edge_case`          | Realistic but non-obvious combinations             | 7     |
+| `destination_pinned` | `destinationSlug` active; tests destination filter | 4     |
+| `stress`             | Extreme vector or near-empty pool                  | 2     |
 
 ### Valid persona keys
 
@@ -261,13 +261,13 @@ The `contrib` column is what this dimension contributed to the total score. Sum 
   ⚠  hard_filter_relaxed — strict workation filter found 0 matches; pool expanded to workation > 0.1
 ```
 
-| Fallback label | Meaning |
-|---|---|
-| `none` | Normal result, no fallback |
-| `hard_filter_relaxed` | Workation strict filter found 0 results; relaxed to > 0.1 |
-| `thin_pool` | Pool < 5 results (typically destination-pinned with few properties) |
-| `weak_match` | Top score < 0.55 — no strong match found |
-| `empty` | Zero results after filtering |
+| Fallback label        | Meaning                                                             |
+| --------------------- | ------------------------------------------------------------------- |
+| `none`                | Normal result, no fallback                                          |
+| `hard_filter_relaxed` | Workation strict filter found 0 results; relaxed to > 0.1           |
+| `thin_pool`           | Pool < 5 results (typically destination-pinned with few properties) |
+| `weak_match`          | Top score < 0.55 — no strong match found                            |
+| `empty`               | Zero results after filtering                                        |
 
 ### Assertion results
 
@@ -287,13 +287,13 @@ A failing assertion (`✗`) is a **ranking regression** that needs investigation
   ⚡  coverage      hard filter removed 78% of pool — verify workation property count is adequate
 ```
 
-| Diagnostic | Meaning | Action |
-|---|---|---|
-| `weight_logic` | Top-N scores span < 0.04 — fragile ordering | Check if a minor metadata change could improve discrimination |
-| `metadata` | A dimension the user cares about (≥ 0.60) shows a large gap (≥ 0.40) on top results | Audit the property's score for that dimension |
-| `coverage:thin_pool` | Pool < 10 properties reached scoring | May need more properties in the destination/category |
-| `coverage:low_ceiling` | Top score < 0.65 with a full pool | No strong match; consider whether scenarios need different personas |
-| `hard_filter` | Filter removed ≥ 40% of pool | Common for workation users; verify the relaxed path works |
+| Diagnostic             | Meaning                                                                             | Action                                                              |
+| ---------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `weight_logic`         | Top-N scores span < 0.04 — fragile ordering                                         | Check if a minor metadata change could improve discrimination       |
+| `metadata`             | A dimension the user cares about (≥ 0.60) shows a large gap (≥ 0.40) on top results | Audit the property's score for that dimension                       |
+| `coverage:thin_pool`   | Pool < 10 properties reached scoring                                                | May need more properties in the destination/category                |
+| `coverage:low_ceiling` | Top score < 0.65 with a full pool                                                   | No strong match; consider whether scenarios need different personas |
+| `hard_filter`          | Filter removed ≥ 40% of pool                                                        | Common for workation users; verify the relaxed path works           |
 
 ---
 
@@ -303,27 +303,27 @@ After running a scenario, classify each result and the overall scenario using th
 
 ### Result-level classifications
 
-| Label | Criteria |
-|---|---|
-| `strong` | Property clearly fits the user's stated intent; top-match dimensions align with what the user asked for; PM would confidently recommend it |
-| `acceptable` | Property is a defensible recommendation; minor gaps but no disqualifying mismatch; a user would not feel misled |
-| `poor` | Property is a meaningful mismatch; a real user would feel the recommendation missed their intent; or a clearly better option was displaced |
+| Label        | Criteria                                                                                                                                   |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `strong`     | Property clearly fits the user's stated intent; top-match dimensions align with what the user asked for; PM would confidently recommend it |
+| `acceptable` | Property is a defensible recommendation; minor gaps but no disqualifying mismatch; a user would not feel misled                            |
+| `poor`       | Property is a meaningful mismatch; a real user would feel the recommendation missed their intent; or a clearly better option was displaced |
 
 ### Scenario-level classifications
 
-| Label | Criteria |
-|---|---|
-| `strong` | #1 result is strong; #2–3 are acceptable or strong; no poor results in top-3 |
-| `acceptable` | #1 is acceptable; mix in top-3; a reasonable user experience |
-| `poor` | #1 is poor; or two+ poor results in top-3; or assertions failing |
+| Label        | Criteria                                                                     |
+| ------------ | ---------------------------------------------------------------------------- |
+| `strong`     | #1 result is strong; #2–3 are acceptable or strong; no poor results in top-3 |
+| `acceptable` | #1 is acceptable; mix in top-3; a reasonable user experience                 |
+| `poor`       | #1 is poor; or two+ poor results in top-3; or assertions failing             |
 
 ### Issue type (for poor/acceptable scenarios)
 
-| Label | Meaning | Fix |
-|---|---|---|
-| `algorithm` | Scoring formula or weights are producing an unintuitive ordering | Adjust weights in `src/config/weights.ts` or ranking thresholds in `src/config/ranking.ts` |
-| `metadata` | A property has an incorrect score or tag that is distorting the ranking | Audit with `npm run audit:properties`; fix in `properties.json` |
-| `both` | Both the scoring logic and property data contribute to the problem | Fix metadata first (cheaper), then re-evaluate whether algorithm changes are still needed |
+| Label       | Meaning                                                                 | Fix                                                                                        |
+| ----------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `algorithm` | Scoring formula or weights are producing an unintuitive ordering        | Adjust weights in `src/config/weights.ts` or ranking thresholds in `src/config/ranking.ts` |
+| `metadata`  | A property has an incorrect score or tag that is distorting the ranking | Audit with `npm run audit:properties`; fix in `properties.json`                            |
+| `both`      | Both the scoring logic and property data contribute to the problem      | Fix metadata first (cheaper), then re-evaluate whether algorithm changes are still needed  |
 
 ### When a result looks wrong — diagnostic checklist
 
@@ -354,15 +354,15 @@ After running a scenario, classify each result and the overall scenario using th
 
 Use this to predict what a weight change will do before making it:
 
-| If you raise weight for... | Effect |
-|---|---|
-| `adventure` | Adventure destinations (Manali, Kasol, Pokhara) beat social-beach destinations (Goa, Phuket) more often |
-| `social` | Social beach destinations surface more often; quiet/scenic properties pushed down |
-| `calm` | Remote mountain properties dominate; social beaches lose rank |
-| `workation` | Workation destinations increasingly outrank equivalent scenic retreats when user has any workation signal |
-| `room_type_fit` | Private-room users see more hotel-adjacent properties; dorm users penalised by mixed-character properties |
-| `scenic` | Limited effect — 72% of properties are at scenic ≥ 0.8, so most properties gain equally. Raising scenic weight mainly widens the gap when comparing urban (scenic 0.1–0.3) vs. mountain destinations |
-| `budget_fit` | Budget properties gain; expensive boutique properties drop more in ranks for non-budget users |
+| If you raise weight for... | Effect                                                                                                                                                                                               |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `adventure`                | Adventure destinations (Manali, Kasol, Pokhara) beat social-beach destinations (Goa, Phuket) more often                                                                                              |
+| `social`                   | Social beach destinations surface more often; quiet/scenic properties pushed down                                                                                                                    |
+| `calm`                     | Remote mountain properties dominate; social beaches lose rank                                                                                                                                        |
+| `workation`                | Workation destinations increasingly outrank equivalent scenic retreats when user has any workation signal                                                                                            |
+| `room_type_fit`            | Private-room users see more hotel-adjacent properties; dorm users penalised by mixed-character properties                                                                                            |
+| `scenic`                   | Limited effect — 72% of properties are at scenic ≥ 0.8, so most properties gain equally. Raising scenic weight mainly widens the gap when comparing urban (scenic 0.1–0.3) vs. mountain destinations |
+| `budget_fit`               | Budget properties gain; expensive boutique properties drop more in ranks for non-budget users                                                                                                        |
 
 ### Safe tuning increment
 
@@ -371,13 +371,13 @@ Move weights in steps of 0.05 maximum. A 0.05 shift on a 50-property pool with s
 ### Current baseline (Day 6)
 
 ```typescript
-adventure:     0.20   // highest — activity-seeking users need clear signal
-social:        0.15   // reduced from 0.20; was over-pulling Goa
-calm:          0.15
-workation:     0.15
-room_type_fit: 0.15   // raised from 0.10; all properties have private rooms now
-scenic:        0.10   // reduced from 0.15; high concentration limits discrimination
-budget_fit:    0.10
+adventure: 0.2; // highest — activity-seeking users need clear signal
+social: 0.15; // reduced from 0.20; was over-pulling Goa
+calm: 0.15;
+workation: 0.15;
+room_type_fit: 0.15; // raised from 0.10; all properties have private rooms now
+scenic: 0.1; // reduced from 0.15; high concentration limits discrimination
+budget_fit: 0.1;
 ```
 
 ---
@@ -497,6 +497,7 @@ npm run validate:scenarios -- --summary-only  # confirm no regressions
 A regression = an assertion that was passing now fails.
 
 **Before reverting**, check:
+
 1. Is the assertion wrong, or is the ranking wrong? Sometimes a scenario's expectation was calibrated to a known-imperfect result.
 2. Run `--breakdown` on the failing scenario. Which dimension caused the rank change?
 3. If a metadata change caused it: the new property data may be more correct; consider updating the assertion rather than reverting the data.
@@ -539,4 +540,4 @@ This means at least one `high`-severity issue was found. High-severity issues ar
 
 ---
 
-*Last updated: 2026-06-24 — Day 6 validation baseline established. 19 scenarios, 19 passing. Weight tuning v2 (adventure=0.20, room_type_fit=0.15) in effect.*
+_Last updated: 2026-06-24 — Day 6 validation baseline established. 19 scenarios, 19 passing. Weight tuning v2 (adventure=0.20, room_type_fit=0.15) in effect._
