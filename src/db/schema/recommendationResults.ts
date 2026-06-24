@@ -17,7 +17,8 @@ export const recommendationResults = pgTable(
     // Snapshot of the property's ScoringVector at ranking time.
     // The property's scoring column is mutable (reseeds overwrite it);
     // this preserves the exact vector that produced the rank for post-hoc analysis.
-    scoreSnapshot: jsonb("score_snapshot").$type<ScoringVector>().notNull(),
+    // Nullable: Day 5 recommendStays() MUST populate this on every insert.
+    scoreSnapshot: jsonb("score_snapshot").$type<ScoringVector>(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (t) => [

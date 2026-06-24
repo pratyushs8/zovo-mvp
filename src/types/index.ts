@@ -58,7 +58,8 @@ export type BudgetLevel = "lowest" | "moderate" | "flexible";
 export interface PropertySeed {
   name: string;
   destinationSlug: string;
-  location: string;
+  destinationName: string; // canonical destination display name, e.g. "Bangalore" not "Koramangala"
+  location: string;        // specific area within the destination, e.g. "Koramangala, Bangalore"
   priceInr: number;
   archetype: Archetype;
   scoring: ScoringVector;

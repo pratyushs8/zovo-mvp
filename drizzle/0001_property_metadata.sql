@@ -37,8 +37,7 @@ ALTER TABLE "recommendation_requests"
   ALTER COLUMN "room_type" DROP DEFAULT;
 
 --> statement-breakpoint
+-- Nullable: Day 5 recommendStays() must populate this on every insert.
+-- NOT NULL would block all recommendation writes until Day 5 is implemented.
 ALTER TABLE "recommendation_results"
-  ADD COLUMN "score_snapshot" jsonb NOT NULL DEFAULT '{}'::jsonb;
-
-ALTER TABLE "recommendation_results"
-  ALTER COLUMN "score_snapshot" DROP DEFAULT;
+  ADD COLUMN "score_snapshot" jsonb;

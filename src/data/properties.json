@@ -1,7 +1,8 @@
 [
   {
-    "name": "Zostel Old Manali",
     "destinationSlug": "manali",
+    "destinationName": "Manali",
+    "name": "Zostel Old Manali",
     "location": "Old Manali",
     "priceInr": 749,
     "archetype": "mountain_adventure_hub",
@@ -26,8 +27,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/manali/"
   },
   {
-    "name": "Zostel Kasol",
     "destinationSlug": "kasol",
+    "destinationName": "Kasol",
+    "name": "Zostel Kasol",
     "location": "Kasol",
     "priceInr": 799,
     "archetype": "mountain_adventure_hub",
@@ -52,8 +54,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/kasol/"
   },
   {
-    "name": "Zostel Kasol (Katagla)",
     "destinationSlug": "kasol",
+    "destinationName": "Kasol",
+    "name": "Zostel Kasol (Katagla)",
     "location": "Kasol",
     "priceInr": 749,
     "archetype": "mountain_adventure_hub",
@@ -77,8 +80,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/kasol-katagla/"
   },
   {
-    "name": "Zostel Manali (Vashisht)",
     "destinationSlug": "manali",
+    "destinationName": "Manali",
+    "name": "Zostel Manali (Vashisht)",
     "location": "Vashisht",
     "priceInr": 749,
     "archetype": "mountain_adventure_hub",
@@ -103,8 +107,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/vashisht/"
   },
   {
-    "name": "Zostel Dobhi",
     "destinationSlug": "manali",
+    "destinationName": "Manali",
+    "name": "Zostel Dobhi",
     "location": "Dobhi",
     "priceInr": 649,
     "archetype": "mountain_adventure_hub",
@@ -128,8 +133,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/dobhi/"
   },
   {
-    "name": "Zostel Rishikesh (Laxman Jhula)",
     "destinationSlug": "rishikesh",
+    "destinationName": "Rishikesh",
+    "name": "Zostel Rishikesh (Laxman Jhula)",
     "location": "Laxman Jhula",
     "priceInr": 749,
     "archetype": "mountain_adventure_hub",
@@ -155,8 +161,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/rishikesh/"
   },
   {
-    "name": "Zostel Rishikesh (Tapovan)",
     "destinationSlug": "rishikesh",
+    "destinationName": "Rishikesh",
+    "name": "Zostel Rishikesh (Tapovan)",
     "location": "Tapovan",
     "priceInr": 799,
     "archetype": "mountain_adventure_hub",
@@ -182,8 +189,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/rishikesh-tapovan/"
   },
   {
-    "name": "Zostel Pokhara",
     "destinationSlug": "pokhara",
+    "destinationName": "Pokhara",
+    "name": "Zostel Pokhara",
     "location": "Pokhara, Nepal",
     "priceInr": 449,
     "archetype": "mountain_adventure_hub",
@@ -210,8 +218,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/pokhara/"
   },
   {
-    "name": "Zostel Chitkul",
     "destinationSlug": "chitkul",
+    "destinationName": "Chitkul",
+    "name": "Zostel Chitkul",
     "location": "Chitkul",
     "priceInr": 699,
     "archetype": "remote_mountain_quiet",
@@ -236,8 +245,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/chitkul/"
   },
   {
-    "name": "Zostel Kalpa",
     "destinationSlug": "kalpa",
+    "destinationName": "Kalpa",
+    "name": "Zostel Kalpa",
     "location": "Kalpa",
     "priceInr": 899,
     "archetype": "remote_mountain_quiet",
@@ -261,8 +271,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/kalpa/"
   },
   {
-    "name": "Zostel Sangla",
     "destinationSlug": "sangla",
+    "destinationName": "Sangla",
+    "name": "Zostel Sangla",
     "location": "Sangla",
     "priceInr": 799,
     "archetype": "remote_mountain_quiet",
@@ -288,8 +299,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/sangla/"
   },
   {
-    "name": "Zostel Pulga",
     "destinationSlug": "pulga",
+    "destinationName": "Pulga",
+    "name": "Zostel Pulga",
     "location": "Pulga",
     "priceInr": 749,
     "archetype": "remote_mountain_quiet",
@@ -313,8 +325,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/pulga/"
   },
   {
-    "name": "Zostel Shangarh",
     "destinationSlug": "shangarh",
+    "destinationName": "Shangarh",
+    "name": "Zostel Shangarh",
     "location": "Shangarh",
     "priceInr": 799,
     "archetype": "remote_mountain_quiet",
@@ -339,8 +352,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/shangarh/"
   },
   {
-    "name": "Zostel Pahalgam",
     "destinationSlug": "pahalgam",
+    "destinationName": "Pahalgam",
+    "name": "Zostel Pahalgam",
     "location": "Pahalgam",
     "priceInr": 549,
     "archetype": "remote_mountain_quiet",
@@ -366,8 +380,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/pahalgam/"
   },
   {
-    "name": "La-Hostel (Zostel Leh)",
     "destinationSlug": "leh",
+    "destinationName": "Leh",
+    "name": "La-Hostel (Zostel Leh)",
     "location": "Leh",
     "priceInr": 549,
     "archetype": "remote_mountain_quiet",
@@ -392,8 +407,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/leh/"
   },
   {
-    "name": "Zostel Rinchenpong (Pelling)",
     "destinationSlug": "pelling",
+    "destinationName": "Pelling",
+    "name": "Zostel Rinchenpong (Pelling)",
     "location": "Rinchenpong",
     "priceInr": 594,
     "archetype": "remote_mountain_quiet",
@@ -417,8 +433,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/pelling/"
   },
   {
-    "name": "Zostel Mcleodganj",
     "destinationSlug": "mcleodganj",
+    "destinationName": "Mcleodganj",
+    "name": "Zostel Mcleodganj",
     "location": "Mcleodganj",
     "priceInr": 649,
     "archetype": "cultural_hill_town",
@@ -445,8 +462,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/mcleodganj/"
   },
   {
-    "name": "Zostel Dharamkot (Bhagsu)",
     "destinationSlug": "mcleodganj",
+    "destinationName": "Mcleodganj",
+    "name": "Zostel Dharamkot (Bhagsu)",
     "location": "Dharamkot",
     "priceInr": 749,
     "archetype": "cultural_hill_town",
@@ -471,8 +489,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/dharamkot/"
   },
   {
-    "name": "Zostel Mussoorie (Mall Road)",
     "destinationSlug": "mussoorie",
+    "destinationName": "Mussoorie",
+    "name": "Zostel Mussoorie (Mall Road)",
     "location": "Mussoorie",
     "priceInr": 799,
     "archetype": "cultural_hill_town",
@@ -497,8 +516,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/mussoorie/"
   },
   {
-    "name": "Zostel Banikhet (Dalhousie)",
     "destinationSlug": "dalhousie",
+    "destinationName": "Dalhousie",
+    "name": "Zostel Banikhet (Dalhousie)",
     "location": "Banikhet",
     "priceInr": 599,
     "archetype": "cultural_hill_town",
@@ -523,8 +543,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/dalhousie/"
   },
   {
-    "name": "Zostel Shillong",
     "destinationSlug": "shillong",
+    "destinationName": "Shillong",
+    "name": "Zostel Shillong",
     "location": "Shillong",
     "priceInr": 749,
     "archetype": "cultural_hill_town",
@@ -549,8 +570,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/shillong/"
   },
   {
-    "name": "Zostel Gangtok",
     "destinationSlug": "gangtok",
+    "destinationName": "Gangtok",
+    "name": "Zostel Gangtok",
     "location": "Gangtok",
     "priceInr": 699,
     "archetype": "cultural_hill_town",
@@ -575,8 +597,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/gangtok/"
   },
   {
-    "name": "Zostel Srinagar",
     "destinationSlug": "srinagar",
+    "destinationName": "Srinagar",
+    "name": "Zostel Srinagar",
     "location": "Srinagar",
     "priceInr": 799,
     "archetype": "cultural_hill_town",
@@ -601,8 +624,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/srinagar/"
   },
   {
-    "name": "Zostel Goa (Morjim)",
     "destinationSlug": "goa",
+    "destinationName": "Goa",
+    "name": "Zostel Goa (Morjim)",
     "location": "Morjim, Goa",
     "priceInr": 799,
     "archetype": "beach_social",
@@ -626,8 +650,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/goa/"
   },
   {
-    "name": "Zostel Gokarna",
     "destinationSlug": "gokarna",
+    "destinationName": "Gokarna",
+    "name": "Zostel Gokarna",
     "location": "Gokarna",
     "priceInr": 949,
     "archetype": "beach_social",
@@ -651,8 +676,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/gokarna/"
   },
   {
-    "name": "Zostel Varkala",
     "destinationSlug": "varkala",
+    "destinationName": "Varkala",
+    "name": "Zostel Varkala",
     "location": "Varkala",
     "priceInr": 719,
     "archetype": "beach_social",
@@ -677,8 +703,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/varkala/"
   },
   {
-    "name": "Zostel Phuket",
     "destinationSlug": "phuket",
+    "destinationName": "Phuket",
+    "name": "Zostel Phuket",
     "location": "Phuket, Thailand",
     "priceInr": 315,
     "archetype": "beach_social",
@@ -705,8 +732,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/phuket/"
   },
   {
-    "name": "Zostel Port Blair",
     "destinationSlug": "port-blair",
+    "destinationName": "Port Blair",
+    "name": "Zostel Port Blair",
     "location": "Port Blair",
     "priceInr": 999,
     "archetype": "beach_social",
@@ -732,8 +760,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/port-blair/"
   },
   {
-    "name": "Zostel Jaipur",
     "destinationSlug": "jaipur",
+    "destinationName": "Jaipur",
+    "name": "Zostel Jaipur",
     "location": "Jaipur",
     "priceInr": 449,
     "archetype": "heritage_cultural_city",
@@ -758,8 +787,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/jaipur/"
   },
   {
-    "name": "Zostel Jaipur (MI Road)",
     "destinationSlug": "jaipur",
+    "destinationName": "Jaipur",
+    "name": "Zostel Jaipur (MI Road)",
     "location": "Jaipur",
     "priceInr": 359,
     "archetype": "heritage_cultural_city",
@@ -783,8 +813,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/jaipur-mi-road/"
   },
   {
-    "name": "Zostel Jaisalmer",
     "destinationSlug": "jaisalmer",
+    "destinationName": "Jaisalmer",
+    "name": "Zostel Jaisalmer",
     "location": "Jaisalmer",
     "priceInr": 449,
     "archetype": "heritage_cultural_city",
@@ -809,8 +840,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/jaisalmer/"
   },
   {
-    "name": "Zostel Sam Desert (Jaisalmer)",
     "destinationSlug": "jaisalmer",
+    "destinationName": "Jaisalmer",
+    "name": "Zostel Sam Desert (Jaisalmer)",
     "location": "Sam, Jaisalmer",
     "priceInr": 449,
     "archetype": "heritage_cultural_city",
@@ -834,8 +866,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/sam-desert/"
   },
   {
-    "name": "Zostel Jodhpur (Clock Tower)",
     "destinationSlug": "jodhpur",
+    "destinationName": "Jodhpur",
+    "name": "Zostel Jodhpur (Clock Tower)",
     "location": "Jodhpur",
     "priceInr": 319,
     "archetype": "heritage_cultural_city",
@@ -859,8 +892,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/jodhpur/"
   },
   {
-    "name": "Zostel Bundi",
     "destinationSlug": "bundi",
+    "destinationName": "Bundi",
+    "name": "Zostel Bundi",
     "location": "Bundi",
     "priceInr": 279,
     "archetype": "heritage_cultural_city",
@@ -884,8 +918,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/bundi/"
   },
   {
-    "name": "Zostel Udaipur",
     "destinationSlug": "udaipur",
+    "destinationName": "Udaipur",
+    "name": "Zostel Udaipur",
     "location": "Udaipur",
     "priceInr": 499,
     "archetype": "heritage_cultural_city",
@@ -910,8 +945,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/udaipur/"
   },
   {
-    "name": "Zostel Varanasi",
     "destinationSlug": "varanasi",
+    "destinationName": "Varanasi",
+    "name": "Zostel Varanasi",
     "location": "Varanasi",
     "priceInr": 649,
     "archetype": "heritage_cultural_city",
@@ -936,8 +972,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/varanasi/"
   },
   {
-    "name": "Zostel Delhi",
     "destinationSlug": "delhi",
+    "destinationName": "Delhi",
+    "name": "Zostel Delhi",
     "location": "Delhi",
     "priceInr": 899,
     "archetype": "urban_metro",
@@ -962,8 +999,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/delhi/"
   },
   {
-    "name": "Zostel Mumbai",
     "destinationSlug": "mumbai",
+    "destinationName": "Mumbai",
+    "name": "Zostel Mumbai",
     "location": "Mumbai",
     "priceInr": 1099,
     "archetype": "urban_metro",
@@ -988,8 +1026,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/mumbai/"
   },
   {
-    "name": "Zostel Bangalore (Koramangala)",
     "destinationSlug": "bangalore",
+    "destinationName": "Bangalore",
+    "name": "Zostel Bangalore (Koramangala)",
     "location": "Koramangala, Bangalore",
     "priceInr": 559,
     "archetype": "urban_metro",
@@ -1015,8 +1054,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/bangalore/"
   },
   {
-    "name": "Zostel Hyderabad",
     "destinationSlug": "hyderabad",
+    "destinationName": "Hyderabad",
+    "name": "Zostel Hyderabad",
     "location": "Hyderabad",
     "priceInr": 749,
     "archetype": "urban_metro",
@@ -1041,8 +1081,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/hyderabad/"
   },
   {
-    "name": "Zostel Kolkata",
     "destinationSlug": "kolkata",
+    "destinationName": "Kolkata",
+    "name": "Zostel Kolkata",
     "location": "Kolkata",
     "priceInr": 649,
     "archetype": "urban_metro",
@@ -1067,8 +1108,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/kolkata/"
   },
   {
-    "name": "Zostel Coorg (Madikeri)",
     "destinationSlug": "coorg",
+    "destinationName": "Coorg",
+    "name": "Zostel Coorg (Madikeri)",
     "location": "Madikeri, Coorg",
     "priceInr": 699,
     "archetype": "nature_retreat",
@@ -1093,8 +1135,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/coorg/"
   },
   {
-    "name": "Zostel Munnar",
     "destinationSlug": "munnar",
+    "destinationName": "Munnar",
+    "name": "Zostel Munnar",
     "location": "Munnar",
     "priceInr": 699,
     "archetype": "nature_retreat",
@@ -1119,8 +1162,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/munnar/"
   },
   {
-    "name": "Zostel Kodaikanal",
     "destinationSlug": "kodaikanal",
+    "destinationName": "Kodaikanal",
+    "name": "Zostel Kodaikanal",
     "location": "Kodaikanal",
     "priceInr": 849,
     "archetype": "nature_retreat",
@@ -1146,8 +1190,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/kodaikanal/"
   },
   {
-    "name": "Zostel Kodaikanal (Vilpatti)",
     "destinationSlug": "kodaikanal",
+    "destinationName": "Kodaikanal",
+    "name": "Zostel Kodaikanal (Vilpatti)",
     "location": "Vilpatti, Kodaikanal",
     "priceInr": 649,
     "archetype": "nature_retreat",
@@ -1172,8 +1217,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/kodaikanal-vilpatti/"
   },
   {
-    "name": "Zostel Alleppey",
     "destinationSlug": "alleppey",
+    "destinationName": "Alleppey",
+    "name": "Zostel Alleppey",
     "location": "Alleppey",
     "priceInr": 649,
     "archetype": "nature_retreat",
@@ -1198,8 +1244,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/alleppey/"
   },
   {
-    "name": "Zostel Kochi (Kumbalangi)",
     "destinationSlug": "kochi",
+    "destinationName": "Kochi",
+    "name": "Zostel Kochi (Kumbalangi)",
     "location": "Kumbalangi, Kochi",
     "priceInr": 549,
     "archetype": "nature_retreat",
@@ -1224,8 +1271,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/kochi/"
   },
   {
-    "name": "Zostel Kolad",
     "destinationSlug": "kolad",
+    "destinationName": "Kolad",
+    "name": "Zostel Kolad",
     "location": "Kolad",
     "priceInr": 559,
     "archetype": "nature_retreat",
@@ -1250,8 +1298,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/kolad/"
   },
   {
-    "name": "Zostel Pondicherry (Auroville Road)",
     "destinationSlug": "pondicherry",
+    "destinationName": "Pondicherry",
+    "name": "Zostel Pondicherry (Auroville Road)",
     "location": "Pondicherry",
     "priceInr": 699,
     "archetype": "nature_retreat",
@@ -1277,8 +1326,9 @@
     "bookingUrl": "https://www.zostel.com/zostel/pondicherry/"
   },
   {
-    "name": "Zostel Hampi (Gangavathi)",
     "destinationSlug": "hampi",
+    "destinationName": "Hampi",
+    "name": "Zostel Hampi (Gangavathi)",
     "location": "Hampi",
     "priceInr": 799,
     "archetype": "nature_retreat",
