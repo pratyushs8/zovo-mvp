@@ -121,10 +121,76 @@ export interface DebugOutput {
 
   assertions: DebugAssertion[];
 
+  diagnostics: DebugDiagnostics;
+
   // PM fills these in — null until reviewed.
   pmNote:               string | null;
   overallClassification: "strong" | "acceptable" | "poor" | null;
   issueType:            "none" | "algorithm" | "metadata" | "both" | null;
+}
+
+// ─── Diagnostics schema ───────────────────────────────────────────────────────
+
+/**
+ * One of four root causes for a weak or surprising ranking result.
+ * "none" means no signals were triggered — the result looks healthy.
+ */
+export type DiagnosticCause =
+  | "weight_logic"  // score spread is too flat; ranking order is fragile
+  | "hard_filter"   // filter is too aggressive or needed the relaxed fallback
+  | "metadata"      // property dimension values look miscalibrated for this user
+  | "coverage"      // pool is too small or all top results are the same archetype
+  | "none";
+
+export interface WeightLogicDiagnostic {
+  scoreSpread:          number;  // topScore − last result score
+  minGapBetweenResults: number;  // smallest adjacent-score gap in the top results
+  spreadFlat:           boolean; // spread < 0.04 with ≥ 3 results
+  note:                 string;
+}
+
+export interface HardFilterDiagnostic {
+  triggered:        boolean;
+  filteredCount:    number;
+  filteredFraction: number;  // filteredCount / (poolSize + filteredCount)
+  relaxedModeUsed:  boolean;
+  tooAggressive:    boolean; // filteredFraction > 0.40 AND confidence !== "high"
+  note:             string;
+}
+
+export interface MetadataSuspect {
+  resultRank:    number;
+  propertyName:  string;
+  dim:           string;
+  userValue:     number; // what the user wants
+  propertyValue: number; // what the property has
+  gap:           number;
+  // Human-readable action hint — what a PM should verify in properties.json.
+  note:          string;
+}
+
+export interface MetadataDiagnostic {
+  suspects: MetadataSuspect[]; // gaps ≥ 0.40 on dimensions the user values ≥ 0.60
+  note:     string;
+}
+
+export interface CoverageDiagnostic {
+  poolSize:         number;
+  thinPool:         boolean; // poolSize < 10
+  lowScoreCeiling:  boolean; // topScore < 0.65 with poolSize ≥ 10 (no good match exists)
+  archetypeCount:   number;  // distinct archetypes in top results
+  archetypes:       string[];
+  homogeneous:      boolean; // archetypeCount === 1 AND topScore < 0.72 AND poolSize ≥ 5
+  note:             string;
+}
+
+export interface DebugDiagnostics {
+  // Ordered list of triggered causes. ["none"] when everything looks healthy.
+  causes:      DiagnosticCause[];
+  weightLogic: WeightLogicDiagnostic;
+  hardFilter:  HardFilterDiagnostic;
+  metadata:    MetadataDiagnostic;
+  coverage:    CoverageDiagnostic;
 }
 
 // ─── Serializer ───────────────────────────────────────────────────────────────
@@ -184,15 +250,134 @@ function toDebugResult(ranked: RankedProperty): DebugResult {
   };
 }
 
+// ─── Diagnostic thresholds ────────────────────────────────────────────────────
+// Centralised so they're easy to adjust during Day 6 validation.
+
+const SPREAD_FLAT_THRESHOLD        = 0.04;  // top results span < 4 pts — ranking is fragile
+const FILTER_AGGRESSIVE_FRACTION   = 0.40;  // > 40% removed AND not high confidence
+const METADATA_SUSPECT_USER_VALUE  = 0.60;  // user must care about a dim to flag it
+const METADATA_SUSPECT_GAP         = 0.40;  // gap must be at least "moderate+weak" to flag
+const THIN_POOL_THRESHOLD          = 10;    // fewer than 10 survivors = coverage problem
+const LOW_SCORE_CEILING            = 0.65;  // top score < 0.65 with a full pool = no good match
+const HOMOGENEOUS_SCORE_CAP        = 0.72;  // homogeneous is only a concern if top score < this
+
+function computeDiagnostics(payload: RankingPayload): DebugDiagnostics {
+  const results = payload.results;
+
+  // ── Weight logic ──────────────────────────────────────────────────────────
+  const scores = results.map((r) => r.score);
+  const scoreSpread = scores.length > 1 ? r3(scores[0] - scores[scores.length - 1]) : 0;
+  const minGap = scores.length > 1
+    ? r3(Math.min(...scores.slice(1).map((s, i) => scores[i] - s)))
+    : 0;
+  // Suppress flat-spread signal on thin pools — compressed spread is expected there.
+  const thinPool = payload.poolSize < THIN_POOL_THRESHOLD;
+  const spreadFlat = !thinPool && scores.length >= 3 && scoreSpread < SPREAD_FLAT_THRESHOLD;
+
+  const weightLogic: WeightLogicDiagnostic = {
+    scoreSpread,
+    minGapBetweenResults: minGap,
+    spreadFlat,
+    note: spreadFlat
+      ? `Top ${results.length} results span only ${(scoreSpread * 100).toFixed(1)} pts — small weight changes could reshuffle rankings. Identify which dimension(s) are pulling multiple properties to the same score.`
+      : `Score spread of ${(scoreSpread * 100).toFixed(1)} pts across ${results.length} results. Ranking order looks stable.`,
+  };
+
+  // ── Hard filter ───────────────────────────────────────────────────────────
+  const totalInPool = payload.poolSize + payload.hardFilteredCount;
+  const filteredFraction = totalInPool > 0 ? r3(payload.hardFilteredCount / totalInPool) : 0;
+  const relaxedModeUsed  = payload.rankingExplanation.relaxedModeUsed;
+  const tooAggressive    = payload.rankingExplanation.hardFilterTriggered
+    && filteredFraction > FILTER_AGGRESSIVE_FRACTION
+    && payload.confidence !== "high";
+
+  const hardFilter: HardFilterDiagnostic = {
+    triggered:        payload.rankingExplanation.hardFilterTriggered,
+    filteredCount:    payload.hardFilteredCount,
+    filteredFraction,
+    relaxedModeUsed,
+    tooAggressive,
+    note: !payload.rankingExplanation.hardFilterTriggered
+      ? "Workation hard filter not active for this request."
+      : relaxedModeUsed
+      ? "Strict filter found no survivors — relaxed threshold was used. Check workation tagging for destination properties; they may be under-tagged."
+      : tooAggressive
+      ? `Filter removed ${(filteredFraction * 100).toFixed(0)}% of pool with only ${payload.confidence} confidence. Consider whether WORKATION_PROP_STRICT (${0.2}) is too high for this destination.`
+      : `Filter removed ${(filteredFraction * 100).toFixed(0)}% of pool — within expected range.`,
+  };
+
+  // ── Metadata ──────────────────────────────────────────────────────────────
+  // Flag gaps on dimensions the user actually cares about (userValue ≥ 0.60).
+  // A large gap on a high-user-value dimension means the property doesn't deliver
+  // what the user wanted — this may be a correct match (property is genuinely weak
+  // on that dim) or a tagging error. PM should verify in properties.json.
+  const suspects: MetadataSuspect[] = [];
+  for (const r of results.slice(0, 3)) {
+    for (const [dim, bd] of Object.entries(r.breakdown)) {
+      if (bd.userValue >= METADATA_SUSPECT_USER_VALUE && bd.gap >= METADATA_SUSPECT_GAP) {
+        suspects.push({
+          resultRank:    r.rank,
+          propertyName:  r.property.name,
+          dim,
+          userValue:     r3(bd.userValue),
+          propertyValue: r3(bd.propertyValue),
+          gap:           r3(bd.gap),
+          note:          `#${r.rank} ${r.property.name.replace("Zostel ", "")} has ${dim}=${bd.propertyValue.toFixed(2)} but user wants ${bd.userValue.toFixed(2)} (gap ${bd.gap.toFixed(2)}) — verify tag in properties.json`,
+        });
+      }
+    }
+  }
+
+  const metadata: MetadataDiagnostic = {
+    suspects,
+    note: suspects.length === 0
+      ? "No dimension mismatches in top 3 results on dimensions the user cares about."
+      : `${suspects.length} suspect gap${suspects.length > 1 ? "s" : ""} in top 3 results. These may be correct (property genuinely weak on that dim) or tagging errors — verify in properties.json.`,
+  };
+
+  // ── Coverage ──────────────────────────────────────────────────────────────
+  const lowScoreCeiling = payload.topScore < LOW_SCORE_CEILING && !thinPool && !relaxedModeUsed;
+  const archetypes = [...new Set(results.map((r) => r.property.archetype as string))];
+  const homogeneous = archetypes.length === 1
+    && payload.topScore < HOMOGENEOUS_SCORE_CAP
+    && payload.poolSize >= 5;
+
+  const coverage: CoverageDiagnostic = {
+    poolSize: payload.poolSize,
+    thinPool,
+    lowScoreCeiling,
+    archetypeCount: archetypes.length,
+    archetypes,
+    homogeneous,
+    note: thinPool
+      ? `Pool has only ${payload.poolSize} propert${payload.poolSize === 1 ? "y" : "ies"} after filtering — results reflect coverage limits, not ranking quality. Add more properties for this destination.`
+      : lowScoreCeiling
+      ? `Best score is ${payload.topScore.toFixed(3)} with ${payload.poolSize} candidates — no existing property closely matches this persona. New property types needed.`
+      : homogeneous
+      ? `All top results share archetype "${archetypes[0]}" with a moderate top score — the engine found only one type of property. More diverse properties could improve results.`
+      : `${payload.poolSize} properties, ${archetypes.length} distinct archetype${archetypes.length > 1 ? "s" : ""} in top results.`,
+  };
+
+  // ── Root cause summary ────────────────────────────────────────────────────
+  const causes: DiagnosticCause[] = [];
+  if (spreadFlat)                                          causes.push("weight_logic");
+  if (tooAggressive || relaxedModeUsed)                   causes.push("hard_filter");
+  if (suspects.length > 0)                                causes.push("metadata");
+  if (thinPool || lowScoreCeiling || homogeneous)         causes.push("coverage");
+  if (causes.length === 0)                                causes.push("none");
+
+  return { causes, weightLogic, hardFilter, metadata, coverage };
+}
+
 /**
  * Serialize a live RankingPayload + scenario context into a PM-reviewable
  * DebugOutput record. Rounds all floats to 3 decimal places.
  */
 export function toDebugOutput(
-  scenario:   TestScenario,
-  payload:    RankingPayload,
-  assertions: DebugAssertion[],
-  totalCandidates: number,
+  scenario:        TestScenario,
+  payload:         RankingPayload,
+  assertions:      DebugAssertion[],
+  totalCandidates: number, // total property count before destination pre-filter
 ): DebugOutput {
   const pipeline: DebugPipeline = {
     totalCandidates,
@@ -218,10 +403,11 @@ export function toDebugOutput(
       budget:           scenario.request.budget,
       destinationSlug:  scenario.request.destinationSlug,
     },
-    userVector:  payload.userVector,
+    userVector:   payload.userVector,
     pipeline,
-    results:     payload.results.map(toDebugResult),
+    results:      payload.results.map(toDebugResult),
     assertions,
+    diagnostics:  computeDiagnostics(payload),
     pmNote:               null,
     overallClassification: null,
     issueType:            null,

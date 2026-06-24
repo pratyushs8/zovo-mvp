@@ -187,12 +187,13 @@ function buildRun(s: TestScenario, payload: RankingPayload, assertions: Assertio
 // ─── Terminal printer ─────────────────────────────────────────────────────────
 
 function printScenario(
-  s:          TestScenario,
-  idx:        number,
-  total:      number,
-  payload:    RankingPayload,
-  userVector: ScoringVector,
-  assertions: AssertionResult[],
+  s:           TestScenario,
+  idx:         number,
+  total:       number,
+  payload:     RankingPayload,
+  userVector:  ScoringVector,
+  assertions:  AssertionResult[],
+  debugOutput: import("./debug-output").DebugOutput,
 ): void {
   const catColor: Record<string, string> = {
     canonical:          CYN,
@@ -294,6 +295,40 @@ function printScenario(
     for (const a of assertions) {
       const icon = a.pass ? `${GRN}✓${R}` : `${RED}✗${R}`;
       console.log(`  ${icon}  ${a.name.padEnd(18)} ${a.pass ? DIM : RED}${a.detail}${R}`);
+    }
+  }
+
+  // ── Diagnostics ──────────────────────────────────────────────────────────
+  const diag = debugOutput.diagnostics;
+  if (diag) {
+    const causeColors: Record<string, string> = {
+      weight_logic: YLW,
+      hard_filter:  RED,
+      metadata:     MGT,
+      coverage:     BLU,
+      none:         DIM,
+    };
+    const causeStr = diag.causes
+      .map((c) => `${causeColors[c] ?? R}${c}${R}`)
+      .join("  ");
+
+    console.log(`\n  ${BOLD}Diagnostics${R}  ${causeStr}`);
+
+    if (diag.weightLogic.spreadFlat) {
+      console.log(`  ${YLW}⚑${R}  weight_logic  ${DIM}${diag.weightLogic.note}${R}`);
+    }
+    if (diag.hardFilter.relaxedModeUsed || diag.hardFilter.tooAggressive) {
+      console.log(`  ${RED}⚑${R}  hard_filter   ${DIM}${diag.hardFilter.note}${R}`);
+    }
+    if (diag.metadata.suspects.length > 0) {
+      const topSuspects = diag.metadata.suspects
+        .slice(0, 3)
+        .map((s) => `#${s.resultRank} ${s.propertyName.replace("Zostel ", "")} ${s.dim}Δ${s.gap.toFixed(2)}`)
+        .join(", ");
+      console.log(`  ${MGT}⚑${R}  metadata      ${DIM}${topSuspects}${R}`);
+    }
+    if (diag.coverage.thinPool || diag.coverage.lowScoreCeiling || diag.coverage.homogeneous) {
+      console.log(`  ${BLU}⚑${R}  coverage      ${DIM}${diag.coverage.note}${R}`);
     }
   }
 
@@ -429,7 +464,7 @@ for (let i = 0; i < selected.length; i++) {
   });
 
   if (!jsonMode && !summaryOnly) {
-    printScenario(s, i + 1, selected.length, payload, userVector, assertions);
+    printScenario(s, i + 1, selected.length, payload, userVector, assertions, debugOutput);
   }
 
   // Save individual debug JSON record if --save
