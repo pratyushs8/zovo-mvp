@@ -34,3 +34,6 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
+          OPENAI_API_KEY: sk-ci-placeholder-not-used-at-build-time

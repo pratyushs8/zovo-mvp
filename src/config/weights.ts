@@ -5,27 +5,43 @@ import type { DimensionWeights } from "@/config/scoring";
 //
 // The single file to change when tuning the ranking model.
 //
-// social (0.20) — the strongest single discriminator in the network.
-// calm  (0.15) — anti-correlated with social in the property data, so
-//   social+calm combined (0.35) acts as the dominant axis: quiet users
-//   are doubly penalised by social properties and vice versa. This is
-//   intentional — the social/calm axis is the sharpest user split.
-// workation (0.15) — the soft gradient above the hard filter floor.
+// adventure (0.20) — raised from 0.15; now the strongest discriminator.
+//   When a user selects adventure_access priority, adventure properties
+//   clearly outrank scenic-calm properties that compensate on other dims.
+// social (0.15) — reduced from 0.20: was over-pulling social beach
+//   destinations (Goa) ahead of adventure/quiet properties for users who
+//   didn't explicitly prioritise social energy.
+// calm (0.15) — unchanged. Anti-correlated with social; together they form
+//   the dominant quiet/social axis at combined 0.30.
+// workation (0.15) — unchanged. Soft gradient above the hard filter floor.
 //   The hard filter (src/config/ranking.ts) enforces the minimum bar
 //   (property must have workation > 0.2); this weight then rewards degree
-//   of fit above that floor. Intentionally kept equal to other mid-tier
-//   dimensions rather than inflated, so scenic/calm preferences still
-//   differentiate within the surviving workation pool.
-// scenic, adventure (0.15) — equal weight; neither dominates by default.
-// budget_fit, room_type_fit (0.10) — refining signals. A 0.10 weight
-//   means a full mismatch on room type costs 0.10, not a disqualifier.
-//   Room type is a soft preference, not a hard filter.
+//   of fit above that floor.
+// room_type_fit (0.15) — raised from 0.10. All properties carry private
+//   rooms (at 2× dorm price), so this dimension measures experience
+//   character (hostel-vibe vs private-vibe), not availability. Couples and
+//   solo-quiet users wanting private feel are now properly differentiated.
+// scenic (0.10) — reduced from 0.15 to absorb the room_type_fit increase.
+//   Scenic is correlated with calm for mountain/nature destinations; the
+//   priority scoringOverride (scenic: 0.9) still boosts it strongly in the
+//   user vector when scenic_views is the stated priority.
+// budget_fit (0.10) — unchanged.
 export const WEIGHTS: DimensionWeights = {
-  social:        0.20,
-  calm:          0.15,
-  scenic:        0.15,
-  workation:     0.15,
-  adventure:     0.15,
-  budget_fit:    0.10,
-  room_type_fit: 0.10,
+  social: 0.15,
+  calm: 0.15,
+  scenic: 0.1,
+  workation: 0.15,
+  adventure: 0.2,
+  budget_fit: 0.1,
+  room_type_fit: 0.15,
 } satisfies DimensionWeights;
+
+// Fail fast if weights drift from 1.0 during tuning sessions.
+// Floating-point arithmetic allows a 0.1% margin before this fires.
+const _weightSum = Object.values(WEIGHTS).reduce((a, b) => a + b, 0);
+if (Math.abs(_weightSum - 1.0) > 0.001) {
+  throw new Error(
+    `WEIGHTS must sum to 1.0 — got ${_weightSum.toFixed(4)}. ` +
+      `Adjust weights.ts before proceeding.`
+  );
+}

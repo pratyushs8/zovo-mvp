@@ -13,9 +13,7 @@ import { rankProperties } from "@/lib/rankProperties";
 // Re-export so server code that imports from this module still gets the types.
 export type { RecommendationRequest, StayResult, RecommendationResponse } from "@/types/api";
 
-export async function recommendStays(
-  req: RecommendationRequest,
-): Promise<RecommendationResponse> {
+export async function recommendStays(req: RecommendationRequest): Promise<RecommendationResponse> {
   // Stage 1: resolve user vector from persona baseline + Q2–Q5 overrides.
   const userVector = buildUserVector(req);
 
@@ -40,44 +38,44 @@ export async function recommendStays(
     const [reqRow] = await tx
       .insert(requestsTable)
       .values({
-        sessionId:   req.sessionId,
-        personaKey:  req.personaKey,
-        priority:    req.priority,
+        sessionId: req.sessionId,
+        personaKey: req.personaKey,
+        priority: req.priority,
         socialEnergy: req.socialEnergy,
-        roomType:    req.roomType,
-        budget:      req.budget ?? null,
+        roomType: req.roomType,
+        budget: req.budget ?? null,
       })
       .returning({ id: requestsTable.id });
 
     if (payload.results.length > 0) {
       await tx.insert(resultsTable).values(
         payload.results.map((r) => ({
-          requestId:     reqRow.id,
-          propertyId:    r.property.id,
-          rank:          r.rank,
+          requestId: reqRow.id,
+          propertyId: r.property.id,
+          rank: r.rank,
           scoreSnapshot: r.property.scoring,
-        })),
+        }))
       );
     }
   });
 
   return {
     results: payload.results.map((r) => ({
-      id:                 r.property.id,
-      name:               r.property.name,
-      location:           r.property.location,
-      bookingUrl:         r.property.bookingUrl,
-      rank:               r.rank,
-      score:              r.score,
-      breakdown:          r.breakdown,
+      id: r.property.id,
+      name: r.property.name,
+      location: r.property.location,
+      bookingUrl: r.property.bookingUrl,
+      rank: r.rank,
+      score: r.score,
+      breakdown: r.breakdown,
       hardFilterExempted: r.hardFilterExempted,
-      lowConfidence:      r.lowConfidence,
-      explanation:        r.explanation,
+      lowConfidence: r.lowConfidence,
+      explanation: r.explanation,
     })),
-    confidence:         payload.confidence,
-    fallback:           payload.fallback,
-    hardFilteredCount:  payload.hardFilteredCount,
-    poolSize:           payload.poolSize,
+    confidence: payload.confidence,
+    fallback: payload.fallback,
+    hardFilteredCount: payload.hardFilteredCount,
+    poolSize: payload.poolSize,
     rankingExplanation: payload.rankingExplanation,
   };
 }

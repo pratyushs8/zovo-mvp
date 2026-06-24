@@ -18,7 +18,7 @@ export class RecommendationClientError extends Error {
   constructor(
     public readonly code: string,
     public readonly status: number,
-    public readonly detail?: Record<string, unknown>,
+    public readonly detail?: Record<string, unknown>
   ) {
     super(`Recommendation request failed: ${code} (HTTP ${status})`);
     this.name = "RecommendationClientError";
@@ -26,7 +26,7 @@ export class RecommendationClientError extends Error {
 }
 
 export async function getRecommendations(
-  req: RecommendationRequest,
+  req: RecommendationRequest
 ): Promise<RecommendationResponse> {
   const res = await fetch("/api/recommend", {
     method: "POST",
@@ -35,11 +35,13 @@ export async function getRecommendations(
   });
 
   if (!res.ok) {
-    const errBody = await res.json().catch(() => ({ error: "unknown_error" })) as RecommendationErrorResponse;
+    const errBody = (await res
+      .json()
+      .catch(() => ({ error: "unknown_error" }))) as RecommendationErrorResponse;
     throw new RecommendationClientError(
       errBody.error ?? "unknown_error",
       res.status,
-      errBody.detail,
+      errBody.detail
     );
   }
 

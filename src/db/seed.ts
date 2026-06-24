@@ -41,13 +41,13 @@ async function seed() {
     .onConflictDoUpdate({
       target: properties.bookingUrl,
       set: {
-        name:      sql`excluded.name`,
-        location:  sql`excluded.location`,
-        priceInr:  sql`excluded.price_inr`,
+        name: sql`excluded.name`,
+        location: sql`excluded.location`,
+        priceInr: sql`excluded.price_inr`,
         archetype: sql`excluded.archetype`,
-        scoring:   sql`excluded.scoring`,
-        tags:      sql`excluded.tags`,
-        summary:   sql`excluded.summary`,
+        scoring: sql`excluded.scoring`,
+        tags: sql`excluded.tags`,
+        summary: sql`excluded.summary`,
       },
     })
     .returning({ id: properties.id, name: properties.name });

@@ -26,12 +26,12 @@ export type PersonaKey =
 // Users and properties both carry a ScoringVector.
 // The recommendation engine compares them to produce a ranked result.
 export interface ScoringVector {
-  social: number;        // preference for communal interaction
-  calm: number;          // preference for quiet, low-stimulation environments
-  scenic: number;        // preference for natural landscape over urban setting
-  workation: number;     // need for wifi, quiet workspace (only hard-filterable dimension)
-  adventure: number;     // appetite for physical activity and outdoor pursuits
-  budget_fit: number;    // price sensitivity (1 = cost is the primary constraint)
+  social: number; // preference for communal interaction
+  calm: number; // preference for quiet, low-stimulation environments
+  scenic: number; // preference for natural landscape over urban setting
+  workation: number; // need for wifi, quiet workspace (only hard-filterable dimension)
+  adventure: number; // appetite for physical activity and outdoor pursuits
+  budget_fit: number; // price sensitivity (1 = cost is the primary constraint)
   room_type_fit: number; // 0 = dorm preferred, 1 = private room required
 }
 
@@ -59,7 +59,7 @@ export interface PropertySeed {
   name: string;
   destinationSlug: string;
   destinationName: string; // canonical destination display name, e.g. "Bangalore" not "Koramangala"
-  location: string;        // specific area within the destination, e.g. "Koramangala, Bangalore"
+  location: string; // specific area within the destination, e.g. "Koramangala, Bangalore"
   priceInr: number;
   archetype: Archetype;
   scoring: ScoringVector;

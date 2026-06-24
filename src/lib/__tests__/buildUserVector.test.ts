@@ -5,11 +5,11 @@ import type { RecommendationRequest } from "@/types/api";
 // Minimal valid request — only personaKey and required fields.
 function req(overrides: Partial<RecommendationRequest> = {}): RecommendationRequest {
   return {
-    sessionId:    "00000000-0000-0000-0000-000000000001",
-    personaKey:   "solo_social",
-    priority:     "social_vibe",
+    sessionId: "00000000-0000-0000-0000-000000000001",
+    personaKey: "solo_social",
+    priority: "social_vibe",
     socialEnergy: "very_social",
-    roomType:     "dorm",
+    roomType: "dorm",
     ...overrides,
   };
 }
@@ -29,9 +29,30 @@ describe("buildUserVector — persona baseline", () => {
   });
 
   test("each persona produces a distinct vector", () => {
-    const social  = buildUserVector(req({ personaKey: "solo_social",   priority: "social_vibe",   socialEnergy: "very_social",    roomType: "dorm" }));
-    const quiet   = buildUserVector(req({ personaKey: "solo_quiet",    priority: "calm_quiet",    socialEnergy: "mostly_private", roomType: "private" }));
-    const work    = buildUserVector(req({ personaKey: "workation",     priority: "work_setup",    socialEnergy: "mostly_private", roomType: "private" }));
+    const social = buildUserVector(
+      req({
+        personaKey: "solo_social",
+        priority: "social_vibe",
+        socialEnergy: "very_social",
+        roomType: "dorm",
+      })
+    );
+    const quiet = buildUserVector(
+      req({
+        personaKey: "solo_quiet",
+        priority: "calm_quiet",
+        socialEnergy: "mostly_private",
+        roomType: "private",
+      })
+    );
+    const work = buildUserVector(
+      req({
+        personaKey: "workation",
+        priority: "work_setup",
+        socialEnergy: "mostly_private",
+        roomType: "private",
+      })
+    );
 
     expect(social.social).toBeGreaterThan(quiet.social);
     expect(quiet.calm).toBeGreaterThan(social.calm);
@@ -57,7 +78,7 @@ describe("buildUserVector — Q2 priority override", () => {
 
   test("scenic_views raises scenic to 0.9 and does not touch adventure or workation", () => {
     const persona = PERSONAS.solo_social.scoring;
-    const vector  = buildUserVector(req({ personaKey: "solo_social", priority: "scenic_views" }));
+    const vector = buildUserVector(req({ personaKey: "solo_social", priority: "scenic_views" }));
     expect(vector.scenic).toBe(0.9);
     // Q2 scenic_views and Q3 very_social (default) neither touch adventure nor workation,
     // so these should retain their persona baseline values.
@@ -75,10 +96,12 @@ describe("buildUserVector — Q3 social energy override", () => {
     expect(vector.calm).toBe(0.0);
   });
 
-  test("mostly_private sets social:0.1 and calm:0.9", () => {
+  test("mostly_private sets social:0.1 (calm left to Q2/persona)", () => {
+    // Q3 only overrides social — calm is the responsibility of Q2 (priority) or
+    // the persona baseline. This keeps Q2 calm_quiet effective for quiet users
+    // while preventing mostly_private from force-overriding a budget user's calm.
     const vector = buildUserVector(req({ socialEnergy: "mostly_private" }));
     expect(vector.social).toBe(0.1);
-    expect(vector.calm).toBe(0.9);
   });
 
   // Q3 writes social/calm AFTER Q2 — it wins on those dimensions.
@@ -121,7 +144,15 @@ describe("buildUserVector — Q5 budget override", () => {
 
   test("omitting budget leaves budget_fit at the persona baseline value", () => {
     const persona = PERSONAS.workation.scoring;
-    const vector  = buildUserVector(req({ personaKey: "workation", priority: "work_setup", socialEnergy: "mostly_private", roomType: "private", budget: undefined }));
+    const vector = buildUserVector(
+      req({
+        personaKey: "workation",
+        priority: "work_setup",
+        socialEnergy: "mostly_private",
+        roomType: "private",
+        budget: undefined,
+      })
+    );
     // workation persona baseline budget_fit is 0.2; no Q5 → should be 0.2.
     expect(vector.budget_fit).toBe(persona.budget_fit);
   });

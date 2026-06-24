@@ -11,15 +11,15 @@ Each property in the ZoCo dataset carries seven categories of information.
 
 ### Required fields
 
-| Field | Type | Notes |
-|---|---|---|
-| `name` | `text NOT NULL` | Display name as shown on Zostel's site |
-| `destinationId` | `integer NOT NULL → destinations.id` | FK to normalised destinations table |
-| `location` | `text NOT NULL` | Human-readable area, e.g. "Old Manali" or "Koramangala, Bangalore" |
-| `priceInr` | `integer NOT NULL` | Lowest dorm price in INR at time of curation |
-| `archetype` | `text NOT NULL` | One of 7 values — see Archetype Taxonomy below |
-| `bookingUrl` | `text NOT NULL UNIQUE` | Canonical Zostel URL; also the upsert key |
-| `summary` | `text` | 1–2 sentence editorial description; see `docs/summary-rules-v1.md` |
+| Field           | Type                                 | Notes                                                              |
+| --------------- | ------------------------------------ | ------------------------------------------------------------------ |
+| `name`          | `text NOT NULL`                      | Display name as shown on Zostel's site                             |
+| `destinationId` | `integer NOT NULL → destinations.id` | FK to normalised destinations table                                |
+| `location`      | `text NOT NULL`                      | Human-readable area, e.g. "Old Manali" or "Koramangala, Bangalore" |
+| `priceInr`      | `integer NOT NULL`                   | Lowest dorm price in INR at time of curation                       |
+| `archetype`     | `text NOT NULL`                      | One of 7 values — see Archetype Taxonomy below                     |
+| `bookingUrl`    | `text NOT NULL UNIQUE`               | Canonical Zostel URL; also the upsert key                          |
+| `summary`       | `text`                               | 1–2 sentence editorial description; see `docs/summary-rules-v1.md` |
 
 ### Scoring vector
 
@@ -27,13 +27,13 @@ Stored as a single `scoring jsonb NOT NULL` column. Shape is `ScoringVector` fro
 
 ```ts
 {
-  social:        number  // 0.0–1.0 — communal interaction level
-  calm:          number  // 0.0–1.0 — quiet, low-stimulation environment
-  scenic:        number  // 0.0–1.0 — natural landscape quality
-  workation:     number  // 0.0–1.0 — wifi + workspace reliability (hard-filterable)
-  adventure:     number  // 0.0–1.0 — proximity to outdoor activity
-  budget_fit:    number  // 0.0–1.0 — price relative to network (1 = cheapest)
-  room_type_fit: number  // 0.0–1.0 — 0 = dorm-dominant, 1 = private-dominant
+  social: number; // 0.0–1.0 — communal interaction level
+  calm: number; // 0.0–1.0 — quiet, low-stimulation environment
+  scenic: number; // 0.0–1.0 — natural landscape quality
+  workation: number; // 0.0–1.0 — wifi + workspace reliability (hard-filterable)
+  adventure: number; // 0.0–1.0 — proximity to outdoor activity
+  budget_fit: number; // 0.0–1.0 — price relative to network (1 = cheapest)
+  room_type_fit: number; // 0.0–1.0 — 0 = dorm-dominant, 1 = private-dominant
 }
 ```
 
@@ -53,10 +53,10 @@ Tags serve display and consistency purposes; they do not participate in the Day 
 
 **Tags serve two roles — do not confuse them:**
 
-| Role | Examples | Affects ranking? |
-|---|---|---|
-| Dimension proxies — readable shorthand for a scoring signal | `social`, `quiet`, `workation`, `adventure`, `budget`, `dorm`, `private` | No — the score is the signal, not the tag |
-| Display / context labels — terrain, activity type, traveler character | `mountains`, `beach`, `trekking`, `cultural`, `romantic`, `backpacker` | No |
+| Role                                                                  | Examples                                                                 | Affects ranking?                          |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------ | ----------------------------------------- |
+| Dimension proxies — readable shorthand for a scoring signal           | `social`, `quiet`, `workation`, `adventure`, `budget`, `dorm`, `private` | No — the score is the signal, not the tag |
+| Display / context labels — terrain, activity type, traveler character | `mountains`, `beach`, `trekking`, `cultural`, `romantic`, `backpacker`   | No                                        |
 
 **Vocabulary note:** the tag `quiet` maps to the `calm` scoring dimension. They refer to the same property characteristic. `quiet` was chosen as the tag because it reads naturally on a result card; `calm` is the internal dimension key used in scoring and the rubric. Treat them as synonyms.
 
@@ -64,15 +64,15 @@ Tags serve display and consistency purposes; they do not participate in the Day 
 
 Seven archetypes group properties by dominant character. Used for editorial organisation and future UI filtering.
 
-| Key | Description |
-|---|---|
-| `mountain_adventure_hub` | High-social, trail-access Himalayan bases |
-| `remote_mountain_quiet` | Off-grid, low-footfall mountain stays |
-| `cultural_hill_town` | Hill stations with cultural or workation character |
-| `beach_social` | Coastal properties with social infrastructure |
-| `heritage_cultural_city` | Rajasthan, heritage towns, pilgrimage cities |
-| `urban_metro` | Metro city bases — Delhi, Mumbai, Bangalore, etc. |
-| `nature_retreat` | Forest, backwater, and plantation retreats |
+| Key                      | Description                                        |
+| ------------------------ | -------------------------------------------------- |
+| `mountain_adventure_hub` | High-social, trail-access Himalayan bases          |
+| `remote_mountain_quiet`  | Off-grid, low-footfall mountain stays              |
+| `cultural_hill_town`     | Hill stations with cultural or workation character |
+| `beach_social`           | Coastal properties with social infrastructure      |
+| `heritage_cultural_city` | Rajasthan, heritage towns, pilgrimage cities       |
+| `urban_metro`            | Metro city bases — Delhi, Mumbai, Bangalore, etc.  |
+| `nature_retreat`         | Forest, backwater, and plantation retreats         |
 
 ---
 
@@ -87,6 +87,7 @@ Full calibration guide in `docs/tagging-rubric-v1.md`. Key principles:
 - Allowed score values: 0.0, 0.1, 0.2 … 1.0. Finer precision is false accuracy.
 
 Cross-dimension consistency rules (full list in the rubric):
+
 - `social ≥ 0.8` → `calm` should be ≤ 0.4
 - `workation ≥ 0.8` → `calm` should be ≥ 0.6
 - `budget_fit ≥ 0.9` → `price_inr` should be ≤ ₹399
@@ -106,7 +107,15 @@ Each entry follows the `PropertySeed` interface from `src/types/index.ts`:
   "location": "Old Manali",
   "priceInr": 749,
   "archetype": "mountain_adventure_hub",
-  "scoring": { "social": 0.8, "calm": 0.2, "scenic": 0.9, "workation": 0.3, "adventure": 0.9, "budget_fit": 0.4, "room_type_fit": 0.2 },
+  "scoring": {
+    "social": 0.8,
+    "calm": 0.2,
+    "scenic": 0.9,
+    "workation": 0.3,
+    "adventure": 0.9,
+    "budget_fit": 0.4,
+    "room_type_fit": 0.2
+  },
   "tags": ["mountains", "riverside", "social", "backpacker", "trekking", "dorm"],
   "summary": "The original Zostel on the backpacker trail — Beas riverside, trail access from the doorstep, and a common area that fills up every evening.",
   "bookingUrl": "https://www.zostel.com/zostel/manali/"
@@ -127,12 +136,12 @@ Each entry follows the `PropertySeed` interface from `src/types/index.ts`:
 
 ### Files
 
-| File | Role |
-|---|---|
-| `src/data/properties.json` | Source of truth — edit this to add or update properties |
-| `src/config/properties.ts` | Typed wrapper; imports JSON, exports `PROPERTIES` and `DESTINATIONS` |
-| `src/scripts/validate-properties.ts` | Pre-seed validation; also runnable standalone |
-| `src/db/seed.ts` | Reads config, validates, upserts destinations then properties |
+| File                                 | Role                                                                 |
+| ------------------------------------ | -------------------------------------------------------------------- |
+| `src/data/properties.json`           | Source of truth — edit this to add or update properties              |
+| `src/config/properties.ts`           | Typed wrapper; imports JSON, exports `PROPERTIES` and `DESTINATIONS` |
+| `src/scripts/validate-properties.ts` | Pre-seed validation; also runnable standalone                        |
+| `src/db/seed.ts`                     | Reads config, validates, upserts destinations then properties        |
 
 ### Commands
 
@@ -153,6 +162,7 @@ This means the seed is safe to rerun after any content correction. A changed sco
 ### Validation checks
 
 The validator runs before any DB write and throws on the first batch of violations:
+
 - All 7 scoring dimensions present and in `[0.0, 1.0]`
 - All tags from the 36-value controlled vocabulary
 - `archetype` is one of 7 valid values
@@ -167,6 +177,7 @@ The validator runs before any DB write and throws on the first batch of violatio
 `drizzle/0001_property_metadata.sql` adds to the Day 3 baseline:
 
 **`properties` table:**
+
 - `location text NOT NULL`
 - `price_inr integer NOT NULL`
 - `archetype text NOT NULL`
@@ -175,6 +186,7 @@ The validator runs before any DB write and throws on the first batch of violatio
 - `UNIQUE(booking_url)` constraint
 
 **`recommendation_requests` table** (aligned with Day 3 intake schema):
+
 - `persona` renamed to `persona_key`
 - `vibe` renamed to `priority`
 - `social_energy text NOT NULL` added
@@ -182,6 +194,7 @@ The validator runs before any DB write and throws on the first batch of violatio
 - `budget text` (nullable) added
 
 **`recommendation_results` table:**
+
 - `score_snapshot jsonb NOT NULL` added — preserves the property's `ScoringVector` at ranking time so post-hoc analysis remains possible after a reseed overwrites the property's current scores.
 
 ---
@@ -198,14 +211,14 @@ The validator runs before any DB write and throws on the first batch of violatio
 
 ## Intentionally Deferred
 
-| Item | Reason |
-|---|---|
-| Property images / media | No image CDN wired; not needed for Day 5 ranking |
-| Availability / inventory | Live availability requires Zostel API integration — out of scope for MVP |
-| Price range (min / max) | Only the dorm floor price is stored; range deferred until inventory data is available |
-| Amenity detail (wifi speed, desk type, A/C) | `workation` score is the proxy; granular amenity data adds curation burden without ranking benefit at this scale |
-| Review scores / ratings | No reviews pipeline; not needed for deterministic ranking |
-| Geo coordinates | No map UI planned for MVP; coordinates add no value to the recommendation engine |
-| `summary NOT NULL` constraint | Technically should be NOT NULL; deferred to avoid a blocking migration on existing rows if the column is backfilled via a future import |
-| Inter-curator scoring consistency test | Weights are set by a single author; data-driven calibration needs usage data first |
-| Region / country grouping on properties | Only `destination_id` exists; no `region` column — fine for MVP, needed if geographic filtering is added in Day 6+ |
+| Item                                        | Reason                                                                                                                                  |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Property images / media                     | No image CDN wired; not needed for Day 5 ranking                                                                                        |
+| Availability / inventory                    | Live availability requires Zostel API integration — out of scope for MVP                                                                |
+| Price range (min / max)                     | Only the dorm floor price is stored; range deferred until inventory data is available                                                   |
+| Amenity detail (wifi speed, desk type, A/C) | `workation` score is the proxy; granular amenity data adds curation burden without ranking benefit at this scale                        |
+| Review scores / ratings                     | No reviews pipeline; not needed for deterministic ranking                                                                               |
+| Geo coordinates                             | No map UI planned for MVP; coordinates add no value to the recommendation engine                                                        |
+| `summary NOT NULL` constraint               | Technically should be NOT NULL; deferred to avoid a blocking migration on existing rows if the column is backfilled via a future import |
+| Inter-curator scoring consistency test      | Weights are set by a single author; data-driven calibration needs usage data first                                                      |
+| Region / country grouping on properties     | Only `destination_id` exists; no `region` column — fine for MVP, needed if geographic filtering is added in Day 6+                      |

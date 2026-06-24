@@ -6,14 +6,14 @@ ZoCo helps travelers discover the right Zostel stay based on their persona and t
 
 ## Stack
 
-| Layer | Choice |
-|---|---|
-| Framework | Next.js 16 (App Router) |
-| Language | TypeScript |
-| Styling | Tailwind CSS |
-| Database | Postgres via Drizzle ORM |
-| AI | OpenAI Responses API |
-| Validation | Zod |
+| Layer      | Choice                   |
+| ---------- | ------------------------ |
+| Framework  | Next.js 16 (App Router)  |
+| Language   | TypeScript               |
+| Styling    | Tailwind CSS             |
+| Database   | Postgres via Drizzle ORM |
+| AI         | OpenAI Responses API     |
+| Validation | Zod                      |
 
 ---
 
@@ -59,21 +59,21 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Scripts
 
-| Script | What it does |
-|---|---|
-| `npm run dev` | Start local dev server with hot reload |
-| `npm run build` | Production build |
-| `npm start` | Serve the production build |
-| `npm run lint` | Run ESLint |
-| `npm run lint:fix` | Run ESLint and auto-fix |
-| `npm run format` | Format all files with Prettier |
-| `npm run format:check` | Check formatting without writing |
-| `npm run typecheck` | TypeScript type check (no emit) |
-| `npm test` | Run Jest tests |
-| `npm run test:watch` | Jest in watch mode |
-| `npm run test:coverage` | Jest with coverage report |
-| `npm run db:generate` | Generate Drizzle migration files |
-| `npm run db:migrate` | Apply pending migrations |
+| Script                  | What it does                           |
+| ----------------------- | -------------------------------------- |
+| `npm run dev`           | Start local dev server with hot reload |
+| `npm run build`         | Production build                       |
+| `npm start`             | Serve the production build             |
+| `npm run lint`          | Run ESLint                             |
+| `npm run lint:fix`      | Run ESLint and auto-fix                |
+| `npm run format`        | Format all files with Prettier         |
+| `npm run format:check`  | Check formatting without writing       |
+| `npm run typecheck`     | TypeScript type check (no emit)        |
+| `npm test`              | Run Jest tests                         |
+| `npm run test:watch`    | Jest in watch mode                     |
+| `npm run test:coverage` | Jest with coverage report              |
+| `npm run db:generate`   | Generate Drizzle migration files       |
+| `npm run db:migrate`    | Apply pending migrations               |
 
 ---
 
@@ -113,15 +113,15 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 **Types:**
 
-| Type | When to use |
-|---|---|
-| `feat` | New user-facing feature |
-| `fix` | Bug fix |
-| `chore` | Tooling, deps, config — no product change |
-| `refactor` | Code restructure with no behavior change |
-| `test` | Adding or updating tests |
-| `docs` | Documentation only |
-| `ci` | CI/CD pipeline changes |
+| Type       | When to use                               |
+| ---------- | ----------------------------------------- |
+| `feat`     | New user-facing feature                   |
+| `fix`      | Bug fix                                   |
+| `chore`    | Tooling, deps, config — no product change |
+| `refactor` | Code restructure with no behavior change  |
+| `test`     | Adding or updating tests                  |
+| `docs`     | Documentation only                        |
+| `ci`       | CI/CD pipeline changes                    |
 
 **Examples:**
 
@@ -133,6 +133,7 @@ test(services): add unit tests for vibe matching logic
 ```
 
 **Rules:**
+
 - Summary is lowercase, imperative, no period at the end
 - Keep the subject line under 72 characters
 - Reference a GitHub issue in the body if one exists: `Closes #12`
@@ -141,11 +142,11 @@ test(services): add unit tests for vibe matching logic
 
 ## Branch strategy
 
-| Branch | Purpose |
-|---|---|
-| `main` | Always deployable; protected — PRs only |
-| `feat/*` | New features |
-| `fix/*` | Bug fixes |
-| `chore/*` | Tooling, deps, config |
+| Branch    | Purpose                                 |
+| --------- | --------------------------------------- |
+| `main`    | Always deployable; protected — PRs only |
+| `feat/*`  | New features                            |
+| `fix/*`   | Bug fixes                               |
+| `chore/*` | Tooling, deps, config                   |
 
 CI (lint + typecheck + format check) must pass before merging to `main`.

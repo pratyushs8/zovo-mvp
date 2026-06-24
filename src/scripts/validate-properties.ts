@@ -13,13 +13,41 @@ const VALID_ARCHETYPES = new Set([
 
 // Tags allowed in property metadata.
 const VALID_TAGS = new Set([
-  "mountains", "riverside", "lake", "beach", "backwaters", "forest", "hills",
-  "desert", "island", "cliffside", "rocky", "camping", "scenic", "city", "village",
-  "social", "quiet", "party", "spiritual", "cultural", "heritage", "romantic",
-  "workation", "cafe",
-  "backpacker", "budget", "international",
-  "trekking", "rafting", "adventure", "paragliding", "diving", "cycling",
-  "dorm", "private",
+  "mountains",
+  "riverside",
+  "lake",
+  "beach",
+  "backwaters",
+  "forest",
+  "hills",
+  "desert",
+  "island",
+  "cliffside",
+  "rocky",
+  "camping",
+  "scenic",
+  "city",
+  "village",
+  "social",
+  "quiet",
+  "party",
+  "spiritual",
+  "cultural",
+  "heritage",
+  "romantic",
+  "workation",
+  "cafe",
+  "backpacker",
+  "budget",
+  "international",
+  "trekking",
+  "rafting",
+  "adventure",
+  "paragliding",
+  "diving",
+  "cycling",
+  "dorm",
+  "private",
   "tech",
 ]);
 
@@ -73,12 +101,17 @@ export function validate(): void {
 
   if (errors.length > 0) {
     for (const e of errors) console.error(`  ✗ ${e}`);
-    throw new Error(`Property validation failed with ${errors.length} error(s). Fix before seeding.`);
+    throw new Error(
+      `Property validation failed with ${errors.length} error(s). Fix before seeding.`
+    );
   }
 }
 
 // Standalone script entry point: npm run validate:properties
-if (process.argv[1].endsWith("validate-properties.ts") || process.argv[1].endsWith("validate-properties.js")) {
+if (
+  process.argv[1].endsWith("validate-properties.ts") ||
+  process.argv[1].endsWith("validate-properties.js")
+) {
   console.log(`Validating ${PROPERTIES.length} properties…\n`);
   try {
     validate();

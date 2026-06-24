@@ -3,7 +3,7 @@ import { recommendationRequestSchema } from "@/lib/schemas/recommendationRequest
 import { recommendStays } from "@/services/recommendation";
 import type { RecommendationResponse, RecommendationErrorResponse } from "@/types/api";
 
-type OkResponse  = NextResponse<RecommendationResponse>;
+type OkResponse = NextResponse<RecommendationResponse>;
 type ErrResponse = NextResponse<RecommendationErrorResponse>;
 
 // POST /api/recommend
@@ -12,9 +12,7 @@ type ErrResponse = NextResponse<RecommendationErrorResponse>;
 // Success 200:  RecommendationResponse
 // Error   400:  { error: "validation_failed", detail: { field: [messages] } }
 // Error   500:  { error: "internal_error" }
-export async function POST(
-  req: NextRequest,
-): Promise<OkResponse | ErrResponse> {
+export async function POST(req: NextRequest): Promise<OkResponse | ErrResponse> {
   // Parse and validate the request body at the API boundary.
   const body = await req.json().catch(() => null);
   const parsed = recommendationRequestSchema.safeParse(body);
@@ -22,7 +20,7 @@ export async function POST(
   if (!parsed.success) {
     return NextResponse.json(
       { error: "validation_failed", detail: parsed.error.flatten().fieldErrors },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
