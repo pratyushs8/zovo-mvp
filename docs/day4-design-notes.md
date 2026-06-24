@@ -49,6 +49,17 @@ Tags serve display and consistency purposes; they do not participate in the Day 
 
 **Why jsonb and not a join table:** Tags are used for display on result cards and as a human-readable sanity check against scoring vectors. They are not aggregated, filtered in SQL, or indexed. A join table adds join complexity for no query benefit at this scale.
 
+**Tags do not affect ranking.** The Day 5 dot-product runs entirely against `scoring`. Tags are a secondary layer for display and curation consistency only.
+
+**Tags serve two roles — do not confuse them:**
+
+| Role | Examples | Affects ranking? |
+|---|---|---|
+| Dimension proxies — readable shorthand for a scoring signal | `social`, `quiet`, `workation`, `adventure`, `budget`, `dorm`, `private` | No — the score is the signal, not the tag |
+| Display / context labels — terrain, activity type, traveler character | `mountains`, `beach`, `trekking`, `cultural`, `romantic`, `backpacker` | No |
+
+**Vocabulary note:** the tag `quiet` maps to the `calm` scoring dimension. They refer to the same property characteristic. `quiet` was chosen as the tag because it reads naturally on a result card; `calm` is the internal dimension key used in scoring and the rubric. Treat them as synonyms.
+
 ### Archetype Taxonomy
 
 Seven archetypes group properties by dominant character. Used for editorial organisation and future UI filtering.

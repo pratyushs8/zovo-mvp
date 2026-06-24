@@ -143,6 +143,24 @@ Before finalising a property's scores, run these sanity checks:
 
 ---
 
+## Tag vocabulary vs. scoring dimensions
+
+Tags and scoring dimensions are related but not the same thing. This table maps between them.
+
+| Scoring dimension | Corresponding tag(s) | Note |
+|---|---|---|
+| `social` | `social`, `party` | `party` implies social ≥ 0.8 |
+| `calm` | `quiet` | **`calm` and `quiet` are the same concept.** `calm` is the internal dimension key; `quiet` is the tag used on cards. |
+| `scenic` | `scenic` | Same word |
+| `workation` | `workation`, `cafe` | `cafe` implies workation-friendly but not necessarily ≥ 0.8 |
+| `adventure` | `adventure`, `trekking`, `rafting`, `paragliding`, `diving`, `cycling` | Specific activity tags imply adventure ≥ 0.7 |
+| `budget_fit` | `budget` | `budget` tag implies budget_fit ≥ 0.7 |
+| `room_type_fit` | `dorm`, `private` | Binary tags; `dorm` → room_type_fit ≤ 0.3, `private` → ≥ 0.6 |
+
+Tags not listed above (`mountains`, `beach`, `cultural`, `heritage`, `romantic`, etc.) are **display-only context labels**. They describe terrain, activity type, or traveler character. They have no scoring counterpart and do not affect ranking.
+
+---
+
 ## Quick reference — score bands
 
 | Band | Means |
