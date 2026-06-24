@@ -8,8 +8,8 @@ import {
   WORKATION_PROP_RELAXED,
   HIGH_CONFIDENCE_THRESHOLD,
   LOW_CONFIDENCE_THRESHOLD,
+  MAX_RESULTS,
 } from "@/config/ranking";
-import { config } from "@/lib/config";
 import { explainProperty, explainRanking } from "@/lib/generateExplanation";
 import type {
   RankingInput,
@@ -22,13 +22,14 @@ import type {
   FallbackMode,
 } from "@/types/ranking";
 
-// Re-export thresholds so unit tests can import them from either location.
+// Re-export ranking config so unit tests can import from either location.
 export {
   WORKATION_USER_THRESHOLD,
   WORKATION_PROP_STRICT,
   WORKATION_PROP_RELAXED,
   HIGH_CONFIDENCE_THRESHOLD,
   LOW_CONFIDENCE_THRESHOLD,
+  MAX_RESULTS,
 } from "@/config/ranking";
 
 // ─── Hard filter ─────────────────────────────────────────────────────────────
@@ -134,7 +135,7 @@ export function rankProperties(
   candidates: CandidateProperty[],
 ): RankingPayload {
   const { userVector } = input;
-  const maxResults = config.recommendation.maxResults;
+  const maxResults = MAX_RESULTS;
 
   // Stage 1: optional destination pre-filter.
   const pool = input.destinationSlug
@@ -144,14 +145,6 @@ export function rankProperties(
   // Stage 2: hard filter.
   const { survivors, hardFilteredCount, relaxedModeActivated, exemptedBookingUrls } =
     applyHardFilter(pool, userVector);
-
-  const fallback = resolveFallback(
-    survivors.length,
-    0, // topScore not yet known; will be recomputed after scoring
-    relaxedModeActivated,
-    maxResults,
-  );
-  const confidence = resolveConfidence(0, survivors.length, maxResults);
 
   if (survivors.length === 0) {
     return {
@@ -188,7 +181,9 @@ export function rankProperties(
   });
 
   // Stage 4: sort descending by score; ascending property.id breaks ties
-  // deterministically.
+  // deterministically within an environment. Note: ids are DB-assigned in
+  // production and index-based in the debug runner — tie-broken results can
+  // differ across environments if two properties score identically.
   scored.sort((a, b) =>
     b.score !== a.score ? b.score - a.score : a.property.id - b.property.id,
   );

@@ -42,10 +42,12 @@ describe("buildUserVector — persona baseline", () => {
 // ─── Q2 priority override ─────────────────────────────────────────────────────
 
 describe("buildUserVector — Q2 priority override", () => {
-  test("work_setup sets workation:1.0 and calm:0.8 regardless of persona", () => {
+  test("work_setup sets workation:1.0 regardless of persona", () => {
+    // Q2 work_setup also writes calm:0.8, but Q3 always runs after Q2 and
+    // overwrites calm (very_social→0.0, balanced→0.5, mostly_private→0.9).
+    // Testing only workation here; calm interaction is tested in the Q3 section.
     const vector = buildUserVector(req({ personaKey: "solo_social", priority: "work_setup" }));
     expect(vector.workation).toBe(1.0);
-    expect(vector.calm).toBe(0.8);
   });
 
   test("best_value sets budget_fit:1.0", () => {
@@ -53,12 +55,14 @@ describe("buildUserVector — Q2 priority override", () => {
     expect(vector.budget_fit).toBe(1.0);
   });
 
-  test("scenic_views raises scenic to 0.9 without touching other dimensions", () => {
-    const persona  = PERSONAS.solo_social.scoring;
-    const vector   = buildUserVector(req({ personaKey: "solo_social", priority: "scenic_views" }));
+  test("scenic_views raises scenic to 0.9 and does not touch adventure or workation", () => {
+    const persona = PERSONAS.solo_social.scoring;
+    const vector  = buildUserVector(req({ personaKey: "solo_social", priority: "scenic_views" }));
     expect(vector.scenic).toBe(0.9);
-    // Social dimension should retain its persona value (Q2 scenic_views doesn't touch it).
-    expect(vector.social).toBe(persona.social);
+    // Q2 scenic_views and Q3 very_social (default) neither touch adventure nor workation,
+    // so these should retain their persona baseline values.
+    expect(vector.adventure).toBe(persona.adventure);
+    expect(vector.workation).toBe(persona.workation);
   });
 });
 

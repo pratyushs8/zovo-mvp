@@ -17,8 +17,8 @@ import {
   LOW_CONFIDENCE_THRESHOLD,
   TOP_N_DIMENSIONS,
   MISS_GAP_THRESHOLD,
+  MAX_RESULTS,
 } from "@/config/ranking";
-import { config } from "@/lib/config";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -40,17 +40,24 @@ export function explainProperty(
   const { breakdown, hardFilterExempted, property } = ranked;
 
   // Build a DimensionMatch for every dimension from the existing breakdown.
-  const allDims: DimensionMatch[] = DIMENSION_KEYS.map((dim) => ({
-    dim,
-    contribution: breakdown[dim].contribution,
-    gap:          breakdown[dim].gap,
-    strength:     classifyStrength(breakdown[dim].gap),
-  }));
+  const allDims: DimensionMatch[] = DIMENSION_KEYS.map((dim) => {
+    const { userValue, gap, contribution } = breakdown[dim];
+    return {
+      dim,
+      contribution,
+      // matchScore = W[d] × U[d] × (1 − gap): "the property delivered on something
+      // the user actually wanted." Dimensions the user doesn't care about (userValue≈0)
+      // cannot surface as topMatches even if the gap is zero.
+      matchScore: contribution * userValue,
+      gap,
+      strength: classifyStrength(gap),
+    };
+  });
 
-  // Sort by contribution descending: "what most explained this property's rank."
-  const dimensions = [...allDims].sort((a, b) => b.contribution - a.contribution);
+  // Sort by matchScore descending: "what dimensions did the user want AND did the property deliver?"
+  const dimensions = [...allDims].sort((a, b) => b.matchScore - a.matchScore);
 
-  // Top 3 contributors — direct slice of the sorted array.
+  // Top 3 by matchScore — direct slice of the sorted array.
   const topMatches = dimensions.slice(0, TOP_N_DIMENSIONS);
 
   // Top misses — dimensions where the user–property gap is large.
@@ -107,7 +114,6 @@ export function explainRanking(params: {
   fallback:          FallbackMode;
   confidence:        ConfidenceLevel;
 }): RankingExplanation {
-  const maxResults = config.recommendation.maxResults;
   const { userVector, poolSize, hardFilteredCount, topScore, fallback, confidence } = params;
 
   return {
@@ -117,6 +123,6 @@ export function explainRanking(params: {
     poolSize,
     fallback,
     confidence,
-    confidenceReason: resolveConfidenceReason(poolSize, topScore, fallback, maxResults),
+    confidenceReason: resolveConfidenceReason(poolSize, topScore, fallback, MAX_RESULTS),
   };
 }

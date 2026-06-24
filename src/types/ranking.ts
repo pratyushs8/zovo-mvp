@@ -43,7 +43,8 @@ export type MatchStrength = "strong" | "moderate" | "weak";
 // Per-dimension match summary produced by generateExplanation.
 export interface DimensionMatch {
   dim:          DimensionKey;
-  contribution: number;     // W[d] × (1 − gap)
+  contribution: number;     // W[d] × (1 − gap)       — raw score contribution
+  matchScore:   number;     // W[d] × U[d] × (1 − gap) — "did the property deliver on what the user wanted?"
   gap:          number;     // |U[d] − P[d]|
   strength:     MatchStrength;
 }
@@ -62,10 +63,10 @@ export interface PropertyFilterTrace {
 
 // Full explanation for a single ranked property.
 export interface PropertyExplanation {
-  // All 7 dimensions sorted by contribution descending.
+  // All 7 dimensions sorted by matchScore descending.
   // Primary signal: "these dimensions explain why this property ranked here."
   dimensions:  DimensionMatch[];
-  // Shortcut: top 3 by contribution (strongest dimension matches).
+  // Shortcut: top 3 by matchScore — dimensions the user cared about AND the property delivered.
   topMatches:  DimensionMatch[];
   // Shortcut: top 3 by gap where gap > MISS_GAP_THRESHOLD (notable mismatches).
   // Empty if all gaps are small (near-match on all dimensions).

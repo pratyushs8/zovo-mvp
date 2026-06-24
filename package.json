@@ -11,6 +11,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
+    "debug:ranking": "tsx --tsconfig tsconfig.json scripts/debug-ranking.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",

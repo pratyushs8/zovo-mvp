@@ -8,8 +8,8 @@ import {
   LOW_CONFIDENCE_THRESHOLD,
 } from "@/config/ranking";
 import { WEIGHTS } from "@/config/weights";
-import type { CandidateProperty, RankingInput, ScoringVector } from "@/types/ranking";
-import type { Archetype } from "@/types";
+import type { CandidateProperty, RankingInput } from "@/types/ranking";
+import type { ScoringVector, Archetype } from "@/types";
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
 
