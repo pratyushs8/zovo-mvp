@@ -18,7 +18,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "tsx src/db/seed.ts",
-    "validate:properties": "tsx src/scripts/validate-properties.ts"
+    "validate:properties": "tsx src/scripts/validate-properties.ts",
+    "validate:scenarios": "tsx --tsconfig tsconfig.json scripts/validate-scenarios.ts"
   },
   "dependencies": {
     "@types/pg": "^8.20.0",
