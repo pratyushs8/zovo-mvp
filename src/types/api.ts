@@ -5,7 +5,14 @@
 // Frontend code should import types from here, not from
 // @/services/recommendation which carries server-side runtime dependencies.
 
-import type { PersonaKey, StayPriority, SocialEnergy, RoomType, BudgetLevel } from "@/types";
+import type {
+  PersonaKey,
+  StayPriority,
+  SocialEnergy,
+  RoomType,
+  BudgetLevel,
+  ScoringVector,
+} from "@/types";
 import type {
   ScoringBreakdown,
   ConfidenceLevel,
@@ -44,8 +51,10 @@ export interface StayCard {
   id: number;
   rank: number;
   title: string; // property display name
-  location: string; // area within destination
+  destinationSlug: string; // canonical slug e.g. "manali" — Day 10 routing / analytics
+  location: string; // area within destination e.g. "Old Manali, Manali"
   summary: string; // 1–2 sentence property blurb
+  priceInr: number; // nightly price — Day 10 card display
   reasons: CardReason[]; // up to 3 match chips (up) + up to 2 miss chips (down)
   lowConfidence: boolean;
   bookingUrl: string;
@@ -77,6 +86,9 @@ export interface RecommendationResponse {
   cards: StayCard[]; // 0–5 items; empty when fallback === "empty"
   meta: ShortlistMeta;
   _debug: {
+    // userVector preserved here so Day 9 explanation generation can build a
+    // Claude prompt without an extra DB round-trip to re-derive it.
+    userVector: ScoringVector;
     rankingExplanation: RankingExplanation;
     cards: StayDebug[];
   };

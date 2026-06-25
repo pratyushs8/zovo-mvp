@@ -109,8 +109,10 @@ export async function recommendStays(req: RecommendationRequest): Promise<Recomm
         id: r.property.id,
         rank: r.rank,
         title: r.property.name,
+        destinationSlug: r.property.destinationSlug,
         location: r.property.location,
         summary: r.property.summary,
+        priceInr: r.property.priceInr,
         reasons: [...upReasons, ...downReasons],
         lowConfidence: r.lowConfidence,
         bookingUrl: r.property.bookingUrl,
@@ -118,6 +120,7 @@ export async function recommendStays(req: RecommendationRequest): Promise<Recomm
     }),
     meta,
     _debug: {
+      userVector,
       rankingExplanation: payload.rankingExplanation,
       cards: payload.results.map((r) => ({
         id: r.property.id,
