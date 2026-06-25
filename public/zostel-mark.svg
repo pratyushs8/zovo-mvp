@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <g fill="#E84B2B">
+    <polygon transform="rotate(0, 60, 60)"   points="63,65 63,55 79,55 95,42 95,50 75,60 95,70 95,78 79,65"/>
+    <polygon transform="rotate(60, 60, 60)"  points="63,65 63,55 79,55 95,42 95,50 75,60 95,70 95,78 79,65"/>
+    <polygon transform="rotate(120, 60, 60)" points="63,65 63,55 79,55 95,42 95,50 75,60 95,70 95,78 79,65"/>
+    <polygon transform="rotate(180, 60, 60)" points="63,65 63,55 79,55 95,42 95,50 75,60 95,70 95,78 79,65"/>
+    <polygon transform="rotate(240, 60, 60)" points="63,65 63,55 79,55 95,42 95,50 75,60 95,70 95,78 79,65"/>
+    <polygon transform="rotate(300, 60, 60)" points="63,65 63,55 79,55 95,42 95,50 75,60 95,70 95,78 79,65"/>
+  </g>
+</svg>
