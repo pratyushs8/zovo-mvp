@@ -56,20 +56,20 @@ IntakePage (receives response)
 
 ### Key files
 
-| Concern | File |
-|---|---|
-| Submit orchestration | `src/app/intake/page.tsx` |
-| Request builder | `src/hooks/useIntakeSession.ts` — `buildRequest()` |
-| API transport | `src/lib/api.ts` — `submitRecommendation()` |
-| Route handler | `src/app/api/recommend/route.ts` |
+| Concern                | File                                                  |
+| ---------------------- | ----------------------------------------------------- |
+| Submit orchestration   | `src/app/intake/page.tsx`                             |
+| Request builder        | `src/hooks/useIntakeSession.ts` — `buildRequest()`    |
+| API transport          | `src/lib/api.ts` — `submitRecommendation()`           |
+| Route handler          | `src/app/api/recommend/route.ts`                      |
 | Recommendation service | `src/services/recommendation.ts` — `recommendStays()` |
-| Ranking engine | `src/lib/rankProperties.ts` |
-| User vector builder | `src/lib/buildUserVector.ts` |
-| Banner copy | `src/lib/buildBannerMessage.ts` |
-| Error copy | `src/lib/friendlyError.ts` |
-| Results page (server) | `src/app/results/page.tsx` |
-| Results page (client) | `src/app/results/ResultsContent.tsx` |
-| Card component | `src/components/results/RecommendationCard.tsx` |
+| Ranking engine         | `src/lib/rankProperties.ts`                           |
+| User vector builder    | `src/lib/buildUserVector.ts`                          |
+| Banner copy            | `src/lib/buildBannerMessage.ts`                       |
+| Error copy             | `src/lib/friendlyError.ts`                            |
+| Results page (server)  | `src/app/results/page.tsx`                            |
+| Results page (client)  | `src/app/results/ResultsContent.tsx`                  |
+| Card component         | `src/components/results/RecommendationCard.tsx`       |
 
 ### Session handoff
 
@@ -90,12 +90,12 @@ Defined in `src/types/api.ts`.
 
 ```ts
 interface RecommendationRequest {
-  sessionId: string;       // UUID, from useIntakeSession
-  personaKey: PersonaKey;  // "solo_social" | "couple_retreat" | ...
-  priority: StayPriority;  // "social_vibe" | "work_setup" | ...
+  sessionId: string; // UUID, from useIntakeSession
+  personaKey: PersonaKey; // "solo_social" | "couple_retreat" | ...
+  priority: StayPriority; // "social_vibe" | "work_setup" | ...
   socialEnergy: SocialEnergy; // "very_social" | "balanced" | "mostly_private"
-  roomType: RoomType;      // "dorm" | "private" | "flexible"
-  budget?: BudgetLevel;    // "lowest" | "moderate" | "flexible" — optional
+  roomType: RoomType; // "dorm" | "private" | "flexible"
+  budget?: BudgetLevel; // "lowest" | "moderate" | "flexible" — optional
 }
 ```
 
@@ -111,12 +111,12 @@ Defined in `src/types/api.ts`. The response has three top-level sections:
 
 ```ts
 interface RecommendationResponse {
-  cards: StayCard[];    // 0–5 UI-facing cards, ranked best-first
+  cards: StayCard[]; // 0–5 UI-facing cards, ranked best-first
   meta: ShortlistMeta; // confidence, fallback mode, banner copy
   _debug: {
-    userVector: ScoringVector;          // computed float vector for the user's answers
+    userVector: ScoringVector; // computed float vector for the user's answers
     rankingExplanation: RankingExplanation; // pool size, filter trace, confidence reason
-    cards: StayDebug[];                 // per-card scores and full explanation breakdown
+    cards: StayDebug[]; // per-card scores and full explanation breakdown
   };
 }
 ```
@@ -128,8 +128,8 @@ interface ShortlistMeta {
   confidence: "high" | "moderate" | "low";
   fallback: "thin_pool" | "weak_match" | "hard_filter_relaxed" | "empty" | null;
   bannerMessage: string | null; // pre-rendered copy, null when no banner needed
-  totalFiltered: number;        // properties removed by hard filter
-  poolSize: number;             // properties surviving filter, before scoring
+  totalFiltered: number; // properties removed by hard filter
+  poolSize: number; // properties surviving filter, before scoring
 }
 ```
 
@@ -149,22 +149,22 @@ The `_debug` block is part of the API response and is stored in `sessionStorage`
 
 ```ts
 interface StayCard {
-  id: number;              // DB property ID
-  rank: number;            // 1-based position in the shortlist
-  title: string;           // property display name, e.g. "Zostel Manali"
+  id: number; // DB property ID
+  rank: number; // 1-based position in the shortlist
+  title: string; // property display name, e.g. "Zostel Manali"
   destinationSlug: string; // canonical slug, e.g. "manali" — Day 10 routing
-  location: string;        // area within destination, e.g. "Old Manali, Manali"
-  summary: string;         // 1–2 sentence property blurb from properties config
-  priceInr: number;        // nightly price in INR — Day 10 card display
-  reasons: CardReason[];   // match/miss chips, max 2 up + 2 down
-  lowConfidence: boolean;  // true when this card's individual score is low
-  bookingUrl: string;      // direct link to Zostel property page
+  location: string; // area within destination, e.g. "Old Manali, Manali"
+  summary: string; // 1–2 sentence property blurb from properties config
+  priceInr: number; // nightly price in INR — Day 10 card display
+  reasons: CardReason[]; // match/miss chips, max 2 up + 2 down
+  lowConfidence: boolean; // true when this card's individual score is low
+  bookingUrl: string; // direct link to Zostel property page
 }
 
 interface CardReason {
-  label: string;                    // human label, e.g. "Social vibe", "Workation"
+  label: string; // human label, e.g. "Social vibe", "Workation"
   strength: "strong" | "moderate" | "weak";
-  direction: "up" | "down";        // up = match, down = miss
+  direction: "up" | "down"; // up = match, down = miss
 }
 ```
 
@@ -199,15 +199,16 @@ Dimension keys (e.g. `"social"`, `"workation"`) are translated to human labels v
 
 The ranking engine classifies each result set with a `ConfidenceLevel` and a `FallbackMode`. These are independent:
 
-| `fallback` | Cause | Cards returned |
-|---|---|---|
-| `null` | Normal result | Up to 5 |
-| `"thin_pool"` | Hard filter left fewer than 3 survivors | 1–2 |
-| `"weak_match"` | Top score below low-confidence threshold | Up to 5, but all weak |
-| `"hard_filter_relaxed"` | Strict workation filter left 0 survivors; relaxed threshold used | Up to 5 |
-| `"empty"` | 0 survivors even after relaxed filter | 0 |
+| `fallback`              | Cause                                                            | Cards returned        |
+| ----------------------- | ---------------------------------------------------------------- | --------------------- |
+| `null`                  | Normal result                                                    | Up to 5               |
+| `"thin_pool"`           | Hard filter left fewer than 3 survivors                          | 1–2                   |
+| `"weak_match"`          | Top score below low-confidence threshold                         | Up to 5, but all weak |
+| `"hard_filter_relaxed"` | Strict workation filter left 0 survivors; relaxed threshold used | Up to 5               |
+| `"empty"`               | 0 survivors even after relaxed filter                            | 0                     |
 
 `confidence` (`"high" | "moderate" | "low"`) applies when `fallback` is `null`:
+
 - `"high"` → no banner
 - `"moderate"` → subtle banner: "Good matches found — some properties are a closer fit than others."
 - `"low"` → banner: "These are the closest options we found. They may not be a perfect fit."
@@ -218,13 +219,13 @@ When a `fallback` mode is active, it takes precedence and overrides confidence c
 
 `ResultsContent.tsx` maps the response to one of five visual states:
 
-| Condition | Heading | Body |
-|---|---|---|
-| `!ready` (hydrating) | — | Logo spinner |
-| `!response && sessionId` | — | "Results have expired." + Start new search |
-| `!response && !sessionId` | — | Redirect to `/` |
-| `cards.length === 0` | "No matches found." | `EmptyState` (context-aware copy) |
-| `cards.length > 0` | Adaptive (see below) | Card list + optional `FallbackBanner` |
+| Condition                 | Heading              | Body                                       |
+| ------------------------- | -------------------- | ------------------------------------------ |
+| `!ready` (hydrating)      | —                    | Logo spinner                               |
+| `!response && sessionId`  | —                    | "Results have expired." + Start new search |
+| `!response && !sessionId` | —                    | Redirect to `/`                            |
+| `cards.length === 0`      | "No matches found."  | `EmptyState` (context-aware copy)          |
+| `cards.length > 0`        | Adaptive (see below) | Card list + optional `FallbackBanner`      |
 
 **Adaptive heading:**
 
@@ -261,14 +262,14 @@ Session creation is also retried at submit time if the background `POST /api/ses
 
 All user-visible error copy lives in `src/lib/friendlyError.ts`. Raw error strings never reach the UI.
 
-| Input | User-facing copy |
-|---|---|
-| `"internal_error"` | "Our server tripped over its own backpack. Give it another shot." |
-| `"validation_failed"` | "Something looks off with your answers — even the yak raised an eyebrow. Try going back." |
-| `"HTTP 5xx"` | "Our server is having a moment. The mountains will wait — try again shortly." |
-| `"HTTP 4xx"` | "Your session got lost somewhere on the trail. Try refreshing the page." |
-| `"Failed to fetch"` / `"NetworkError"` | "Looks like you've gone off-grid. Check your connection and try again." |
-| anything else | "Something went sideways. The hostel gods are frowning — try again." |
+| Input                                  | User-facing copy                                                                          |
+| -------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `"internal_error"`                     | "Our server tripped over its own backpack. Give it another shot."                         |
+| `"validation_failed"`                  | "Something looks off with your answers — even the yak raised an eyebrow. Try going back." |
+| `"HTTP 5xx"`                           | "Our server is having a moment. The mountains will wait — try again shortly."             |
+| `"HTTP 4xx"`                           | "Your session got lost somewhere on the trail. Try refreshing the page."                  |
+| `"Failed to fetch"` / `"NetworkError"` | "Looks like you've gone off-grid. Check your connection and try again."                   |
+| anything else                          | "Something went sideways. The hostel gods are frowning — try again."                      |
 
 `console.error` is called server-side on `validation_failed` with the full field error detail for developer visibility.
 
@@ -285,6 +286,7 @@ Both tools are development-only (`process.env.NODE_ENV === "development"`).
 ### IntakeDebugPanel (`src/components/dev/IntakeDebugPanel.tsx`)
 
 Fixed bottom overlay on `/intake`. Shows:
+
 - Session ID and DB sync status
 - Current step with jump-to-step buttons
 - Current answers (parsed and raw `localStorage`)
@@ -295,11 +297,11 @@ Fixed bottom overlay on `/intake`. Shows:
 
 Fixed bottom overlay on `/results`. Three tabs:
 
-| Tab | Content |
-|---|---|
-| **meta** | `ShortlistMeta` JSON — confidence, fallback, poolSize, totalFiltered, bannerMessage |
+| Tab       | Content                                                                                                          |
+| --------- | ---------------------------------------------------------------------------------------------------------------- |
+| **meta**  | `ShortlistMeta` JSON — confidence, fallback, poolSize, totalFiltered, bannerMessage                              |
 | **cards** | Per-card: score from `_debug`, destinationSlug, priceInr, reason chips with strength, per-dimension contribution |
-| **debug** | `_debug.userVector` + `_debug.rankingExplanation` raw JSON |
+| **debug** | `_debug.userVector` + `_debug.rankingExplanation` raw JSON                                                       |
 
 The DEV button turns red with `⚠` if a contract check fires. The check validates all top-level keys (`cards`, `meta`, `_debug`) and required `StayCard` fields on render.
 
