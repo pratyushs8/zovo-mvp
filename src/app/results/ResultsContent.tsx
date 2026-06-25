@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import type { RecommendationResponse, ShortlistMeta } from "@/types/api";
 import { RecommendationCard } from "@/components/results/RecommendationCard";
 import { LogoSpinner } from "@/components/ui/LogoSpinner";
+import { ResultsDebugPanel } from "@/components/dev/ResultsDebugPanel";
 
 // ─── Heading copy ─────────────────────────────────────────────────────────────
 
@@ -140,6 +141,8 @@ export default function ResultsContent() {
           ← Start over
         </Link>
       </div>
+
+      {process.env.NODE_ENV === "development" && <ResultsDebugPanel response={response} />}
     </main>
   );
 }
