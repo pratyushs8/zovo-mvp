@@ -9,6 +9,7 @@ import { ProgressIndicator } from "@/components/intake/ProgressIndicator";
 import { QuestionRenderer } from "@/components/intake/QuestionRenderer";
 import { NavControls } from "@/components/intake/NavControls";
 import { IntakeDebugPanel } from "@/components/dev/IntakeDebugPanel";
+import { LogoSpinner } from "@/components/ui/LogoSpinner";
 
 const TOTAL = QUESTIONS.length;
 
@@ -110,6 +111,14 @@ export default function IntakePage() {
       setSubmitError(friendlyError(raw));
       setIsLoading(false);
     }
+  }
+
+  if (isLoading) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center">
+        <LogoSpinner size={48} />
+      </main>
+    );
   }
 
   if (!isLoaded || !question) {

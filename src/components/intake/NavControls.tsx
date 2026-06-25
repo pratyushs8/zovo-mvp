@@ -1,5 +1,3 @@
-import { LogoSpinner } from "@/components/ui/LogoSpinner";
-
 interface Props {
   isLast: boolean;
   isRequired: boolean;
@@ -17,7 +15,7 @@ export function NavControls({
   onSkip,
   isLoading,
 }: Props) {
-  const label = isLast ? "Find my stay →" : "Continue →";
+  const label = isLoading ? "Finding stays…" : isLast ? "Find my stay →" : "Continue →";
   const blocked = !hasSelection && !isLoading;
 
   return (
@@ -26,20 +24,13 @@ export function NavControls({
         onClick={onContinue}
         disabled={!hasSelection || isLoading}
         aria-describedby={blocked ? "nav-hint" : undefined}
-        className={`flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3.5 text-sm font-medium text-white transition-all duration-200 focus-visible:ring-2 focus-visible:ring-[#E84B2B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f0f0f] focus-visible:outline-none ${
+        className={`w-full rounded-lg px-6 py-3.5 text-sm font-medium text-white transition-all duration-200 focus-visible:ring-2 focus-visible:ring-[#E84B2B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f0f0f] focus-visible:outline-none ${
           hasSelection && !isLoading
             ? "bg-[#E84B2B] hover:bg-[#c73b1f]"
             : "cursor-not-allowed bg-zinc-800 text-zinc-500"
         }`}
       >
-        {isLoading ? (
-          <>
-            <LogoSpinner size={18} color="white" />
-            <span>Finding stays…</span>
-          </>
-        ) : (
-          label
-        )}
+        {label}
       </button>
 
       {/* Guidance shown only when a required question is unanswered */}
