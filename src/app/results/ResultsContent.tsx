@@ -3,14 +3,90 @@
 import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import type { RecommendationResponse } from "@/types/api";
+import type { RecommendationResponse, StayCard } from "@/types/api";
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+function CardSkeleton() {
+  return (
+    <div className="animate-pulse rounded-xl border border-zinc-800 bg-zinc-900 px-5 py-4">
+      <div className="mb-3 h-3 w-8 rounded bg-zinc-800" />
+      <div className="mb-2 h-4 w-40 rounded bg-zinc-800" />
+      <div className="mb-3 h-3 w-28 rounded bg-zinc-800" />
+      <div className="mb-1 h-3 w-full rounded bg-zinc-800" />
+      <div className="h-3 w-3/4 rounded bg-zinc-800" />
+    </div>
+  );
+}
+
+function ShortlistCard({ card }: { card: StayCard }) {
+  const strengthColor =
+    card.reason.strength === "strong"
+      ? "text-[#E84B2B]"
+      : card.reason.strength === "moderate"
+        ? "text-zinc-400"
+        : "text-zinc-600";
+
+  return (
+    <div className="rounded-xl border border-zinc-800 bg-zinc-900 px-5 py-4">
+      <div className="mb-1 flex items-start justify-between gap-3">
+        <span className="text-xs text-zinc-600">#{card.rank}</span>
+        {card.lowConfidence && (
+          <span className="shrink-0 rounded border border-zinc-700 px-1.5 py-0.5 text-[10px] text-zinc-500">
+            Best available
+          </span>
+        )}
+      </div>
+
+      <p className="mb-0.5 text-sm font-semibold text-zinc-100">{card.title}</p>
+      <p className="mb-3 text-xs text-zinc-500">{card.location}</p>
+
+      <p className="mb-3 text-xs leading-relaxed text-zinc-400">{card.summary}</p>
+
+      <p className={`mb-4 text-xs font-medium ${strengthColor}`}>↑ {card.reason.label}</p>
+
+      <a
+        href={card.bookingUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block w-full rounded-lg bg-[#E84B2B] px-4 py-2.5 text-center text-xs font-medium text-white transition-colors hover:bg-[#c73b1f]"
+      >
+        View on Zostel →
+      </a>
+    </div>
+  );
+}
+
+function FallbackBanner({ message }: { message: string }) {
+  return (
+    <div className="mb-4 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3">
+      <p className="text-xs text-zinc-400">{message}</p>
+    </div>
+  );
+}
+
+function EmptyState() {
+  return (
+    <div className="rounded-xl border border-zinc-800 bg-zinc-900 px-5 py-8 text-center">
+      <p className="mb-1 text-sm text-zinc-400">No matches found</p>
+      <p className="mb-6 text-xs text-zinc-600">
+        Try adjusting your travel style — for example, choosing a different room type or budget.
+      </p>
+      <Link href="/intake" className="text-sm text-[#E84B2B] underline underline-offset-2">
+        Start a new search
+      </Link>
+    </div>
+  );
+}
+
+// ─── Main component ───────────────────────────────────────────────────────────
 
 export default function ResultsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("s");
 
-  const [results, setResults] = useState<RecommendationResponse | null>(null);
+  const [response, setResponse] = useState<RecommendationResponse | null>(null);
   const [ready, setReady] = useState(false);
   const [, startTransition] = useTransition();
 
@@ -18,7 +94,7 @@ export default function ResultsContent() {
     startTransition(() => {
       try {
         const raw = sessionStorage.getItem("zoco_results");
-        if (raw) setResults(JSON.parse(raw) as RecommendationResponse);
+        if (raw) setResponse(JSON.parse(raw) as RecommendationResponse);
       } catch {
         // malformed JSON — treat as absent
       }
@@ -27,14 +103,30 @@ export default function ResultsContent() {
   }, []);
 
   useEffect(() => {
-    if (ready && !results && !sessionId) {
+    if (ready && !response && !sessionId) {
       router.replace("/");
     }
-  }, [ready, results, sessionId, router]);
+  }, [ready, response, sessionId, router]);
 
-  if (!ready) return null;
+  // Not yet hydrated — show card skeletons to avoid layout shift
+  if (!ready) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
+        <div className="w-full max-w-sm">
+          <p className="mb-2 text-xs text-zinc-600">Your matches</p>
+          <h1 className="mb-6 text-2xl font-semibold text-white">Finding your stays…</h1>
+          <div className="flex flex-col gap-3">
+            {[1, 2, 3].map((n) => (
+              <CardSkeleton key={n} />
+            ))}
+          </div>
+        </div>
+      </main>
+    );
+  }
 
-  if (!results) {
+  // sessionId present but no sessionStorage — tab refreshed or link shared
+  if (!response) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
         <div className="w-full max-w-sm">
@@ -53,14 +145,17 @@ export default function ResultsContent() {
         <p className="mb-2 text-xs text-zinc-600">Your matches</p>
         <h1 className="mb-6 text-2xl font-semibold text-white">Here are your Zostel stays.</h1>
 
-        <div className="flex flex-col gap-3">
-          {results.results.slice(0, 5).map((stay) => (
-            <div key={stay.id} className="rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3">
-              <p className="text-sm font-medium text-zinc-100">{stay.name}</p>
-              <p className="text-xs text-zinc-500">{stay.location}</p>
-            </div>
-          ))}
-        </div>
+        {response.meta.bannerMessage && <FallbackBanner message={response.meta.bannerMessage} />}
+
+        {response.cards.length === 0 ? (
+          <EmptyState />
+        ) : (
+          <div className="flex flex-col gap-3">
+            {response.cards.map((card) => (
+              <ShortlistCard key={card.id} card={card} />
+            ))}
+          </div>
+        )}
 
         <Link
           href="/"

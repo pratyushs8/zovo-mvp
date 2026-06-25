@@ -1,5 +1,6 @@
 import type { CandidateProperty } from "@/types/ranking";
-import type { RecommendationRequest, RecommendationResponse } from "@/types/api";
+import type { ConfidenceLevel, FallbackMode } from "@/types/ranking";
+import type { RecommendationRequest, RecommendationResponse, ShortlistMeta } from "@/types/api";
 import { db } from "@/db/client";
 import {
   properties as propertiesTable,
@@ -7,18 +8,34 @@ import {
   recommendationResults as resultsTable,
 } from "@/db/schema";
 import { PROPERTIES } from "@/config/properties";
+import { DIMENSIONS } from "@/config/scoring";
 import { buildUserVector } from "@/lib/buildUserVector";
 import { rankProperties } from "@/lib/rankProperties";
 
-// Re-export so server code that imports from this module still gets the types.
-export type { RecommendationRequest, StayResult, RecommendationResponse } from "@/types/api";
+export type { RecommendationRequest, StayCard, RecommendationResponse } from "@/types/api";
+
+// ─── Banner copy ──────────────────────────────────────────────────────────────
+
+function buildBannerMessage(confidence: ConfidenceLevel, fallback: FallbackMode): string | null {
+  if (fallback === "empty") return null;
+  if (fallback === "thin_pool")
+    return "Fewer properties matched your filters — showing the closest options.";
+  if (fallback === "weak_match")
+    return "These are the closest matches we found — not a perfect fit for every preference.";
+  if (fallback === "hard_filter_relaxed")
+    return "We relaxed the work-setup filter to show more options.";
+  if (confidence === "moderate")
+    return "Good matches found — some properties are a closer fit than others.";
+  if (confidence === "low")
+    return "These are the closest options we found. They may not be a perfect fit.";
+  return null;
+}
+
+// ─── Main service function ────────────────────────────────────────────────────
 
 export async function recommendStays(req: RecommendationRequest): Promise<RecommendationResponse> {
-  // Stage 1: resolve user vector from persona baseline + Q2–Q5 overrides.
   const userVector = buildUserVector(req);
 
-  // Stage 2: load candidates — fetch DB ids then join with in-memory PROPERTIES.
-  // PROPERTIES is the seeded source of truth; the DB only adds the row id.
   const dbRows = await db
     .select({ id: propertiesTable.id, bookingUrl: propertiesTable.bookingUrl })
     .from(propertiesTable);
@@ -30,10 +47,8 @@ export async function recommendStays(req: RecommendationRequest): Promise<Recomm
     return id !== undefined ? [{ ...p, id }] : [];
   });
 
-  // Stages 3–6: hard filter → score → sort → slice → explain (pure, sync).
   const payload = rankProperties({ userVector }, candidates);
 
-  // Stage 7: persist request + results in a single transaction.
   await db.transaction(async (tx) => {
     const [reqRow] = await tx
       .insert(requestsTable)
@@ -59,23 +74,41 @@ export async function recommendStays(req: RecommendationRequest): Promise<Recomm
     }
   });
 
-  return {
-    results: payload.results.map((r) => ({
-      id: r.property.id,
-      name: r.property.name,
-      location: r.property.location,
-      bookingUrl: r.property.bookingUrl,
-      rank: r.rank,
-      score: r.score,
-      breakdown: r.breakdown,
-      hardFilterExempted: r.hardFilterExempted,
-      lowConfidence: r.lowConfidence,
-      explanation: r.explanation,
-    })),
+  const meta: ShortlistMeta = {
     confidence: payload.confidence,
     fallback: payload.fallback,
-    hardFilteredCount: payload.hardFilteredCount,
+    bannerMessage: buildBannerMessage(payload.confidence, payload.fallback),
+    totalFiltered: payload.hardFilteredCount,
     poolSize: payload.poolSize,
-    rankingExplanation: payload.rankingExplanation,
+  };
+
+  return {
+    cards: payload.results.map((r) => {
+      const topMatch = r.explanation.topMatches[0];
+      return {
+        id: r.property.id,
+        rank: r.rank,
+        title: r.property.name,
+        location: r.property.location,
+        summary: r.property.summary,
+        reason: {
+          label: topMatch ? DIMENSIONS[topMatch.dim].label : "Best match",
+          strength: topMatch?.strength ?? "moderate",
+        },
+        lowConfidence: r.lowConfidence,
+        bookingUrl: r.property.bookingUrl,
+      };
+    }),
+    meta,
+    _debug: {
+      rankingExplanation: payload.rankingExplanation,
+      cards: payload.results.map((r) => ({
+        id: r.property.id,
+        score: r.score,
+        breakdown: r.breakdown,
+        hardFilterExempted: r.hardFilterExempted,
+        explanation: r.explanation,
+      })),
+    },
   };
 }
