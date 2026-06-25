@@ -13,6 +13,33 @@ import { LogoSpinner } from "@/components/ui/LogoSpinner";
 
 const TOTAL = QUESTIONS.length;
 
+const LOADER_LINES = [
+  "Asking the mountains which hostel has the best chai…",
+  "Bribing a retired backpacker for insider tips…",
+  "Consulting a yak on the best dorm vibes…",
+  "Speed-running 47 hostel reviews so you don't have to…",
+  "Negotiating with the WiFi gods on your behalf…",
+  "Cross-referencing rooftop sunsets with your vibe…",
+  "Filtering out the places with suspiciously lumpy mattresses…",
+  "Almost there — the mountains have opinions too…",
+];
+
+function LoadingScreen() {
+  const [idx, setIdx] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setIdx((i) => (i + 1) % LOADER_LINES.length), 2200);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-center gap-5 px-8">
+      <LogoSpinner size={48} />
+      <p key={idx} className="animate-fadeIn max-w-xs text-center text-sm text-zinc-500">
+        {LOADER_LINES[idx]}
+      </p>
+    </main>
+  );
+}
+
 function friendlyError(raw: string): string {
   if (raw === "internal_error") return "Something went wrong on our end. Please try again.";
   if (raw === "validation_failed")
@@ -114,11 +141,7 @@ export default function IntakePage() {
   }
 
   if (isLoading) {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-center">
-        <LogoSpinner size={48} />
-      </main>
-    );
+    return <LoadingScreen />;
   }
 
   if (!isLoaded || !question) {
