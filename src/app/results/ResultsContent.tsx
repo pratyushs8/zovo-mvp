@@ -68,8 +68,7 @@ function FallbackBanner({ message }: { message: string }) {
 function EmptyState() {
   return (
     <div className="rounded-xl border border-zinc-800 bg-zinc-900 px-5 py-8 text-center">
-      <p className="mb-1 text-sm text-zinc-400">No matches found</p>
-      <p className="mb-6 text-xs text-zinc-600">
+      <p className="mb-6 text-xs text-zinc-500">
         Try adjusting your travel style — for example, choosing a different room type or budget.
       </p>
       <Link href="/intake" className="text-sm text-[#E84B2B] underline underline-offset-2">
@@ -143,7 +142,9 @@ export default function ResultsContent() {
     <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
       <div className="w-full max-w-sm">
         <p className="mb-2 text-xs text-zinc-600">Your matches</p>
-        <h1 className="mb-6 text-2xl font-semibold text-white">Here are your Zostel stays.</h1>
+        <h1 className="mb-6 text-2xl font-semibold text-white">
+          {response.cards.length === 0 ? "No matches found." : "Here are your Zostel stays."}
+        </h1>
 
         {response.meta.bannerMessage && <FallbackBanner message={response.meta.bannerMessage} />}
 
