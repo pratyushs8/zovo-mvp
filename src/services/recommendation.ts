@@ -1,5 +1,5 @@
 import type { CandidateProperty } from "@/types/ranking";
-import type { RecommendationRequest, RecommendationResponse } from "@/types/api";
+import type { RecommendationRequest, RecommendationResponse, ShortlistMeta } from "@/types/api";
 import { db } from "@/db/client";
 import {
   properties as propertiesTable,
@@ -7,18 +7,18 @@ import {
   recommendationResults as resultsTable,
 } from "@/db/schema";
 import { PROPERTIES } from "@/config/properties";
+import { DIMENSIONS } from "@/config/scoring";
 import { buildUserVector } from "@/lib/buildUserVector";
 import { rankProperties } from "@/lib/rankProperties";
+import { buildBannerMessage } from "@/lib/buildBannerMessage";
 
-// Re-export so server code that imports from this module still gets the types.
-export type { RecommendationRequest, StayResult, RecommendationResponse } from "@/types/api";
+export type { RecommendationRequest, StayCard, RecommendationResponse } from "@/types/api";
+
+// ─── Main service function ────────────────────────────────────────────────────
 
 export async function recommendStays(req: RecommendationRequest): Promise<RecommendationResponse> {
-  // Stage 1: resolve user vector from persona baseline + Q2–Q5 overrides.
   const userVector = buildUserVector(req);
 
-  // Stage 2: load candidates — fetch DB ids then join with in-memory PROPERTIES.
-  // PROPERTIES is the seeded source of truth; the DB only adds the row id.
   const dbRows = await db
     .select({ id: propertiesTable.id, bookingUrl: propertiesTable.bookingUrl })
     .from(propertiesTable);
@@ -30,10 +30,8 @@ export async function recommendStays(req: RecommendationRequest): Promise<Recomm
     return id !== undefined ? [{ ...p, id }] : [];
   });
 
-  // Stages 3–6: hard filter → score → sort → slice → explain (pure, sync).
   const payload = rankProperties({ userVector }, candidates);
 
-  // Stage 7: persist request + results in a single transaction.
   await db.transaction(async (tx) => {
     const [reqRow] = await tx
       .insert(requestsTable)
@@ -59,23 +57,61 @@ export async function recommendStays(req: RecommendationRequest): Promise<Recomm
     }
   });
 
-  return {
-    results: payload.results.map((r) => ({
-      id: r.property.id,
-      name: r.property.name,
-      location: r.property.location,
-      bookingUrl: r.property.bookingUrl,
-      rank: r.rank,
-      score: r.score,
-      breakdown: r.breakdown,
-      hardFilterExempted: r.hardFilterExempted,
-      lowConfidence: r.lowConfidence,
-      explanation: r.explanation,
-    })),
+  const meta: ShortlistMeta = {
     confidence: payload.confidence,
     fallback: payload.fallback,
-    hardFilteredCount: payload.hardFilteredCount,
+    bannerMessage: buildBannerMessage(payload.confidence, payload.fallback),
+    totalFiltered: payload.hardFilteredCount,
     poolSize: payload.poolSize,
-    rankingExplanation: payload.rankingExplanation,
+  };
+
+  return {
+    cards: payload.results.map((r) => {
+      const upReasons = r.explanation.topMatches
+        .filter((m) => m.strength !== "weak")
+        .slice(0, 2)
+        .map((m) => ({
+          label: DIMENSIONS[m.dim].label,
+          strength: m.strength,
+          direction: "up" as const,
+        }));
+
+      const downReasons = r.explanation.topMisses.slice(0, 2).map((m) => ({
+        label: DIMENSIONS[m.dim].label,
+        strength: m.strength,
+        direction: "down" as const,
+      }));
+
+      // Always have at least one up reason — fall back to the top match even if weak.
+      if (upReasons.length === 0 && r.explanation.topMatches[0]) {
+        const m = r.explanation.topMatches[0];
+        upReasons.push({ label: DIMENSIONS[m.dim].label, strength: m.strength, direction: "up" });
+      }
+
+      return {
+        id: r.property.id,
+        rank: r.rank,
+        title: r.property.name,
+        destinationSlug: r.property.destinationSlug,
+        location: r.property.location,
+        summary: r.property.summary,
+        priceInr: r.property.priceInr,
+        reasons: [...upReasons, ...downReasons],
+        lowConfidence: r.lowConfidence,
+        bookingUrl: r.property.bookingUrl,
+      };
+    }),
+    meta,
+    _debug: {
+      userVector,
+      rankingExplanation: payload.rankingExplanation,
+      cards: payload.results.map((r) => ({
+        id: r.property.id,
+        score: r.score,
+        breakdown: r.breakdown,
+        hardFilterExempted: r.hardFilterExempted,
+        explanation: r.explanation,
+      })),
+    },
   };
 }

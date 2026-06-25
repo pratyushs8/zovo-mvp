@@ -145,9 +145,11 @@ export function IntakeDebugPanel({ session, sessionSynced, onFill, onGoToStep, o
               </div>
 
               <div>
-                <p className="mb-1 text-zinc-500">buildRequest()</p>
+                <p className="mb-1 text-zinc-500">Request payload</p>
                 {req ? (
-                  <span className="text-emerald-400">✓ valid</span>
+                  <pre className="max-h-40 overflow-y-auto rounded bg-zinc-800 p-2 text-emerald-300">
+                    {JSON.stringify(req, null, 2)}
+                  </pre>
                 ) : (
                   <span className="text-red-400">✗ null — required fields missing</span>
                 )}
