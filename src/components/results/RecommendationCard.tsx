@@ -34,8 +34,8 @@ export function RecommendationCard({ card }: Props) {
         <p className="text-xs text-zinc-500">{card.location}</p>
       </header>
 
-      {/* Summary — property blurb */}
-      {/* Day 9: replace or augment with AI-generated explanation copy */}
+      {/* Summary — property blurb; Day 9 replaces with AI-generated explanation */}
+      {/* Day 9: card.lowConfidence → muted border or "limited info" chip */}
       <p className="mb-3 text-xs leading-relaxed text-zinc-400">{card.summary}</p>
 
       {/* Reason chips — up signals then down signals */}

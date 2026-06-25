@@ -55,7 +55,7 @@ export interface StayCard {
   location: string; // area within destination e.g. "Old Manali, Manali"
   summary: string; // 1–2 sentence property blurb
   priceInr: number; // nightly price — Day 10 card display
-  reasons: CardReason[]; // up to 3 match chips (up) + up to 2 miss chips (down)
+  reasons: CardReason[]; // up to 2 up chips (strong/moderate matches) + up to 2 down chips (notable misses)
   lowConfidence: boolean;
   bookingUrl: string;
 }
