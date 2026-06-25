@@ -1,5 +1,4 @@
 import type { CandidateProperty } from "@/types/ranking";
-import type { ConfidenceLevel, FallbackMode } from "@/types/ranking";
 import type { RecommendationRequest, RecommendationResponse, ShortlistMeta } from "@/types/api";
 import { db } from "@/db/client";
 import {
@@ -11,25 +10,9 @@ import { PROPERTIES } from "@/config/properties";
 import { DIMENSIONS } from "@/config/scoring";
 import { buildUserVector } from "@/lib/buildUserVector";
 import { rankProperties } from "@/lib/rankProperties";
+import { buildBannerMessage } from "@/lib/buildBannerMessage";
 
 export type { RecommendationRequest, StayCard, RecommendationResponse } from "@/types/api";
-
-// ─── Banner copy ──────────────────────────────────────────────────────────────
-
-function buildBannerMessage(confidence: ConfidenceLevel, fallback: FallbackMode): string | null {
-  if (fallback === "empty") return null;
-  if (fallback === "thin_pool")
-    return "Fewer properties matched your filters — showing the closest options.";
-  if (fallback === "weak_match")
-    return "These are the closest matches we found — not a perfect fit for every preference.";
-  if (fallback === "hard_filter_relaxed")
-    return "We relaxed the work-setup filter to show more options.";
-  if (confidence === "moderate")
-    return "Good matches found — some properties are a closer fit than others.";
-  if (confidence === "low")
-    return "These are the closest options we found. They may not be a perfect fit.";
-  return null;
-}
 
 // ─── Main service function ────────────────────────────────────────────────────
 
