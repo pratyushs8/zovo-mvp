@@ -24,10 +24,10 @@ export function NavControls({
         onClick={onContinue}
         disabled={!hasSelection || isLoading}
         aria-describedby={blocked ? "nav-hint" : undefined}
-        className={`w-full rounded-lg px-6 py-3.5 text-sm font-medium text-white transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E84B2B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f0f0f] ${
+        className={`w-full rounded-lg px-6 py-3.5 text-sm font-medium text-white transition-all duration-200 focus-visible:ring-2 focus-visible:ring-[#E84B2B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f0f0f] focus-visible:outline-none ${
           hasSelection && !isLoading
             ? "bg-[#E84B2B] hover:bg-[#c73b1f]"
-            : "bg-zinc-800 cursor-not-allowed text-zinc-500"
+            : "cursor-not-allowed bg-zinc-800 text-zinc-500"
         }`}
       >
         {label}
@@ -44,7 +44,7 @@ export function NavControls({
         <button
           onClick={onSkip}
           disabled={isLoading}
-          className="mt-6 w-full py-2 text-sm text-zinc-600 hover:text-zinc-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-700 rounded disabled:opacity-40"
+          className="mt-6 w-full rounded py-2 text-sm text-zinc-600 transition-colors hover:text-zinc-400 focus-visible:ring-2 focus-visible:ring-zinc-700 focus-visible:outline-none disabled:opacity-40"
         >
           Skip — I&apos;ll leave this one open
         </button>

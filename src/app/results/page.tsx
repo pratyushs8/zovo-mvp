@@ -45,9 +45,7 @@ export default function ResultsPage() {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
         <div className="w-full max-w-sm">
-          <p className="mb-4 text-sm text-zinc-400">
-            Results are no longer available in this tab.
-          </p>
+          <p className="mb-4 text-sm text-zinc-400">Results are no longer available in this tab.</p>
           <Link href="/intake" className="text-sm text-[#E84B2B] underline underline-offset-2">
             Start a new search
           </Link>
@@ -60,9 +58,7 @@ export default function ResultsPage() {
     <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
       <div className="w-full max-w-sm">
         <p className="mb-2 text-xs text-zinc-600">Your matches</p>
-        <h1 className="mb-6 text-2xl font-semibold text-white">
-          Here are your Zostel stays.
-        </h1>
+        <h1 className="mb-6 text-2xl font-semibold text-white">Here are your Zostel stays.</h1>
 
         <div className="flex flex-col gap-3">
           {results.results.slice(0, 5).map((stay) => (
@@ -75,7 +71,7 @@ export default function ResultsPage() {
 
         <Link
           href="/"
-          className="mt-8 block text-center text-sm text-zinc-600 hover:text-zinc-400 transition-colors"
+          className="mt-8 block text-center text-sm text-zinc-600 transition-colors hover:text-zinc-400"
         >
           ← Start over
         </Link>

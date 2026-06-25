@@ -62,13 +62,7 @@ interface Props {
   onClear: () => void;
 }
 
-export function IntakeDebugPanel({
-  session,
-  sessionSynced,
-  onFill,
-  onGoToStep,
-  onClear,
-}: Props) {
+export function IntakeDebugPanel({ session, sessionSynced, onFill, onGoToStep, onClear }: Props) {
   const [open, setOpen] = useState(false);
   const [showRaw, setShowRaw] = useState(false);
 
@@ -87,16 +81,14 @@ export function IntakeDebugPanel({
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-50 font-mono text-xs"
+      className="fixed right-0 bottom-0 left-0 z-50 font-mono text-xs"
       aria-label="Developer debug panel"
     >
       {open ? (
         <div className="border-t border-zinc-700 bg-zinc-900 text-zinc-300 shadow-2xl">
           {/* Header row */}
           <div className="flex items-center justify-between border-b border-zinc-700 px-4 py-2">
-            <span className="font-semibold text-zinc-100">
-              DEV — Intake Debug
-            </span>
+            <span className="font-semibold text-zinc-100">DEV — Intake Debug</span>
             <button
               onClick={() => setOpen(false)}
               className="text-zinc-400 hover:text-zinc-100"
@@ -120,7 +112,7 @@ export function IntakeDebugPanel({
                   Step {session.currentStep + 1} / {QUESTIONS.length} —{" "}
                   {QUESTIONS[session.currentStep]?.requestField ?? "done"}
                 </p>
-                <div className="flex gap-1 flex-wrap">
+                <div className="flex flex-wrap gap-1">
                   {QUESTIONS.map((_, i) => (
                     <button
                       key={i}
@@ -148,9 +140,7 @@ export function IntakeDebugPanel({
                   </button>
                 </div>
                 <pre className="max-h-28 overflow-y-auto rounded bg-zinc-800 p-2 text-zinc-200">
-                  {showRaw
-                    ? storageRaw ?? "(empty)"
-                    : JSON.stringify(session.answers, null, 2)}
+                  {showRaw ? (storageRaw ?? "(empty)") : JSON.stringify(session.answers, null, 2)}
                 </pre>
               </div>
 

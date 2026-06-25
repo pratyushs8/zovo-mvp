@@ -14,7 +14,8 @@ const TOTAL = QUESTIONS.length;
 
 function friendlyError(raw: string): string {
   if (raw === "internal_error") return "Something went wrong on our end. Please try again.";
-  if (raw === "validation_failed") return "Some answers look invalid. Please go back and check them.";
+  if (raw === "validation_failed")
+    return "Some answers look invalid. Please go back and check them.";
   if (raw.startsWith("HTTP 5")) return "Our server had a hiccup. Please try again in a moment.";
   if (raw.startsWith("HTTP 4")) return "Your session may have expired. Try refreshing the page.";
   return raw;
@@ -93,9 +94,7 @@ export default function IntakePage() {
         setSessionSynced(true);
       } catch {
         setIsLoading(false);
-        setSubmitError(
-          "We couldn't reach the server. Check your connection and try again.",
-        );
+        setSubmitError("We couldn't reach the server. Check your connection and try again.");
         return;
       }
     }
@@ -116,9 +115,9 @@ export default function IntakePage() {
   if (!isLoaded || !question) {
     return (
       <main className="flex min-h-screen flex-col px-6 py-8" aria-hidden="true">
-        <div className="w-full max-w-sm mx-auto">
-          <div className="h-0.5 w-full rounded-full bg-zinc-100 mb-4" />
-          <div className="h-4 w-16 rounded bg-zinc-100 ml-auto mb-8" />
+        <div className="mx-auto w-full max-w-sm">
+          <div className="mb-4 h-0.5 w-full rounded-full bg-zinc-100" />
+          <div className="mb-8 ml-auto h-4 w-16 rounded bg-zinc-100" />
         </div>
       </main>
     );
@@ -126,7 +125,7 @@ export default function IntakePage() {
 
   return (
     <main className="flex min-h-screen flex-col px-6 py-8">
-      <div className="w-full max-w-sm mx-auto flex flex-col flex-1">
+      <div className="mx-auto flex w-full max-w-sm flex-1 flex-col">
         <ProgressIndicator
           current={stepIndex + 1}
           total={TOTAL}
@@ -135,7 +134,10 @@ export default function IntakePage() {
         />
 
         {sessionSynced === false && !syncWarningDismissed && (
-          <div role="status" className="mb-4 flex items-start justify-between gap-2 rounded-md bg-amber-950/40 px-3 py-2 text-xs text-amber-400">
+          <div
+            role="status"
+            className="mb-4 flex items-start justify-between gap-2 rounded-md bg-amber-950/40 px-3 py-2 text-xs text-amber-400"
+          >
             <span>Your answers are saved locally. We&apos;ll sync them when you submit.</span>
             <button
               onClick={() => setSyncWarningDismissed(true)}

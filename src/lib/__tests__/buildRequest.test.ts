@@ -46,7 +46,7 @@ describe("buildRequest", () => {
     const req = buildRequest(session({ roomType: "private", budget: "moderate" }));
     expect(req).toMatchObject({
       sessionId: expect.stringMatching(
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
       ),
       personaKey: "solo_social",
       priority: "social_vibe",
@@ -118,10 +118,7 @@ describe("buildRequest", () => {
     expect(buildRequest(session({ personaKey }))).not.toBeNull();
   });
 
-  test.each(["dorm", "private", "flexible"] as const)(
-    "accepts roomType '%s'",
-    (roomType) => {
-      expect(buildRequest(session({ roomType }))).not.toBeNull();
-    },
-  );
+  test.each(["dorm", "private", "flexible"] as const)("accepts roomType '%s'", (roomType) => {
+    expect(buildRequest(session({ roomType }))).not.toBeNull();
+  });
 });

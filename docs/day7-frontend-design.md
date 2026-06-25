@@ -23,11 +23,11 @@ Implemented in `src/app/`, `src/components/intake/`, `src/hooks/`, `src/lib/`, a
 
 ### Pages
 
-| Route | File | Purpose |
-| --- | --- | --- |
-| `/` | `src/app/page.tsx` | Landing — Zostel mark, headline, CTA to `/intake` |
-| `/intake` | `src/app/intake/page.tsx` | 5-step intake orchestrator |
-| `/results` | *(Day 8)* | Ranked recommendation list |
+| Route      | File                      | Purpose                                           |
+| ---------- | ------------------------- | ------------------------------------------------- |
+| `/`        | `src/app/page.tsx`        | Landing — Zostel mark, headline, CTA to `/intake` |
+| `/intake`  | `src/app/intake/page.tsx` | 5-step intake orchestrator                        |
+| `/results` | _(Day 8)_                 | Ranked recommendation list                        |
 
 ### Intake sequence
 
@@ -48,14 +48,14 @@ Each step renders one question from `QUESTIONS` in `src/config/questions.ts`. Th
 
 Questions are driven by the `QUESTIONS` array. Each entry declares:
 
-| Field | Type | Purpose |
-|---|---|---|
-| `id` | `string` | Stable identifier |
-| `requestField` | `keyof IntakeAnswers` | Maps directly to the `RecommendationRequest` field |
-| `label` | `string` | Heading shown to the user |
-| `required` | `boolean` | Whether skipping is allowed |
-| `options` | `QuestionOption[]` | Selectable answers with `value` and `label` |
-| `resolveVia` | `"persona_lookup" \| "direct_map"` | How the engine uses the answer (not UI-relevant) |
+| Field          | Type                               | Purpose                                            |
+| -------------- | ---------------------------------- | -------------------------------------------------- |
+| `id`           | `string`                           | Stable identifier                                  |
+| `requestField` | `keyof IntakeAnswers`              | Maps directly to the `RecommendationRequest` field |
+| `label`        | `string`                           | Heading shown to the user                          |
+| `required`     | `boolean`                          | Whether skipping is allowed                        |
+| `options`      | `QuestionOption[]`                 | Selectable answers with `value` and `label`        |
+| `resolveVia`   | `"persona_lookup" \| "direct_map"` | How the engine uses the answer (not UI-relevant)   |
 
 The UI never has its own answer shape — it writes directly into `IntakeAnswers`, which is `Partial<Omit<RecommendationRequest, "sessionId">>`.
 
@@ -82,7 +82,7 @@ IntakePage  (src/app/intake/page.tsx)
 
 Renders a full-width progress bar and the step counter. Owns the Back button — it is placed in the header rather than the CTA area so forward/back have distinct visual zones. Props: `current`, `total`, `onBack` (undefined on step 1), `isLoading`.
 
-The fill bar uses `transition-[width] duration-300 ease-out` on a `style={{ width: \`${pct}%\` }}` inline style. The `role="progressbar"` attribute carries `aria-valuenow`, `aria-valuemin`, and `aria-valuemax` for screen readers.
+The fill bar uses `transition-[width] duration-300 ease-out` on a `style={{ width: \`${pct}%\` }}`inline style. The`role="progressbar"`attribute carries`aria-valuenow`, `aria-valuemin`, and `aria-valuemax` for screen readers.
 
 **`QuestionRenderer`** (`src/components/intake/QuestionRenderer.tsx`)
 
@@ -104,10 +104,10 @@ The primary CTA and optional skip button. CTA label adapts: "Continue →" on st
 
 ### Two-layer persistence
 
-| Layer | What it stores | When it's written | When it's read |
-|---|---|---|---|
-| localStorage | Full `IntakeSession` (answers + step + sessionId) | On every answer or step change | On page load (once, via `useEffect`) |
-| Postgres `sessions` table | `intake_step`, `intake_answers` | Non-blocking PATCH after each step advance | Not read client-side; available for Day 8 server-side logic |
+| Layer                     | What it stores                                    | When it's written                          | When it's read                                              |
+| ------------------------- | ------------------------------------------------- | ------------------------------------------ | ----------------------------------------------------------- |
+| localStorage              | Full `IntakeSession` (answers + step + sessionId) | On every answer or step change             | On page load (once, via `useEffect`)                        |
+| Postgres `sessions` table | `intake_step`, `intake_answers`                   | Non-blocking PATCH after each step advance | Not read client-side; available for Day 8 server-side logic |
 
 localStorage is the source of truth for the active flow. The DB copy is best-effort — if it fails, the user continues uninterrupted. If the DB write fails at session creation, the page shows an amber non-blocking warning and retries once at submit time.
 
@@ -115,10 +115,10 @@ localStorage is the source of truth for the active flow. The DB copy is best-eff
 
 ```ts
 interface IntakeSession {
-  version: number;      // schema version — bump to discard stale localStorage
-  sessionId: string;    // UUID, generated once on first visit
+  version: number; // schema version — bump to discard stale localStorage
+  sessionId: string; // UUID, generated once on first visit
   answers: IntakeAnswers;
-  currentStep: number;  // 0-indexed
+  currentStep: number; // 0-indexed
 }
 ```
 
@@ -128,14 +128,14 @@ interface IntakeSession {
 
 Lives in `src/hooks/useIntakeSession.ts`. Provides:
 
-| Export | Purpose |
-|---|---|
-| `session` | Current `IntakeSession` |
-| `isLoaded` | `false` until localStorage has been read; page renders `null` until true |
-| `setAnswer(field, value)` | Generic setter — type `K extends keyof IntakeAnswers` ensures each field only accepts its correct union type |
-| `goToStep(step)` | Advances or retreats; writes localStorage |
-| `clearSession()` | Removes localStorage entry, creates a fresh session in state |
-| `fillAnswers(answers, step)` | Dev-only batch setter used by `IntakeDebugPanel` |
+| Export                       | Purpose                                                                                                      |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `session`                    | Current `IntakeSession`                                                                                      |
+| `isLoaded`                   | `false` until localStorage has been read; page renders `null` until true                                     |
+| `setAnswer(field, value)`    | Generic setter — type `K extends keyof IntakeAnswers` ensures each field only accepts its correct union type |
+| `goToStep(step)`             | Advances or retreats; writes localStorage                                                                    |
+| `clearSession()`             | Removes localStorage entry, creates a fresh session in state                                                 |
+| `fillAnswers(answers, step)` | Dev-only batch setter used by `IntakeDebugPanel`                                                             |
 
 All state mutations use functional `setSession(prev => ...)` updates to avoid stale-closure bugs in the concurrent async paths (DB sync + submit running together).
 
@@ -196,13 +196,13 @@ export function buildRequest(session: IntakeSession): RecommendationRequest | nu
 
 ### Question-to-field mapping
 
-| Step | Question | `requestField` | Required |
-|---|---|---|---|
-| 1 | What kind of trip is this? | `personaKey` | ✓ |
-| 2 | What matters most about your stay? | `priority` | ✓ |
-| 3 | How social do you want to be? | `socialEnergy` | ✓ |
-| 4 | Which room type do you prefer? | `roomType` | ✓ |
-| 5 | What's your budget comfort level? | `budget` | — |
+| Step | Question                           | `requestField` | Required |
+| ---- | ---------------------------------- | -------------- | -------- |
+| 1    | What kind of trip is this?         | `personaKey`   | ✓        |
+| 2    | What matters most about your stay? | `priority`     | ✓        |
+| 3    | How social do you want to be?      | `socialEnergy` | ✓        |
+| 4    | Which room type do you prefer?     | `roomType`     | ✓        |
+| 5    | What's your budget comfort level?  | `budget`       | —        |
 
 `budget` is optional on both the UI (`question.required = false`, skip button shown) and the schema (`budget` is `z.optional()` in `recommendationRequestSchema`). The engine applies a default budget weight when the field is absent.
 
@@ -220,20 +220,20 @@ The CTA is `disabled` when `!hasSelection`. A hint — "Pick one of the options 
 
 - `null` — pending (no flash shown to user)
 - `true` — synced; no UI change
-- `false` — failed; amber `role="status"` banner: *"Your answers are saved locally. We'll sync them when you submit."*
+- `false` — failed; amber `role="status"` banner: _"Your answers are saved locally. We'll sync them when you submit."_
 
-At submit time, if `sessionSynced === false`, one retry is attempted before calling `/api/recommend`. If the retry also fails, the submit is aborted with: *"We couldn't reach the server. Check your connection and try again."*
+At submit time, if `sessionSynced === false`, one retry is attempted before calling `/api/recommend`. If the retry also fails, the submit is aborted with: _"We couldn't reach the server. Check your connection and try again."_
 
 ### Submit error messaging
 
 Raw API error codes are mapped to human-readable strings in `friendlyError()`:
 
-| Raw error | Displayed message |
-|---|---|
-| `internal_error` | "Something went wrong on our end. Please try again." |
+| Raw error           | Displayed message                                           |
+| ------------------- | ----------------------------------------------------------- |
+| `internal_error`    | "Something went wrong on our end. Please try again."        |
 | `validation_failed` | "Some answers look invalid. Please go back and check them." |
-| `HTTP 5xx` | "Our server had a hiccup. Please try again in a moment." |
-| `HTTP 4xx` | "Your session may have expired. Try refreshing the page." |
+| `HTTP 5xx`          | "Our server had a hiccup. Please try again in a moment."    |
+| `HTTP 4xx`          | "Your session may have expired. Try refreshing the page."   |
 
 ---
 
@@ -249,12 +249,12 @@ Raw API error codes are mapped to human-readable strings in `friendlyError()`:
 - **`buildRequest()` status** — shows ✓ valid or ✗ null (with reason) in real time as answers accumulate
 - **Presets** — four named fixtures covering distinct personas and completion states:
 
-| Preset | Covers |
-|---|---|
-| Solo social (full) | All 5 fields answered, lands on Q5 |
-| Couple retreat | Private room, scenic priority, with budget |
-| Budget backpacker (no budget) | Required fields only, no budget answer |
-| Workation (required only) | `work_setup` priority, private room |
+| Preset                        | Covers                                     |
+| ----------------------------- | ------------------------------------------ |
+| Solo social (full)            | All 5 fields answered, lands on Q5         |
+| Couple retreat                | Private room, scenic priority, with budget |
+| Budget backpacker (no budget) | Required fields only, no budget answer     |
+| Workation (required only)     | `work_setup` priority, private room        |
 
 - **Clear session + reload** — removes localStorage and reloads; useful for testing the initial session creation path and the schema-version discard guard
 
@@ -277,6 +277,7 @@ Raw API error codes are mapped to human-readable strings in `friendlyError()`:
 ### Results page (`/results`)
 
 `submit()` in `intake/page.tsx` does:
+
 ```ts
 sessionStorage.setItem("zoco_results", JSON.stringify(response));
 router.push("/results");
@@ -287,6 +288,7 @@ The results page must read `sessionStorage.getItem("zoco_results")` on load and 
 ### `RecommendationResponse` rendering
 
 The API returns a ranked list of properties with match scores and explanations. Day 8 must decide:
+
 - how many results to show (API returns up to 5)
 - what to show per card (name, location, score, explanation excerpt, booking link)
 - how to handle an empty result set (all properties filtered out)

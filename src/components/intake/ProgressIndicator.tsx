@@ -17,10 +17,10 @@ export function ProgressIndicator({ current, total, onBack, isLoading }: Props) 
         aria-valuemin={1}
         aria-valuemax={total}
         aria-label={`Step ${current} of ${total}`}
-        className="h-0.5 w-full rounded-full bg-zinc-800 overflow-hidden mb-4"
+        className="mb-4 h-0.5 w-full overflow-hidden rounded-full bg-zinc-800"
       >
         <div
-          className="h-full bg-[#E84B2B] rounded-full transition-[width] duration-300 ease-out"
+          className="h-full rounded-full bg-[#E84B2B] transition-[width] duration-300 ease-out"
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -32,7 +32,7 @@ export function ProgressIndicator({ current, total, onBack, isLoading }: Props) 
             onClick={onBack}
             disabled={isLoading}
             aria-label="Go back to previous question"
-            className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-600 rounded disabled:opacity-40"
+            className="rounded text-sm text-zinc-500 transition-colors hover:text-zinc-300 focus-visible:ring-2 focus-visible:ring-zinc-600 focus-visible:outline-none disabled:opacity-40"
           >
             ← Back
           </button>

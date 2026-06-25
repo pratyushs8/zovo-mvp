@@ -55,7 +55,7 @@ export function OptionGroup({ groupLabel, options, selected, onSelect, layout }:
             // tabIndex follows roving-tabindex pattern: only the selected (or first) item
             // is in the tab sequence; others are reachable via arrow keys
             tabIndex={isSelected || (!selected && i === 0) ? 0 : -1}
-            className={`rounded-lg border px-4 py-3 text-sm font-medium text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E84B2B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f0f0f] ${
+            className={`rounded-lg border px-4 py-3 text-left text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-[#E84B2B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f0f0f] focus-visible:outline-none ${
               isSelected
                 ? "border-[#E84B2B] bg-[#E84B2B]/10 text-[#E84B2B]"
                 : "border-zinc-700 bg-zinc-900 text-zinc-300 hover:border-zinc-500"

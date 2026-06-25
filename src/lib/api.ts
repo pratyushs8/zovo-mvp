@@ -2,7 +2,7 @@ import type { RecommendationRequest, RecommendationResponse } from "@/types/api"
 import type { IntakeAnswers } from "@/hooks/useIntakeSession";
 
 export async function submitRecommendation(
-  req: RecommendationRequest,
+  req: RecommendationRequest
 ): Promise<RecommendationResponse> {
   const res = await fetch("/api/recommend", {
     method: "POST",
@@ -11,7 +11,7 @@ export async function submitRecommendation(
   });
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({})) as { error?: string; detail?: unknown };
+    const err = (await res.json().catch(() => ({}))) as { error?: string; detail?: unknown };
     if (err.error === "validation_failed") {
       console.error("[submitRecommendation] validation_failed — field errors:", err.detail);
     }
@@ -26,7 +26,7 @@ export async function submitRecommendation(
 // whether the session was successfully persisted and retry before submit.
 export async function createSession(
   sessionId: string,
-  opts?: { referrer?: string; userAgent?: string },
+  opts?: { referrer?: string; userAgent?: string }
 ): Promise<void> {
   const res = await fetch("/api/session", {
     method: "POST",
@@ -41,7 +41,7 @@ export async function createSession(
 export async function updateSessionProgress(
   sessionId: string,
   step: number,
-  answers: IntakeAnswers,
+  answers: IntakeAnswers
 ): Promise<void> {
   await fetch("/api/session", {
     method: "PATCH",

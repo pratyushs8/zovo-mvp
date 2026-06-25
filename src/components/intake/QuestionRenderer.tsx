@@ -17,9 +17,7 @@ export function QuestionRenderer({ question, selected, onSelect, headingRef }: P
     <div>
       <div className="mb-5">
         {!question.required && (
-          <span className="inline-block mb-2 text-xs text-zinc-400">
-            Optional
-          </span>
+          <span className="mb-2 inline-block text-xs text-zinc-400">Optional</span>
         )}
         {/* tabIndex={-1} lets programmatic focus() work without adding to tab order */}
         <h2

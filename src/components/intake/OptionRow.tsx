@@ -16,7 +16,7 @@ export function OptionRow({ options, selected, onSelect }: Props) {
         <button
           key={opt.value}
           onClick={() => onSelect(opt.value)}
-          className={`rounded-lg border px-4 py-3 text-sm font-medium text-left transition-colors ${
+          className={`rounded-lg border px-4 py-3 text-left text-sm font-medium transition-colors ${
             selected === opt.value
               ? "border-zinc-900 bg-zinc-900 text-white"
               : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-400"
