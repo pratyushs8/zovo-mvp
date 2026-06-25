@@ -29,13 +29,8 @@ function ShortlistCard({ card }: { card: StayCard }) {
 
   return (
     <div className="rounded-xl border border-zinc-800 bg-zinc-900 px-5 py-4">
-      <div className="mb-1 flex items-start justify-between gap-3">
+      <div className="mb-1">
         <span className="text-xs text-zinc-600">#{card.rank}</span>
-        {card.lowConfidence && (
-          <span className="shrink-0 rounded border border-zinc-700 px-1.5 py-0.5 text-[10px] text-zinc-500">
-            Best available
-          </span>
-        )}
       </div>
 
       <p className="mb-0.5 text-sm font-semibold text-zinc-100">{card.title}</p>
