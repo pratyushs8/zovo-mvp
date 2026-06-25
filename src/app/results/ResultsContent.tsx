@@ -20,13 +20,6 @@ function CardSkeleton() {
 }
 
 function ShortlistCard({ card }: { card: StayCard }) {
-  const strengthColor =
-    card.reason.strength === "strong"
-      ? "text-[#E84B2B]"
-      : card.reason.strength === "moderate"
-        ? "text-zinc-400"
-        : "text-zinc-600";
-
   return (
     <div className="rounded-xl border border-zinc-800 bg-zinc-900 px-5 py-4">
       <div className="mb-1">
@@ -38,7 +31,22 @@ function ShortlistCard({ card }: { card: StayCard }) {
 
       <p className="mb-3 text-xs leading-relaxed text-zinc-400">{card.summary}</p>
 
-      <p className={`mb-4 text-xs font-medium ${strengthColor}`}>↑ {card.reason.label}</p>
+      <div className="mb-4 flex flex-wrap gap-1.5">
+        {card.reasons.map((r, i) => (
+          <span
+            key={i}
+            className={`text-[11px] font-medium ${
+              r.direction === "up"
+                ? r.strength === "strong"
+                  ? "text-[#E84B2B]"
+                  : "text-zinc-400"
+                : "text-zinc-600"
+            }`}
+          >
+            {r.direction === "up" ? "↑" : "↓"} {r.label}
+          </span>
+        ))}
+      </div>
 
       <a
         href={card.bookingUrl}

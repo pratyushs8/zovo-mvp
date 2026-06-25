@@ -84,17 +84,34 @@ export async function recommendStays(req: RecommendationRequest): Promise<Recomm
 
   return {
     cards: payload.results.map((r) => {
-      const topMatch = r.explanation.topMatches[0];
+      const upReasons = r.explanation.topMatches
+        .filter((m) => m.strength !== "weak")
+        .slice(0, 2)
+        .map((m) => ({
+          label: DIMENSIONS[m.dim].label,
+          strength: m.strength,
+          direction: "up" as const,
+        }));
+
+      const downReasons = r.explanation.topMisses.slice(0, 2).map((m) => ({
+        label: DIMENSIONS[m.dim].label,
+        strength: m.strength,
+        direction: "down" as const,
+      }));
+
+      // Always have at least one up reason — fall back to the top match even if weak.
+      if (upReasons.length === 0 && r.explanation.topMatches[0]) {
+        const m = r.explanation.topMatches[0];
+        upReasons.push({ label: DIMENSIONS[m.dim].label, strength: m.strength, direction: "up" });
+      }
+
       return {
         id: r.property.id,
         rank: r.rank,
         title: r.property.name,
         location: r.property.location,
         summary: r.property.summary,
-        reason: {
-          label: topMatch ? DIMENSIONS[topMatch.dim].label : "Best match",
-          strength: topMatch?.strength ?? "moderate",
-        },
+        reasons: [...upReasons, ...downReasons],
         lowConfidence: r.lowConfidence,
         bookingUrl: r.property.bookingUrl,
       };

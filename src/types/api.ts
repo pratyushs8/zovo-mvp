@@ -28,12 +28,14 @@ export interface RecommendationRequest {
 
 // ─── Response — UI-facing fields ─────────────────────────────────────────────
 
-// Pre-computed reason chip for a single card. The `label` is the human name of
-// the top-matching scoring dimension; `strength` is its match quality.
+// A single reason chip on a recommendation card.
+// direction "up" = this property delivers on something the user wants.
+// direction "down" = notable gap between what the user wants and what this property offers.
 // Day 9 adds a `sentence` field here for the full explanation layer.
 export interface CardReason {
   label: string; // e.g. "Social vibe", "Scenic", "Budget fit"
   strength: MatchStrength; // "strong" | "moderate" | "weak"
+  direction: "up" | "down";
 }
 
 // UI-facing projection of a ranked property. Contains exactly what a
@@ -44,7 +46,7 @@ export interface StayCard {
   title: string; // property display name
   location: string; // area within destination
   summary: string; // 1–2 sentence property blurb
-  reason: CardReason; // top match reason chip
+  reasons: CardReason[]; // up to 3 match chips (up) + up to 2 miss chips (down)
   lowConfidence: boolean;
   bookingUrl: string;
 }
