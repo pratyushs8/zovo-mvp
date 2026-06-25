@@ -41,15 +41,18 @@ function LoadingScreen() {
 }
 
 function friendlyError(raw: string): string {
-  if (raw === "internal_error") return "Something went wrong on our end. Please try again.";
+  if (raw === "internal_error")
+    return "Our server tripped over its own backpack. Give it another shot.";
   if (raw === "validation_failed")
-    return "Some answers look invalid. Please go back and check them.";
-  if (raw.startsWith("HTTP 5")) return "Our server had a hiccup. Please try again in a moment.";
-  if (raw.startsWith("HTTP 4")) return "Your session may have expired. Try refreshing the page.";
+    return "Something looks off with your answers — even the yak raised an eyebrow. Try going back.";
+  if (raw.startsWith("HTTP 5"))
+    return "Our server is having a moment. The mountains will wait — try again shortly.";
+  if (raw.startsWith("HTTP 4"))
+    return "Your session got lost somewhere on the trail. Try refreshing the page.";
   // fetch throws TypeError("Failed to fetch") when offline or DNS fails
   if (raw.toLowerCase().includes("failed to fetch") || raw.toLowerCase().includes("networkerror"))
-    return "No internet connection. Check your network and try again.";
-  return "Something went wrong. Please try again.";
+    return "Looks like you've gone off-grid. Check your connection and try again.";
+  return "Something went sideways. The hostel gods are frowning — try again.";
 }
 
 export default function IntakePage() {
