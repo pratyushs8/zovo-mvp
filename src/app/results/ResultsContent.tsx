@@ -3,10 +3,58 @@
 import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import type { RecommendationResponse } from "@/types/api";
+import type { RecommendationResponse, ShortlistMeta } from "@/types/api";
 import { RecommendationCard } from "@/components/results/RecommendationCard";
 
-// ─── Supporting states ────────────────────────────────────────────────────────
+// ─── Heading copy ─────────────────────────────────────────────────────────────
+
+function resultHeading(meta: ShortlistMeta, cardCount: number): string {
+  if (cardCount === 0) return "No matches found.";
+  if (meta.fallback === "thin_pool" && cardCount <= 2) return "A few options for your trip.";
+  return "Here are your Zostel stays.";
+}
+
+// ─── Fallback banner ──────────────────────────────────────────────────────────
+// Shown when confidence is not high or a fallback mode is active.
+// Left border distinguishes it visually from property cards.
+
+function FallbackBanner({ message }: { message: string }) {
+  return (
+    <div className="mb-5 border-l-2 border-zinc-600 pl-3">
+      <p className="text-xs leading-relaxed text-zinc-400">{message}</p>
+    </div>
+  );
+}
+
+// ─── Empty state ──────────────────────────────────────────────────────────────
+// Context-aware: explains why nothing came back and gives a specific next step.
+
+function EmptyState({ meta }: { meta: ShortlistMeta }) {
+  const wasFiltered = meta.totalFiltered > 0;
+
+  return (
+    <div className="rounded-xl border border-zinc-800 bg-zinc-900 px-5 py-8">
+      <p className="mb-2 text-sm font-medium text-zinc-300">
+        {wasFiltered
+          ? "Your work-setup filter was too strict."
+          : "No properties matched your answers."}
+      </p>
+      <p className="mb-6 text-xs leading-relaxed text-zinc-500">
+        {wasFiltered
+          ? `All ${meta.totalFiltered} properties we checked were removed by the workation filter. Try choosing a different priority or selecting "Either is fine" for room type.`
+          : "Try loosening your preferences — for example, choosing a different room type or skipping the budget question."}
+      </p>
+      <Link
+        href="/intake"
+        className="block w-full rounded-lg border border-zinc-700 px-4 py-2.5 text-center text-xs font-medium text-zinc-300 transition-colors hover:border-zinc-500 hover:text-white"
+      >
+        Try a different search
+      </Link>
+    </div>
+  );
+}
+
+// ─── Card skeleton ────────────────────────────────────────────────────────────
 
 function CardSkeleton() {
   return (
@@ -16,27 +64,6 @@ function CardSkeleton() {
       <div className="mb-3 h-3 w-28 rounded bg-zinc-800" />
       <div className="mb-1 h-3 w-full rounded bg-zinc-800" />
       <div className="h-3 w-3/4 rounded bg-zinc-800" />
-    </div>
-  );
-}
-
-function FallbackBanner({ message }: { message: string }) {
-  return (
-    <div className="mb-4 rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3">
-      <p className="text-xs text-zinc-400">{message}</p>
-    </div>
-  );
-}
-
-function EmptyState() {
-  return (
-    <div className="rounded-xl border border-zinc-800 bg-zinc-900 px-5 py-8 text-center">
-      <p className="mb-6 text-xs text-zinc-500">
-        Try adjusting your travel style — for example, choosing a different room type or budget.
-      </p>
-      <Link href="/intake" className="text-sm text-[#E84B2B] underline underline-offset-2">
-        Start a new search
-      </Link>
     </div>
   );
 }
@@ -70,6 +97,7 @@ export default function ResultsContent() {
     }
   }, [ready, response, sessionId, router]);
 
+  // Skeleton while sessionStorage hydrates
   if (!ready) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
@@ -86,11 +114,16 @@ export default function ResultsContent() {
     );
   }
 
+  // sessionStorage absent — tab was refreshed or link shared before Day 9 re-fetch
   if (!response) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
         <div className="w-full max-w-sm">
-          <p className="mb-4 text-sm text-zinc-400">Results are no longer available in this tab.</p>
+          <p className="mb-2 text-sm font-medium text-zinc-300">Results have expired.</p>
+          <p className="mb-6 text-xs leading-relaxed text-zinc-500">
+            Results are stored in the current tab only. Close and reopen the link, or start a fresh
+            search.
+          </p>
           <Link href="/intake" className="text-sm text-[#E84B2B] underline underline-offset-2">
             Start a new search
           </Link>
@@ -99,21 +132,23 @@ export default function ResultsContent() {
     );
   }
 
+  const { cards, meta } = response;
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
       <div className="w-full max-w-sm">
         <p className="mb-2 text-xs text-zinc-600">Your matches</p>
         <h1 className="mb-6 text-2xl font-semibold text-white">
-          {response.cards.length === 0 ? "No matches found." : "Here are your Zostel stays."}
+          {resultHeading(meta, cards.length)}
         </h1>
 
-        {response.meta.bannerMessage && <FallbackBanner message={response.meta.bannerMessage} />}
+        {meta.bannerMessage && <FallbackBanner message={meta.bannerMessage} />}
 
-        {response.cards.length === 0 ? (
-          <EmptyState />
+        {cards.length === 0 ? (
+          <EmptyState meta={meta} />
         ) : (
           <div className="flex flex-col gap-3">
-            {response.cards.map((card) => (
+            {cards.map((card) => (
               <RecommendationCard key={card.id} card={card} />
             ))}
           </div>
