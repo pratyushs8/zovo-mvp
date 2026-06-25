@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import type { RecommendationResponse, StayCard } from "@/types/api";
+import type { RecommendationResponse } from "@/types/api";
+import { RecommendationCard } from "@/components/results/RecommendationCard";
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
+// ─── Supporting states ────────────────────────────────────────────────────────
 
 function CardSkeleton() {
   return (
@@ -15,47 +16,6 @@ function CardSkeleton() {
       <div className="mb-3 h-3 w-28 rounded bg-zinc-800" />
       <div className="mb-1 h-3 w-full rounded bg-zinc-800" />
       <div className="h-3 w-3/4 rounded bg-zinc-800" />
-    </div>
-  );
-}
-
-function ShortlistCard({ card }: { card: StayCard }) {
-  return (
-    <div className="rounded-xl border border-zinc-800 bg-zinc-900 px-5 py-4">
-      <div className="mb-1">
-        <span className="text-xs text-zinc-600">#{card.rank}</span>
-      </div>
-
-      <p className="mb-0.5 text-sm font-semibold text-zinc-100">{card.title}</p>
-      <p className="mb-3 text-xs text-zinc-500">{card.location}</p>
-
-      <p className="mb-3 text-xs leading-relaxed text-zinc-400">{card.summary}</p>
-
-      <div className="mb-4 flex flex-wrap gap-1.5">
-        {card.reasons.map((r, i) => (
-          <span
-            key={i}
-            className={`text-[11px] font-medium ${
-              r.direction === "up"
-                ? r.strength === "strong"
-                  ? "text-[#E84B2B]"
-                  : "text-zinc-400"
-                : "text-zinc-600"
-            }`}
-          >
-            {r.direction === "up" ? "↑" : "↓"} {r.label}
-          </span>
-        ))}
-      </div>
-
-      <a
-        href={card.bookingUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block w-full rounded-lg bg-[#E84B2B] px-4 py-2.5 text-center text-xs font-medium text-white transition-colors hover:bg-[#c73b1f]"
-      >
-        View on Zostel →
-      </a>
     </div>
   );
 }
@@ -110,7 +70,6 @@ export default function ResultsContent() {
     }
   }, [ready, response, sessionId, router]);
 
-  // Not yet hydrated — show card skeletons to avoid layout shift
   if (!ready) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
@@ -127,7 +86,6 @@ export default function ResultsContent() {
     );
   }
 
-  // sessionId present but no sessionStorage — tab refreshed or link shared
   if (!response) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
@@ -156,7 +114,7 @@ export default function ResultsContent() {
         ) : (
           <div className="flex flex-col gap-3">
             {response.cards.map((card) => (
-              <ShortlistCard key={card.id} card={card} />
+              <RecommendationCard key={card.id} card={card} />
             ))}
           </div>
         )}
