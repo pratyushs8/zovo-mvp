@@ -5,6 +5,7 @@ import { useEffect, useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { RecommendationResponse, ShortlistMeta } from "@/types/api";
 import { RecommendationCard } from "@/components/results/RecommendationCard";
+import { LogoSpinner } from "@/components/ui/LogoSpinner";
 
 // ─── Heading copy ─────────────────────────────────────────────────────────────
 
@@ -54,20 +55,6 @@ function EmptyState({ meta }: { meta: ShortlistMeta }) {
   );
 }
 
-// ─── Card skeleton ────────────────────────────────────────────────────────────
-
-function CardSkeleton() {
-  return (
-    <div className="animate-pulse rounded-xl border border-zinc-800 bg-zinc-900 px-5 py-4">
-      <div className="mb-3 h-3 w-8 rounded bg-zinc-800" />
-      <div className="mb-2 h-4 w-40 rounded bg-zinc-800" />
-      <div className="mb-3 h-3 w-28 rounded bg-zinc-800" />
-      <div className="mb-1 h-3 w-full rounded bg-zinc-800" />
-      <div className="h-3 w-3/4 rounded bg-zinc-800" />
-    </div>
-  );
-}
-
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export default function ResultsContent() {
@@ -97,19 +84,11 @@ export default function ResultsContent() {
     }
   }, [ready, response, sessionId, router]);
 
-  // Skeleton while sessionStorage hydrates
+  // Logo spinner while sessionStorage hydrates
   if (!ready) {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
-        <div className="w-full max-w-sm">
-          <p className="mb-2 text-xs text-zinc-600">Your matches</p>
-          <h1 className="mb-6 text-2xl font-semibold text-white">Finding your stays…</h1>
-          <div className="flex flex-col gap-3">
-            {[1, 2, 3].map((n) => (
-              <CardSkeleton key={n} />
-            ))}
-          </div>
-        </div>
+      <main className="flex min-h-screen flex-col items-center justify-center px-6">
+        <LogoSpinner size={48} />
       </main>
     );
   }
