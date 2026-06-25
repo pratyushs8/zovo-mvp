@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 130" fill="none">
+  <!-- Geometric mark — six-pointed arrow star -->
+  <!-- Right arrow -->
+  <polyline points="108,58 120,50 108,42" stroke="#E8511A" stroke-width="4.5" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+  <line x1="80" y1="50" x2="120" y2="50" stroke="#E8511A" stroke-width="4.5" stroke-linecap="square"/>
+  <!-- Upper-right arrow -->
+  <polyline points="107,41 113,29 101,27" stroke="#E8511A" stroke-width="4.5" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+  <line x1="87" y1="71" x2="113" y2="29" stroke="#E8511A" stroke-width="4.5" stroke-linecap="square"/>
+  <!-- Upper-left arrow -->
+  <polyline points="93,41 87,29 99,27" stroke="#E8511A" stroke-width="4.5" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+  <line x1="113" y1="71" x2="87" y2="29" stroke="#E8511A" stroke-width="4.5" stroke-linecap="square"/>
+  <!-- Left arrow -->
+  <polyline points="92,42 80,50 92,58" stroke="#E8511A" stroke-width="4.5" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+  <!-- Lower-left arrow -->
+  <polyline points="93,59 87,71 99,73" stroke="#E8511A" stroke-width="4.5" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+  <line x1="87" y1="71" x2="113" y2="29" stroke="#E8511A" stroke-width="4.5" stroke-linecap="square"/>
+  <!-- Lower-right arrow -->
+  <polyline points="107,59 113,71 101,73" stroke="#E8511A" stroke-width="4.5" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+  <line x1="113" y1="71" x2="87" y2="29" stroke="#E8511A" stroke-width="4.5" stroke-linecap="square"/>
+  <!-- Wordmark -->
+  <text x="100" y="106" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="8" fill="#2C2C2C" text-anchor="middle">ZOSTEL</text>
+</svg>
