@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { RecommendationResponse } from "@/types/api";
 
@@ -15,15 +15,18 @@ export default function ResultsPage() {
 
   const [results, setResults] = useState<RecommendationResponse | null>(null);
   const [ready, setReady] = useState(false);
+  const [, startTransition] = useTransition();
 
   useEffect(() => {
-    try {
-      const raw = sessionStorage.getItem("zoco_results");
-      if (raw) setResults(JSON.parse(raw) as RecommendationResponse);
-    } catch {
-      // malformed JSON — treat as absent
-    }
-    setReady(true);
+    startTransition(() => {
+      try {
+        const raw = sessionStorage.getItem("zoco_results");
+        if (raw) setResults(JSON.parse(raw) as RecommendationResponse);
+      } catch {
+        // malformed JSON — treat as absent
+      }
+      setReady(true);
+    });
   }, []);
 
   // Redirect to home if there are no results and no sessionId to recover from.

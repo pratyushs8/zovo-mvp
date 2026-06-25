@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import type { RecommendationRequest } from "@/types/api";
 export { buildRequest } from "@/lib/buildRequest";
 
@@ -67,10 +67,13 @@ export function useIntakeSession() {
   // isLoaded prevents the page from rendering with the ephemeral initial state
   // (new UUID) before localStorage has been read on the client.
   const [isLoaded, setIsLoaded] = useState(false);
+  const [, startTransition] = useTransition();
 
   useEffect(() => {
-    setSession(loadSession());
-    setIsLoaded(true);
+    startTransition(() => {
+      setSession(loadSession());
+      setIsLoaded(true);
+    });
   }, []);
 
   // Generic overload: each field only accepts its correct union type.
