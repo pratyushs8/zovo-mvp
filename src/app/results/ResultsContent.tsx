@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import type { RecommendationResponse, ShortlistMeta } from "@/types/api";
+import type { RecommendationResponse, ShortlistMeta, StayCard } from "@/types/api";
+import type { ExplainedCard } from "@/types/explain";
 import { RecommendationCard } from "@/components/results/RecommendationCard";
 import { LogoSpinner } from "@/components/ui/LogoSpinner";
 import { ResultsDebugPanel } from "@/components/dev/ResultsDebugPanel";
+import { fetchExplanations } from "@/lib/api";
 
 // ─── Heading copy ─────────────────────────────────────────────────────────────
 
@@ -64,6 +66,7 @@ export default function ResultsContent() {
   const sessionId = searchParams.get("s");
 
   const [response, setResponse] = useState<RecommendationResponse | null>(null);
+  const [explanations, setExplanations] = useState<Map<number, ExplainedCard>>(new Map());
   const [ready, setReady] = useState(false);
   const [, startTransition] = useTransition();
 
@@ -84,6 +87,19 @@ export default function ResultsContent() {
       router.replace("/");
     }
   }, [ready, response, sessionId, router]);
+
+  // Fire explanation request after Day 8 cards are ready — non-blocking
+  useEffect(() => {
+    if (!response || response.cards.length === 0) return;
+    fetchExplanations({ cards: response.cards, debug: response._debug })
+      .then((res) => {
+        const map = new Map<number, ExplainedCard>(res.cards.map((c) => [c.id, c]));
+        setExplanations(map);
+      })
+      .catch(() => {
+        // Silent: Day 8 cards remain visible unchanged
+      });
+  }, [response]);
 
   // Logo spinner while sessionStorage hydrates
   if (!ready) {
@@ -114,6 +130,18 @@ export default function ResultsContent() {
 
   const { cards, meta } = response;
 
+  function mergeExplanation(card: StayCard): StayCard {
+    const ex = explanations.get(card.id);
+    if (!ex) return card;
+    // Ranking owns chip metadata (label, strength, direction) — explanation
+    // only contributes copy text. Never replace card.reasons wholesale.
+    return {
+      ...card,
+      summary: ex.cardSummary,
+      reasons: card.reasons.map((r) => ({ ...r, sentence: ex.sentences[r.label] })),
+    };
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
       <div className="w-full max-w-sm">
@@ -129,7 +157,7 @@ export default function ResultsContent() {
         ) : (
           <div className="flex flex-col gap-3">
             {cards.map((card) => (
-              <RecommendationCard key={card.id} card={card} />
+              <RecommendationCard key={card.id} card={mergeExplanation(card)} />
             ))}
           </div>
         )}

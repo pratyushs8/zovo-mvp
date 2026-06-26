@@ -43,6 +43,7 @@ export interface CardReason {
   label: string; // e.g. "Social vibe", "Scenic", "Budget fit"
   strength: MatchStrength; // "strong" | "moderate" | "weak"
   direction: "up" | "down";
+  sentence?: string; // Day 9: one-sentence explanation for this chip
 }
 
 // UI-facing projection of a ranked property. Contains exactly what a

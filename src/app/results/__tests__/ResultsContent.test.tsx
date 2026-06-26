@@ -1,5 +1,14 @@
 import { render, screen, act } from "@testing-library/react";
 import type { RecommendationResponse } from "@/types/api";
+import type { ExplainResponse } from "@/types/explain";
+
+// ─── api mock — prevents real network calls from tests ───────────────────────
+
+const mockFetchExplanations = jest.fn<Promise<ExplainResponse>, [unknown]>();
+
+jest.mock("@/lib/api", () => ({
+  fetchExplanations: (...args: unknown[]) => mockFetchExplanations(...args),
+}));
 
 // ─── Next.js navigation mocks ─────────────────────────────────────────────────
 
@@ -86,6 +95,8 @@ function setSession(data: RecommendationResponse | null) {
 beforeEach(() => {
   jest.clearAllMocks();
   sessionStorage.clear();
+  // Default: explanation fetch silently fails so existing tests are unaffected
+  mockFetchExplanations.mockRejectedValue(new Error("not mocked"));
 });
 
 describe("ResultsContent — navigation guard", () => {
@@ -218,5 +229,97 @@ describe("ResultsContent — results render", () => {
       render(<ResultsContent />);
     });
     expect(screen.getByRole("link", { name: /start over/i })).toBeInTheDocument();
+  });
+});
+
+describe("ResultsContent — Day 9 explanation merge", () => {
+  const explainResponse = (overrides: Partial<ExplainResponse> = {}): ExplainResponse => ({
+    cards: [
+      {
+        id: 1,
+        cardSummary: "A scenic and social stay that fits what you described.",
+        sentences: {
+          "Social vibe": "Lively communal vibe — well-suited to meeting fellow travelers.",
+        },
+        explanationSource: "model",
+      },
+    ],
+    ...overrides,
+  });
+
+  test("replaces card summary with explanation cardSummary when fetch succeeds", async () => {
+    mockFetchExplanations.mockResolvedValueOnce(explainResponse());
+    mockGet.mockReturnValue("abc");
+    setSession(response());
+    await act(async () => {
+      render(<ResultsContent />);
+    });
+    expect(
+      screen.getByText("A scenic and social stay that fits what you described.")
+    ).toBeInTheDocument();
+    expect(screen.queryByText("A lively mountain stay.")).not.toBeInTheDocument();
+  });
+
+  test("shows chip sentence as visible text after explanation loads", async () => {
+    mockFetchExplanations.mockResolvedValueOnce(explainResponse());
+    mockGet.mockReturnValue("abc");
+    setSession(response());
+    await act(async () => {
+      render(<ResultsContent />);
+    });
+    expect(
+      screen.getByText("Lively communal vibe — well-suited to meeting fellow travelers.")
+    ).toBeInTheDocument();
+  });
+
+  test("falls back to original summary when fetch rejects", async () => {
+    mockFetchExplanations.mockRejectedValueOnce(new Error("timeout"));
+    mockGet.mockReturnValue("abc");
+    setSession(response());
+    await act(async () => {
+      render(<ResultsContent />);
+    });
+    // Original DB summary stays visible
+    expect(screen.getByText("A lively mountain stay.")).toBeInTheDocument();
+  });
+
+  test("preserves original summary when explanation has no matching card id", async () => {
+    mockFetchExplanations.mockResolvedValueOnce({
+      cards: [
+        {
+          id: 999, // wrong id
+          cardSummary: "Should not appear.",
+          sentences: {},
+          explanationSource: "fallback",
+        },
+      ],
+    });
+    mockGet.mockReturnValue("abc");
+    setSession(response());
+    await act(async () => {
+      render(<ResultsContent />);
+    });
+    expect(screen.getByText("A lively mountain stay.")).toBeInTheDocument();
+    expect(screen.queryByText("Should not appear.")).not.toBeInTheDocument();
+  });
+
+  test("chip metadata (label, arrow) is preserved after explanation merge", async () => {
+    mockFetchExplanations.mockResolvedValueOnce(explainResponse());
+    mockGet.mockReturnValue("abc");
+    setSession(response());
+    await act(async () => {
+      render(<ResultsContent />);
+    });
+    // Chip direction/label from Day 8 must not be overwritten
+    expect(screen.getByText(/↑\s*Social vibe/)).toBeInTheDocument();
+  });
+
+  test("does not call fetchExplanations when card list is empty", async () => {
+    mockGet.mockReturnValue("abc");
+    setSession(response({ cards: [], meta: meta({ fallback: "empty" }) }));
+    await act(async () => {
+      render(<ResultsContent />);
+    });
+    expect(mockFetchExplanations).not.toHaveBeenCalled();
   });
 });

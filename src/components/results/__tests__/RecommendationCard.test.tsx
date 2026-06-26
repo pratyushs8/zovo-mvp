@@ -61,3 +61,67 @@ describe("RecommendationCard", () => {
     expect(screen.queryByText(/↑/)).not.toBeInTheDocument();
   });
 });
+
+describe("RecommendationCard — Day 9 explanation copy", () => {
+  test("renders explanation summary when summary field is replaced", () => {
+    const explained = {
+      ...base,
+      summary: "A scenic and peaceful stay in Manali that matches what you described.",
+    };
+    render(<RecommendationCard card={explained} />);
+    expect(
+      screen.getByText("A scenic and peaceful stay in Manali that matches what you described.")
+    ).toBeInTheDocument();
+  });
+
+  test("chip shows title tooltip when sentence is present", () => {
+    const withSentence = {
+      ...base,
+      reasons: [
+        { label: "Social vibe", strength: "strong" as const, direction: "up" as const, sentence: "Lively communal vibe — great for meeting fellow travelers." },
+      ],
+    };
+    render(<RecommendationCard card={withSentence} />);
+    // Sentence is now rendered as visible text, not a tooltip
+    expect(screen.getByText("Lively communal vibe — great for meeting fellow travelers.")).toBeInTheDocument();
+  });
+
+  test("sentence text is visually present beneath the chip label", () => {
+    const withSentence = {
+      ...base,
+      reasons: [
+        { label: "Social vibe", strength: "strong" as const, direction: "up" as const, sentence: "Lively vibe." },
+      ],
+    };
+    render(<RecommendationCard card={withSentence} />);
+    expect(screen.getByText("Lively vibe.")).toBeInTheDocument();
+  });
+
+  test("chip renders no sentence element when sentence is absent", () => {
+    render(<RecommendationCard card={base} />);
+    // No title attribute and no hidden sentence spans
+    expect(document.querySelector("[title]")).toBeNull();
+  });
+
+  test("shows lowConfidence badge when lowConfidence is true", () => {
+    render(<RecommendationCard card={{ ...base, lowConfidence: true }} />);
+    expect(screen.getByText(/limited info/i)).toBeInTheDocument();
+  });
+
+  test("does not show lowConfidence badge when lowConfidence is false", () => {
+    render(<RecommendationCard card={base} />);
+    expect(screen.queryByText(/limited info/i)).not.toBeInTheDocument();
+  });
+
+  test("lowConfidence card has a lighter border class", () => {
+    const { container } = render(<RecommendationCard card={{ ...base, lowConfidence: true }} />);
+    const article = container.querySelector("article");
+    expect(article?.className).toContain("border-zinc-700");
+  });
+
+  test("normal confidence card has standard border class", () => {
+    const { container } = render(<RecommendationCard card={base} />);
+    const article = container.querySelector("article");
+    expect(article?.className).toContain("border-zinc-800");
+  });
+});
