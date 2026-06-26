@@ -120,7 +120,8 @@ export default function IntakePage() {
     }
 
     try {
-      const response = await submitRecommendation(req);
+      const minDelay = new Promise((r) => setTimeout(r, 2500));
+      const [response] = await Promise.all([submitRecommendation(req), minDelay]);
       const sid = session.sessionId;
       clearSession();
       sessionStorage.setItem("zoco_results", JSON.stringify(response));
