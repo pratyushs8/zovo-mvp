@@ -75,10 +75,10 @@ Defined in `src/types/explain.ts` as `ExplainRequest`.
 
 ```typescript
 interface ExplainRequest {
-  cards: StayCard[];        // Day 8 shortlist, order preserved
+  cards: StayCard[]; // Day 8 shortlist, order preserved
   debug: {
     userVector: ScoringVector;
-    cards: StayDebug[];     // one entry per card, carries breakdown and explanation
+    cards: StayDebug[]; // one entry per card, carries breakdown and explanation
   };
 }
 ```
@@ -97,8 +97,8 @@ interface ExplainResponse {
 
 interface ExplainedCard {
   id: number;
-  cardSummary: string;                   // one sentence ≤120 chars after sanitization
-  sentences: Record<string, string>;    // chip label → one sentence ≤100 chars
+  cardSummary: string; // one sentence ≤120 chars after sanitization
+  sentences: Record<string, string>; // chip label → one sentence ≤100 chars
   explanationSource: "model" | "fallback";
 }
 ```
@@ -117,7 +117,7 @@ interface PromptCard {
   score: number;
   lowConfidence: boolean;
   targetReasons: Array<{ label: string; direction: "up" | "down" }>;
-  facts: PromptDimensionFact[];         // one entry per dimension (all 7)
+  facts: PromptDimensionFact[]; // one entry per dimension (all 7)
 }
 
 interface PromptDimensionFact {
@@ -211,7 +211,7 @@ client.responses.create(
     max_output_tokens: 1024,
   },
   { timeout: EXPLAIN_TIMEOUT_MS }
-)
+);
 ```
 
 `max_output_tokens: 1024` is sufficient for a batch of five cards at the stated per-field character limits.
@@ -220,11 +220,11 @@ client.responses.create(
 
 `callResponsesAPI()` returns a typed result rather than throwing:
 
-| Result shape                           | Meaning                                       |
-| -------------------------------------- | --------------------------------------------- |
-| `{ text: string; durationMs: number }` | Success — proceed to JSON parse               |
-| `{ text: null; category: "api_timeout" }` | Error message matched `/timeout|ETIMEDOUT/i` |
-| `{ text: null; category: "api_error" }` | Any other thrown error                        |
+| Result shape                              | Meaning                         |
+| ----------------------------------------- | ------------------------------- | ------------ |
+| `{ text: string; durationMs: number }`    | Success — proceed to JSON parse |
+| `{ text: null; category: "api_timeout" }` | Error message matched `/timeout | ETIMEDOUT/i` |
+| `{ text: null; category: "api_error" }`   | Any other thrown error          |
 
 Both `null` results trigger a full-batch fallback. `durationMs` is included in both branches so the batch summary always has timing regardless of outcome.
 
@@ -242,20 +242,20 @@ Every text field in the model response passes through `sanitizeAndValidate()` in
 
 Strips formatting artifacts the model may emit despite instructions:
 
-| Pattern             | Action                          |
-| ------------------- | ------------------------------- |
-| `**bold**`          | Strip markers, keep text        |
-| `*italic*`          | Strip markers, keep text        |
-| `` `inline code` `` | Strip markers, keep text        |
-| ` ```lang\ncontent\n``` ` | Strip fence, keep content |
-| `[text](url)`       | Strip link, keep label text     |
-| `## Heading`        | Strip `#` markers               |
-| `> blockquote`      | Strip `>` marker                |
-| `---` (HR)          | Remove                          |
-| `<strong>...</strong>` | Strip HTML tags              |
-| `&amp;` `&lt;` etc. | Decode HTML entities            |
-| `"` `"` `'` `'`    | Normalise to straight quotes    |
-| Multiple whitespace | Collapse to single space        |
+| Pattern                   | Action                       |
+| ------------------------- | ---------------------------- |
+| `**bold**`                | Strip markers, keep text     |
+| `*italic*`                | Strip markers, keep text     |
+| `` `inline code` ``       | Strip markers, keep text     |
+| ` ```lang\ncontent\n``` ` | Strip fence, keep content    |
+| `[text](url)`             | Strip link, keep label text  |
+| `## Heading`              | Strip `#` markers            |
+| `> blockquote`            | Strip `>` marker             |
+| `---` (HR)                | Remove                       |
+| `<strong>...</strong>`    | Strip HTML tags              |
+| `&amp;` `&lt;` etc.       | Decode HTML entities         |
+| `"` `"` `'` `'`           | Normalise to straight quotes |
+| Multiple whitespace       | Collapse to single space     |
 
 Sanitization is length-neutral — it never truncates. Validation runs on the clean string.
 
@@ -267,22 +267,22 @@ Sanitization is length-neutral — it never truncates. Validation runs on the cl
 
 **Unsupported fact patterns.** Rejected regardless of confidence level:
 
-| Category       | Example patterns rejected                                        |
-| -------------- | ---------------------------------------------------------------- |
-| Specific prices | `₹1500`, `2000 INR`, `800 per night`, `priced at`              |
-| Availability   | `sold out`, `fully booked`, `fills up fast`, `book now`         |
-| Ratings        | `4.5/5`, `300 reviews`, `highly rated`, `great reviews`         |
-| Popularity     | `popular`, `well-known`, `trending`, `famous`                   |
+| Category        | Example patterns rejected                               |
+| --------------- | ------------------------------------------------------- |
+| Specific prices | `₹1500`, `2000 INR`, `800 per night`, `priced at`       |
+| Availability    | `sold out`, `fully booked`, `fills up fast`, `book now` |
+| Ratings         | `4.5/5`, `300 reviews`, `highly rated`, `great reviews` |
+| Popularity      | `popular`, `well-known`, `trending`, `famous`           |
 
 **Overconfidence patterns** (only when `lowConfidence: true`):
 
-| Pattern                          | Example rejected text                      |
-| -------------------------------- | ------------------------------------------ |
-| `perfect` / `perfectly`          | "The perfect stay for your trip."          |
-| `ideal` / `ideally`              | "An ideal base for exploring."             |
-| Certainty adverbs                | "Definitely suits your preference."        |
-| Future-tense certainty           | "Will suit your calm preference."          |
-| Exact-match claims               | "Exactly what you're looking for."         |
+| Pattern                 | Example rejected text               |
+| ----------------------- | ----------------------------------- |
+| `perfect` / `perfectly` | "The perfect stay for your trip."   |
+| `ideal` / `ideally`     | "An ideal base for exploring."      |
+| Certainty adverbs       | "Definitely suits your preference." |
+| Future-tense certainty  | "Will suit your calm preference."   |
+| Exact-match claims      | "Exactly what you're looking for."  |
 
 Hedged phrases (`may suit`, `could work`, `tends toward`, `possibly`) always pass.
 
@@ -315,17 +315,19 @@ dimension × direction × strength
 
 Example for `scenic`:
 
-| Direction | Strength | Sentence |
-| --------- | -------- | -------- |
+| Direction | Strength | Sentence                                                                       |
+| --------- | -------- | ------------------------------------------------------------------------------ |
 | up        | strong   | "The setting matches the kind of scenic backdrop you said you're looking for." |
-| up        | moderate | "Good scenery here — fits well with what you described." |
-| up        | weak     | "Some scenic value, though not as dramatic as your ideal." |
-| down      | —        | "Less scenic than you'd prefer — worth knowing before you book." |
+| up        | moderate | "Good scenery here — fits well with what you described."                       |
+| up        | weak     | "Some scenic value, though not as dramatic as your ideal."                     |
+| down      | —        | "Less scenic than you'd prefer — worth knowing before you book."               |
 
 `down` sentences are always hedged further when `lowConfidence: true` or `strength: "weak"`:
+
 > "May not fully match your [label] preference, but worth exploring."
 
 `up` sentences when `lowConfidence: true`:
+
 > "This property may suit your [label] preference — limited data available."
 
 ### Card summary
@@ -333,18 +335,19 @@ Example for `scenic`:
 `buildCardSummary()` constructs a single sentence from the top one or two up-direction facts using short adjective fragments (`scenic`, `peaceful`, `sociable`, `remote-work-friendly`, `adventure-ready`). `budget_fit` and `room_type_fit` are excluded from summaries — `budget_fit` would imply a price claim and `room_type_fit` reads too clinical in a summary sentence.
 
 **Location extraction.** `cityFromLocation()` strips state names from the location string:
+
 - `"Old Manali, Manali"` → `"Manali"` (last segment is destination-level)
 - `"Bir, Himachal Pradesh"` → `"Bir"` (last segment is a state name → use first)
 
 **Fallback paths within the summary:**
 
-| Condition                        | Output                                                          |
-| -------------------------------- | --------------------------------------------------------------- |
-| No usable up facts               | `"A Zostel stay in {city}."`                                    |
-| No usable up facts + lowConfidence | `"A possible match in {city} — limited data, so worth checking directly."` |
-| All up facts are weak OR lowConfidence | `"A possibly {fragment} option in {city} — less data on this one."` |
-| Two strong/moderate up facts (combined ≤120 chars) | `"A {f1} and {f2} stay in {city} that matches what you described."` |
-| Single strong/moderate up fact   | `"A {fragment} stay in {city} that matches what you described."` |
+| Condition                                          | Output                                                                     |
+| -------------------------------------------------- | -------------------------------------------------------------------------- |
+| No usable up facts                                 | `"A Zostel stay in {city}."`                                               |
+| No usable up facts + lowConfidence                 | `"A possible match in {city} — limited data, so worth checking directly."` |
+| All up facts are weak OR lowConfidence             | `"A possibly {fragment} option in {city} — less data on this one."`        |
+| Two strong/moderate up facts (combined ≤120 chars) | `"A {f1} and {f2} stay in {city} that matches what you described."`        |
+| Single strong/moderate up fact                     | `"A {fragment} stay in {city} that matches what you described."`           |
 
 ---
 
@@ -356,19 +359,19 @@ Example for `scenic`:
 
 ```typescript
 type ExplainFailureCategory =
-  | "api_error"     // network error, auth failure, rate limit, server 5xx
-  | "api_timeout"   // request exceeded EXPLAIN_TIMEOUT_MS
-  | "json_parse"    // model returned non-JSON or structurally invalid envelope
-  | "validation"    // per-card text failed sanitize/validate checks
+  | "api_error" // network error, auth failure, rate limit, server 5xx
+  | "api_timeout" // request exceeded EXPLAIN_TIMEOUT_MS
+  | "json_parse" // model returned non-JSON or structurally invalid envelope
+  | "validation" // per-card text failed sanitize/validate checks
   | "missing_card"; // model returned fewer cards than were requested
 ```
 
 ### Emission rules
 
-| Environment | Per-card failures | Batch summary |
-| ----------- | ----------------- | ------------- |
-| Local       | `console.warn`    | `console.info` + failure breakdown |
-| Staging     | `console.warn`    | `console.info` + failure breakdown |
+| Environment | Per-card failures | Batch summary                           |
+| ----------- | ----------------- | --------------------------------------- |
+| Local       | `console.warn`    | `console.info` + failure breakdown      |
+| Staging     | `console.warn`    | `console.info` + failure breakdown      |
 | Production  | silent            | `console.info` only when `fallback > 0` |
 
 Production is quiet on a clean run. The batch summary fires in production whenever any card fell back, which covers the cases worth investigating.
@@ -380,7 +383,7 @@ interface ExplainBatchSummary {
   total: number;
   model: number;
   fallback: number;
-  durationMs: number;       // wall-clock time from buildPromptCard to final results
+  durationMs: number; // wall-clock time from buildPromptCard to final results
   failures: ExplainFailure[];
 }
 ```
@@ -426,12 +429,12 @@ return {
 
 ## 9. Deferred to later days
 
-| Item | Reason deferred |
-| ---- | --------------- |
-| Streaming explanation updates | Adds client complexity; progressive enhancement is already smooth with the second-`useEffect` pattern |
-| Prompt caching | All batches differ (different user vectors, different cards) — cache hit rate would be negligible until traffic volume justifies measurement |
-| Explanation quality A/B testing | Requires an analytics event (`explanation_shown`, `explanation_source`) and a variant flag — Day 12 QA will identify whether the model copy is good enough before wiring this |
-| Per-sentence confidence display | UI design not finalised — tooltip is a placeholder; richer treatment (e.g. fade-in, source badge) belongs in a UI polish pass |
+| Item                             | Reason deferred                                                                                                                                                                                                 |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Streaming explanation updates    | Adds client complexity; progressive enhancement is already smooth with the second-`useEffect` pattern                                                                                                           |
+| Prompt caching                   | All batches differ (different user vectors, different cards) — cache hit rate would be negligible until traffic volume justifies measurement                                                                    |
+| Explanation quality A/B testing  | Requires an analytics event (`explanation_shown`, `explanation_source`) and a variant flag — Day 12 QA will identify whether the model copy is good enough before wiring this                                   |
+| Per-sentence confidence display  | UI design not finalised — tooltip is a placeholder; richer treatment (e.g. fade-in, source badge) belongs in a UI polish pass                                                                                   |
 | Model output caching by property | Explanation depends on `userVector` — two users looking at the same property get different sentences. Caching would require a key that includes user preferences, which has privacy implications not yet scoped |
-| Retry on validation failure | Current design falls back immediately on any per-card failure. A re-prompt with the rejection reason could recover some of these — deferred until Day 12 QA data shows whether the failure rate justifies it |
-| Non-English output | System prompt is English-only; locale handling is a Day 13+ concern |
+| Retry on validation failure      | Current design falls back immediately on any per-card failure. A re-prompt with the rejection reason could recover some of these — deferred until Day 12 QA data shows whether the failure rate justifies it    |
+| Non-English output               | System prompt is English-only; locale handling is a Day 13+ concern                                                                                                                                             |
