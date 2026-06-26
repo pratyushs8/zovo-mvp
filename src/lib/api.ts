@@ -63,6 +63,20 @@ export function trackHandoffClick(
   }).catch(() => undefined);
 }
 
+// Fire-and-forget — fires once when the results list first renders.
+// Provides the denominator for handoff conversion rate in Day 11 analytics.
+export function trackRecommendationsShown(
+  properties: EventProperties<"recommendations_shown">,
+  sessionId?: string | null
+): void {
+  fetch("/api/track/recommendations-shown", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ properties, ...(sessionId ? { sessionId } : {}) }),
+    keepalive: true,
+  }).catch(() => undefined);
+}
+
 // Persists current step + accumulated answers on each step advance.
 // Best-effort — errors are silently swallowed so they don't interrupt the flow.
 export async function updateSessionProgress(

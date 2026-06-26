@@ -8,7 +8,8 @@ import type { ExplainedCard } from "@/types/explain";
 import { RecommendationCard } from "@/components/results/RecommendationCard";
 import { LogoSpinner } from "@/components/ui/LogoSpinner";
 import { ResultsDebugPanel } from "@/components/dev/ResultsDebugPanel";
-import { fetchExplanations } from "@/lib/api";
+import { fetchExplanations, trackRecommendationsShown } from "@/lib/api";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 // ─── Heading copy ─────────────────────────────────────────────────────────────
 
@@ -65,6 +66,8 @@ export default function ResultsContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("s");
 
+  const { trackRecommendationClicked } = useAnalytics();
+
   const [response, setResponse] = useState<RecommendationResponse | null>(null);
   const [explanations, setExplanations] = useState<Map<number, ExplainedCard>>(new Map());
   const [ready, setReady] = useState(false);
@@ -87,6 +90,21 @@ export default function ResultsContent() {
       router.replace("/");
     }
   }, [ready, response, sessionId, router]);
+
+  // Fire recommendations_shown once when cards first become available.
+  // Provides the denominator for handoff conversion rate in Day 11 analytics.
+  useEffect(() => {
+    if (!response || response.cards.length === 0) return;
+    trackRecommendationsShown(
+      {
+        requestId: response._debug.requestId,
+        propertyIds: response.cards.map((c) => c.id),
+        count: response.cards.length,
+      },
+      sessionId
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response]);
 
   // Fire explanation request after Day 8 cards are ready — non-blocking
   useEffect(() => {
@@ -163,6 +181,12 @@ export default function ResultsContent() {
                 requestId={response._debug.requestId}
                 sessionId={sessionId}
                 explanationSource={explanations.get(card.id)?.explanationSource}
+                onCardClick={() =>
+                  trackRecommendationClicked(
+                    { requestId: response._debug.requestId, propertyId: card.id, rank: card.rank },
+                    sessionId ?? undefined
+                  )
+                }
               />
             ))}
           </div>

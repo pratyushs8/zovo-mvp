@@ -1,3 +1,6 @@
+"use client";
+
+import { useRef } from "react";
 import type { StayCard, CardReason } from "@/types/api";
 import { buildViewStayUrl } from "@/lib/buildViewStayUrl";
 import { trackHandoffClick } from "@/lib/api";
@@ -31,16 +34,30 @@ interface Props {
   requestId: number;
   sessionId?: string | null;
   explanationSource?: "model" | "fallback";
+  onCardClick?: () => void;
 }
 
-export function RecommendationCard({ card, requestId, sessionId, explanationSource }: Props) {
+export function RecommendationCard({
+  card,
+  requestId,
+  sessionId,
+  explanationSource,
+  onCardClick,
+}: Props) {
   const ctaResult = buildViewStayUrl({
     bookingUrl: card.bookingUrl,
     rank: card.rank,
     sessionId,
   });
 
+  // Prevents duplicate booking_handoff_clicked events on double-click or
+  // back-and-click-again within the same card mount.
+  const handoffFired = useRef(false);
+
   function handleCtaClick() {
+    onCardClick?.();
+    if (handoffFired.current) return;
+    handoffFired.current = true;
     trackHandoffClick(
       {
         propertyId: card.id,

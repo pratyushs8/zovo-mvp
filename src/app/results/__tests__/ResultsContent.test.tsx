@@ -10,6 +10,11 @@ const mockFetchExplanations = jest.fn<Promise<ExplainResponse>, [ExplainRequest]
 
 jest.mock("@/lib/api", () => ({
   fetchExplanations: (req: ExplainRequest) => mockFetchExplanations(req),
+  trackRecommendationsShown: jest.fn(),
+}));
+
+jest.mock("@/hooks/useAnalytics", () => ({
+  useAnalytics: () => ({ trackRecommendationClicked: jest.fn() }),
 }));
 
 // ─── Next.js navigation mocks ─────────────────────────────────────────────────

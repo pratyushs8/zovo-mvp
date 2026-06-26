@@ -203,6 +203,48 @@ describe("RecommendationCard — CTA click tracking", () => {
     expect(screen.queryByRole("link", { name: /View Stay/i })).not.toBeInTheDocument();
     expect(mockTrack).not.toHaveBeenCalled();
   });
+
+  test("fires handoff tracking only once on repeated clicks (dedup guard)", () => {
+    render(<RecommendationCard card={base} requestId={REQUEST_ID} sessionId={SESSION} />);
+    const link = screen.getByRole("link", { name: /View Stay/i });
+    fireEvent.click(link);
+    fireEvent.click(link);
+    fireEvent.click(link);
+    expect(mockTrack).toHaveBeenCalledTimes(1);
+  });
+
+  test("calls onCardClick on each CTA click", () => {
+    const onCardClick = jest.fn();
+    render(
+      <RecommendationCard
+        card={base}
+        requestId={REQUEST_ID}
+        sessionId={SESSION}
+        onCardClick={onCardClick}
+      />
+    );
+    const link = screen.getByRole("link", { name: /View Stay/i });
+    fireEvent.click(link);
+    fireEvent.click(link);
+    expect(onCardClick).toHaveBeenCalledTimes(2);
+  });
+
+  test("onCardClick fires even after dedup guard blocks trackHandoffClick", () => {
+    const onCardClick = jest.fn();
+    render(
+      <RecommendationCard
+        card={base}
+        requestId={REQUEST_ID}
+        sessionId={SESSION}
+        onCardClick={onCardClick}
+      />
+    );
+    const link = screen.getByRole("link", { name: /View Stay/i });
+    fireEvent.click(link);
+    fireEvent.click(link);
+    expect(onCardClick).toHaveBeenCalledTimes(2);
+    expect(mockTrack).toHaveBeenCalledTimes(1);
+  });
 });
 
 // ─── Day 9 explanation copy ───────────────────────────────────────────────────
