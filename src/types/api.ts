@@ -92,6 +92,9 @@ export interface RecommendationResponse {
     userVector: ScoringVector;
     rankingExplanation: RankingExplanation;
     cards: StayDebug[];
+    // requestId surfaces the DB row so the client can include it in CTA click
+    // events without an extra round-trip.
+    requestId: number;
   };
 }
 

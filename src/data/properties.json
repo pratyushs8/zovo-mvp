@@ -1,7 +1,7 @@
 [
   {
-    "destinationSlug": "manali",
-    "destinationName": "Manali",
+    "destinationSlug": "old-manali",
+    "destinationName": "Old Manali",
     "name": "Zostel Old Manali",
     "location": "Old Manali",
     "priceInr": 749,
@@ -16,8 +16,8 @@
       "room_type_fit": 0.2
     },
     "tags": ["mountains", "riverside", "social", "backpacker", "trekking", "dorm"],
-    "summary": "The original Zostel on the backpacker trail \u2014 Beas riverside, trail access from the doorstep, and a common area that fills up every evening.",
-    "bookingUrl": "https://www.zostel.com/zostel/manali/"
+    "summary": "The original Zostel on the backpacker trail — Beas riverside, trail access from the doorstep, and a common area that fills up every evening.",
+    "bookingUrl": "https://www.zostel.com/destination/old-manali"
   },
   {
     "destinationSlug": "kasol",
@@ -36,8 +36,8 @@
       "room_type_fit": 0.4
     },
     "tags": ["mountains", "riverside", "social", "backpacker", "trekking", "dorm"],
-    "summary": "Parvati Valley's social heartbeat \u2014 Kheerganga and Kiru treks start here, and the common room runs late into the night.",
-    "bookingUrl": "https://www.zostel.com/zostel/kasol/"
+    "summary": "Parvati Valley's social heartbeat — Kheerganga and Kiru treks start here, and the common room runs late into the night.",
+    "bookingUrl": "https://www.zostel.com/destination/kasol"
   },
   {
     "destinationSlug": "kasol",
@@ -56,12 +56,12 @@
       "room_type_fit": 0.4
     },
     "tags": ["mountains", "riverside", "quiet", "trekking", "dorm"],
-    "summary": "Same valley, fewer crowds \u2014 Katagla sits upriver from the main Kasol scene and suits travelers who want the mountains without the noise.",
-    "bookingUrl": "https://www.zostel.com/zostel/kasol-katagla/"
+    "summary": "Same valley, fewer crowds — Katagla sits upriver from the main Kasol scene and suits travelers who want the mountains without the noise.",
+    "bookingUrl": "https://www.zostel.com/destination/kasol"
   },
   {
-    "destinationSlug": "manali",
-    "destinationName": "Manali",
+    "destinationSlug": "vashisht",
+    "destinationName": "Vashisht",
     "name": "Zostel Manali (Vashisht)",
     "location": "Vashisht",
     "priceInr": 749,
@@ -77,7 +77,7 @@
     },
     "tags": ["mountains", "social", "trekking", "adventure", "dorm", "private"],
     "summary": "Perched above the hot springs in Vashisht village, with Rohtang access and a buzzing traveler kitchen that doubles as a trip-planning hub.",
-    "bookingUrl": "https://www.zostel.com/zostel/vashisht/"
+    "bookingUrl": "https://www.zostel.com/destination/vashisht/stay/zostel-manali-vashisht-vshh380"
   },
   {
     "destinationSlug": "manali",
@@ -96,8 +96,8 @@
       "room_type_fit": 0.4
     },
     "tags": ["mountains", "riverside", "quiet", "trekking", "dorm"],
-    "summary": "A quieter Manali-area stay on the Beas \u2014 fewer party nights, better views, and the same Himalayan trailheads without the Old Manali crowd.",
-    "bookingUrl": "https://www.zostel.com/zostel/dobhi/"
+    "summary": "A quieter Manali-area stay on the Beas — fewer party nights, better views, and the same Himalayan trailheads without the Old Manali crowd.",
+    "bookingUrl": "https://www.zostel.com/destination/manali/stay/dobhi-kullu-dbhh254"
   },
   {
     "destinationSlug": "rishikesh",
@@ -116,8 +116,8 @@
       "room_type_fit": 0.2
     },
     "tags": ["riverside", "mountains", "social", "rafting", "trekking", "spiritual", "dorm"],
-    "summary": "Ganges-side base for rafting, bungee, and cliff jumping \u2014 the most action-packed address in Rishikesh with a social kitchen and daily activity signups.",
-    "bookingUrl": "https://www.zostel.com/zostel/rishikesh/"
+    "summary": "Ganges-side base for rafting, bungee, and cliff jumping — the most action-packed address in Rishikesh with a social kitchen and daily activity signups.",
+    "bookingUrl": "https://www.zostel.com/destination/rishikesh"
   },
   {
     "destinationSlug": "rishikesh",
@@ -136,8 +136,8 @@
       "room_type_fit": 0.4
     },
     "tags": ["riverside", "mountains", "spiritual", "social", "rafting", "dorm", "private"],
-    "summary": "Uphill from the ghats in quieter Tapovan, this Zostel splits the difference between yoga retreats and adventure bookings \u2014 calmer than Laxman Jhula, livelier than a retreat.",
-    "bookingUrl": "https://www.zostel.com/zostel/rishikesh-tapovan/"
+    "summary": "Uphill from the ghats in quieter Tapovan, this Zostel splits the difference between yoga retreats and adventure bookings — calmer than Laxman Jhula, livelier than a retreat.",
+    "bookingUrl": "https://www.zostel.com/destination/rishikesh"
   },
   {
     "destinationSlug": "pokhara",
@@ -165,8 +165,8 @@
       "dorm",
       "budget"
     ],
-    "summary": "Nepal's adventure capital at a price that undercuts most Indian hill stations \u2014 Annapurna trailhead access, lakeside social scene, and paragliding launch points within 20 minutes.",
-    "bookingUrl": "https://www.zostel.com/zostel/pokhara/"
+    "summary": "Nepal's adventure capital at a price that undercuts most Indian hill stations — Annapurna trailhead access, lakeside social scene, and paragliding launch points within 20 minutes.",
+    "bookingUrl": "https://www.zostel.com/destination/pokhara"
   },
   {
     "destinationSlug": "chitkul",
@@ -185,8 +185,8 @@
       "room_type_fit": 0.6
     },
     "tags": ["mountains", "quiet", "scenic", "trekking", "dorm", "private"],
-    "summary": "India's last inhabited village before the Tibetan border \u2014 no crowds, no noise, just the Baspa River and peaks so close they feel like walls.",
-    "bookingUrl": "https://www.zostel.com/zostel/chitkul/"
+    "summary": "India's last inhabited village before the Tibetan border — no crowds, no noise, just the Baspa River and peaks so close they feel like walls.",
+    "bookingUrl": "https://www.zostel.com/destination/chitkul"
   },
   {
     "destinationSlug": "kalpa",
@@ -205,8 +205,8 @@
       "room_type_fit": 0.7
     },
     "tags": ["mountains", "quiet", "scenic", "private", "dorm"],
-    "summary": "Apple orchards in the foreground, Kinner Kailash directly across \u2014 Kalpa is the Kinnaur Valley's most visually dramatic stay and one of Zostel's quietest.",
-    "bookingUrl": "https://www.zostel.com/zostel/kalpa/"
+    "summary": "Apple orchards in the foreground, Kinner Kailash directly across — Kalpa is the Kinnaur Valley's most visually dramatic stay and one of Zostel's quietest.",
+    "bookingUrl": "https://www.zostel.com/destination/kalpa"
   },
   {
     "destinationSlug": "sangla",
@@ -225,8 +225,8 @@
       "room_type_fit": 0.6
     },
     "tags": ["mountains", "quiet", "scenic", "riverside", "trekking", "dorm", "private"],
-    "summary": "The Baspa valley widens into meadows at Sangla \u2014 a proper offseason reset with orchard walks, high-altitude treks, and almost no other tourists.",
-    "bookingUrl": "https://www.zostel.com/zostel/sangla/"
+    "summary": "The Baspa valley widens into meadows at Sangla — a proper offseason reset with orchard walks, high-altitude treks, and almost no other tourists.",
+    "bookingUrl": "https://www.zostel.com/destination/sangla"
   },
   {
     "destinationSlug": "pulga",
@@ -245,8 +245,8 @@
       "room_type_fit": 0.5
     },
     "tags": ["mountains", "forest", "quiet", "scenic", "dorm"],
-    "summary": "A pocket forest village above Kasol that most travelers walk past \u2014 Pulga rewards the extra hour of trekking with pine canopy, zero phone signal, and complete stillness.",
-    "bookingUrl": "https://www.zostel.com/zostel/pulga/"
+    "summary": "A pocket forest village above Kasol that most travelers walk past — Pulga rewards the extra hour of trekking with pine canopy, zero phone signal, and complete stillness.",
+    "bookingUrl": "https://www.zostel.com/destination/pulga"
   },
   {
     "destinationSlug": "shangarh",
@@ -265,8 +265,8 @@
       "room_type_fit": 0.6
     },
     "tags": ["mountains", "quiet", "scenic", "camping", "private", "dorm"],
-    "summary": "A high meadow above the Sainj Valley with 360-degree Himalayan views and no market strip \u2014 arguably the most peaceful landscape in the Zostel network.",
-    "bookingUrl": "https://www.zostel.com/zostel/shangarh/"
+    "summary": "A high meadow above the Sainj Valley with 360-degree Himalayan views and no market strip — arguably the most peaceful landscape in the Zostel network.",
+    "bookingUrl": "https://www.zostel.com/destination/shangarh"
   },
   {
     "destinationSlug": "pahalgam",
@@ -285,8 +285,8 @@
       "room_type_fit": 0.5
     },
     "tags": ["mountains", "quiet", "scenic", "trekking", "riverside", "dorm", "private"],
-    "summary": "The Lidder River runs past the property in the heart of Kashmir's most storied valley \u2014 gentle enough for a scenic walk, serious enough for the Kolahoi Glacier trek.",
-    "bookingUrl": "https://www.zostel.com/zostel/pahalgam/"
+    "summary": "The Lidder River runs past the property in the heart of Kashmir's most storied valley — gentle enough for a scenic walk, serious enough for the Kolahoi Glacier trek.",
+    "bookingUrl": "https://www.zostel.com/destination/pahalgam"
   },
   {
     "destinationSlug": "leh",
@@ -305,12 +305,12 @@
       "room_type_fit": 0.4
     },
     "tags": ["mountains", "scenic", "trekking", "adventure", "dorm", "private"],
-    "summary": "Ladakh's own Zostel at 3,500m \u2014 monastery day trips, Markha Valley treks, and motorcycle routes radiate outward from a high-altitude base with thin air and extraordinary light.",
-    "bookingUrl": "https://www.zostel.com/zostel/leh/"
+    "summary": "Ladakh's own Zostel at 3,500m — monastery day trips, Markha Valley treks, and motorcycle routes radiate outward from a high-altitude base with thin air and extraordinary light.",
+    "bookingUrl": "https://www.zostel.com/destination/leh/stay/leh-lehh490"
   },
   {
-    "destinationSlug": "pelling",
-    "destinationName": "Pelling",
+    "destinationSlug": "rinchenpong",
+    "destinationName": "Rinchenpong",
     "name": "Zostel Rinchenpong (Pelling)",
     "location": "Rinchenpong",
     "priceInr": 594,
@@ -325,8 +325,8 @@
       "room_type_fit": 0.6
     },
     "tags": ["mountains", "quiet", "scenic", "private", "dorm"],
-    "summary": "A Sikkim ridge property with unobstructed Kanchenjunga views and almost no tourist footfall \u2014 the right choice for travelers who want dramatic scenery without the Darjeeling queue.",
-    "bookingUrl": "https://www.zostel.com/zostel/pelling/"
+    "summary": "A Sikkim ridge property with unobstructed Kanchenjunga views and almost no tourist footfall — the right choice for travelers who want dramatic scenery without the Darjeeling queue.",
+    "bookingUrl": "https://www.zostel.com/destination/rinchenpong/stay/zostel-rinchenpong-pelling-rnch334"
   },
   {
     "destinationSlug": "mcleodganj",
@@ -345,12 +345,12 @@
       "room_type_fit": 0.6
     },
     "tags": ["mountains", "cultural", "quiet", "workation", "spiritual", "dorm", "private", "cafe"],
-    "summary": "Tibetan culture, mountain-framed windows, and the Zostel network's most consistently reviewed wifi \u2014 Mcleodganj is the workation traveler's Himalayan default.",
-    "bookingUrl": "https://www.zostel.com/zostel/mcleodganj/"
+    "summary": "Tibetan culture, mountain-framed windows, and the Zostel network's most consistently reviewed wifi — Mcleodganj is the workation traveler's Himalayan default.",
+    "bookingUrl": "https://www.zostel.com/destination/mcleodganj/stay/zostel-mcleodganj-mclh045"
   },
   {
-    "destinationSlug": "mcleodganj",
-    "destinationName": "Mcleodganj",
+    "destinationSlug": "dharamkot",
+    "destinationName": "Dharamkot",
     "name": "Zostel Dharamkot (Bhagsu)",
     "location": "Dharamkot",
     "priceInr": 749,
@@ -365,8 +365,8 @@
       "room_type_fit": 0.5
     },
     "tags": ["mountains", "spiritual", "trekking", "quiet", "dorm", "private"],
-    "summary": "Just above Mcleodganj in the forest belt \u2014 yoga studios and Triund trailhead at the door, with enough altitude to stay cool and enough quiet to think.",
-    "bookingUrl": "https://www.zostel.com/zostel/dharamkot/"
+    "summary": "Just above Mcleodganj in the forest belt — yoga studios and Triund trailhead at the door, with enough altitude to stay cool and enough quiet to think.",
+    "bookingUrl": "https://www.zostel.com/destination/dharamkot"
   },
   {
     "destinationSlug": "mussoorie",
@@ -385,12 +385,12 @@
       "room_type_fit": 0.5
     },
     "tags": ["mountains", "hills", "social", "cultural", "private", "dorm"],
-    "summary": "Uttarakhand's classic hill station on the Mall Road \u2014 valley views, weekend crowds in season, and a social energy that sits between a quiet escape and a proper Zostel hub.",
-    "bookingUrl": "https://www.zostel.com/zostel/mussoorie/"
+    "summary": "Uttarakhand's classic hill station on the Mall Road — valley views, weekend crowds in season, and a social energy that sits between a quiet escape and a proper Zostel hub.",
+    "bookingUrl": "https://www.zostel.com/destination/mussoorie"
   },
   {
-    "destinationSlug": "dalhousie",
-    "destinationName": "Dalhousie",
+    "destinationSlug": "banikhet",
+    "destinationName": "Banikhet",
     "name": "Zostel Banikhet (Dalhousie)",
     "location": "Banikhet",
     "priceInr": 599,
@@ -405,8 +405,8 @@
       "room_type_fit": 0.6
     },
     "tags": ["mountains", "hills", "quiet", "scenic", "private", "dorm"],
-    "summary": "The quieter edge of Dalhousie \u2014 colonial-era pine walks, Pir Panjal views, and a pace of life that makes most travelers stay two days longer than planned.",
-    "bookingUrl": "https://www.zostel.com/zostel/dalhousie/"
+    "summary": "The quieter edge of Dalhousie — colonial-era pine walks, Pir Panjal views, and a pace of life that makes most travelers stay two days longer than planned.",
+    "bookingUrl": "https://www.zostel.com/destination/banikhet/stay/zostel-banikhet-dalhousie-bnkh233"
   },
   {
     "destinationSlug": "shillong",
@@ -425,8 +425,8 @@
       "room_type_fit": 0.5
     },
     "tags": ["hills", "cultural", "social", "scenic", "dorm", "private"],
-    "summary": "Northeast India's most accessible base \u2014 living root bridges, local music culture, and misty hills that feel nothing like the rest of the Zostel network.",
-    "bookingUrl": "https://www.zostel.com/zostel/shillong/"
+    "summary": "Northeast India's most accessible base — living root bridges, local music culture, and misty hills that feel nothing like the rest of the Zostel network.",
+    "bookingUrl": "https://www.zostel.com/destination/shillong"
   },
   {
     "destinationSlug": "gangtok",
@@ -445,8 +445,8 @@
       "room_type_fit": 0.5
     },
     "tags": ["mountains", "cultural", "scenic", "social", "dorm", "private"],
-    "summary": "Sikkim's capital with monastery day trips, mountain backdrops, and a caf\u00e9 culture that makes it easy to extend a transit stop into a proper stay.",
-    "bookingUrl": "https://www.zostel.com/zostel/gangtok/"
+    "summary": "Sikkim's capital with monastery day trips, mountain backdrops, and a café culture that makes it easy to extend a transit stop into a proper stay.",
+    "bookingUrl": "https://www.zostel.com/destination/gangtok"
   },
   {
     "destinationSlug": "srinagar",
@@ -465,8 +465,8 @@
       "room_type_fit": 0.6
     },
     "tags": ["lake", "mountains", "cultural", "scenic", "private", "dorm"],
-    "summary": "Dal Lake mornings and Mughal gardens \u2014 Srinagar is Kashmir at its most composed, a cultural capital with scenery dramatic enough to anchor a week-long itinerary.",
-    "bookingUrl": "https://www.zostel.com/zostel/srinagar/"
+    "summary": "Dal Lake mornings and Mughal gardens — Srinagar is Kashmir at its most composed, a cultural capital with scenery dramatic enough to anchor a week-long itinerary.",
+    "bookingUrl": "https://www.zostel.com/destination/srinagar"
   },
   {
     "destinationSlug": "goa",
@@ -485,8 +485,8 @@
       "room_type_fit": 0.4
     },
     "tags": ["beach", "party", "social", "backpacker", "dorm"],
-    "summary": "Bonfires, sea-facing hammocks, and a common area that organises itself every evening \u2014 Morjim is Zostel Goa's social flagship.",
-    "bookingUrl": "https://www.zostel.com/zostel/goa/"
+    "summary": "Bonfires, sea-facing hammocks, and a common area that organises itself every evening — Morjim is Zostel Goa's social flagship.",
+    "bookingUrl": "https://www.zostel.com/destination/goa"
   },
   {
     "destinationSlug": "gokarna",
@@ -505,8 +505,8 @@
       "room_type_fit": 0.3
     },
     "tags": ["beach", "social", "spiritual", "scenic", "dorm"],
-    "summary": "Goa's quieter coastal cousin \u2014 temples and boulder beaches sit together here, drawing travelers who want a beach stay with less noise and more character.",
-    "bookingUrl": "https://www.zostel.com/zostel/gokarna/"
+    "summary": "Goa's quieter coastal cousin — temples and boulder beaches sit together here, drawing travelers who want a beach stay with less noise and more character.",
+    "bookingUrl": "https://www.zostel.com/destination/gokarna"
   },
   {
     "destinationSlug": "varkala",
@@ -525,8 +525,8 @@
       "room_type_fit": 0.3
     },
     "tags": ["beach", "social", "spiritual", "scenic", "cliffside", "dorm"],
-    "summary": "Kerala's cliffside beach with a view that drops straight into the Arabian Sea \u2014 the traveler caf\u00e9 strip above and the pilgrimage ghats below make Varkala unlike any other Zostel location.",
-    "bookingUrl": "https://www.zostel.com/zostel/varkala/"
+    "summary": "Kerala's cliffside beach with a view that drops straight into the Arabian Sea — the traveler café strip above and the pilgrimage ghats below make Varkala unlike any other Zostel location.",
+    "bookingUrl": "https://www.zostel.com/destination/varkala"
   },
   {
     "destinationSlug": "phuket",
@@ -545,8 +545,8 @@
       "room_type_fit": 0.1
     },
     "tags": ["beach", "party", "social", "international", "adventure", "diving", "dorm", "budget"],
-    "summary": "Southeast Asia's most social Zostel at India's cheapest Zostel price \u2014 Andaman-quality beaches with a backpacker party scene and scuba access, priced at under \u20b9400 a night.",
-    "bookingUrl": "https://www.zostel.com/zostel/phuket/"
+    "summary": "Southeast Asia's most social Zostel at India's cheapest Zostel price — Andaman-quality beaches with a backpacker party scene and scuba access, priced at under ₹400 a night.",
+    "bookingUrl": "https://www.zostel.com/destination/phuket"
   },
   {
     "destinationSlug": "port-blair",
@@ -565,8 +565,8 @@
       "room_type_fit": 0.5
     },
     "tags": ["island", "beach", "scenic", "diving", "adventure", "private", "dorm"],
-    "summary": "The Andaman Islands gateway \u2014 Havelock ferries, scuba operators, and bioluminescent bays accessible from a property that costs more but is hard to replicate anywhere else in the network.",
-    "bookingUrl": "https://www.zostel.com/zostel/port-blair/"
+    "summary": "The Andaman Islands gateway — Havelock ferries, scuba operators, and bioluminescent bays accessible from a property that costs more but is hard to replicate anywhere else in the network.",
+    "bookingUrl": "https://www.zostel.com/destination/port-blair"
   },
   {
     "destinationSlug": "jaipur",
@@ -585,8 +585,8 @@
       "room_type_fit": 0.4
     },
     "tags": ["city", "cultural", "heritage", "social", "dorm", "budget"],
-    "summary": "The Pink City at budget price \u2014 Hawa Mahal walks, rooftop sunsets, and a traveler common area where Rajasthan circuit plans get made over chai.",
-    "bookingUrl": "https://www.zostel.com/zostel/jaipur/"
+    "summary": "The Pink City at budget price — Hawa Mahal walks, rooftop sunsets, and a traveler common area where Rajasthan circuit plans get made over chai.",
+    "bookingUrl": "https://www.zostel.com/destination/jaipur"
   },
   {
     "destinationSlug": "jaipur",
@@ -605,8 +605,8 @@
       "room_type_fit": 0.3
     },
     "tags": ["city", "cultural", "heritage", "budget", "dorm"],
-    "summary": "City-centre Jaipur at one of the lowest dorm prices in the network \u2014 a no-frills base that keeps the budget intact for the forts, markets, and food outside.",
-    "bookingUrl": "https://www.zostel.com/zostel/jaipur-mi-road/"
+    "summary": "City-centre Jaipur at one of the lowest dorm prices in the network — a no-frills base that keeps the budget intact for the forts, markets, and food outside.",
+    "bookingUrl": "https://www.zostel.com/destination/jaipur"
   },
   {
     "destinationSlug": "jaisalmer",
@@ -625,8 +625,8 @@
       "room_type_fit": 0.4
     },
     "tags": ["desert", "cultural", "heritage", "social", "dorm", "budget"],
-    "summary": "Golden Fort city with a Zostel that organises camel safaris and overnight desert camps \u2014 the natural hub for Thar Desert travellers on a Rajasthan circuit.",
-    "bookingUrl": "https://www.zostel.com/zostel/jaisalmer/"
+    "summary": "Golden Fort city with a Zostel that organises camel safaris and overnight desert camps — the natural hub for Thar Desert travellers on a Rajasthan circuit.",
+    "bookingUrl": "https://www.zostel.com/destination/jaisalmer"
   },
   {
     "destinationSlug": "jaisalmer",
@@ -645,8 +645,8 @@
       "room_type_fit": 0.3
     },
     "tags": ["desert", "scenic", "camping", "cultural", "dorm"],
-    "summary": "Slept in the dunes, not next to them \u2014 Sam Desert puts you inside the Thar rather than in the city, with star-filled skies and camel-back sunrises built into the stay.",
-    "bookingUrl": "https://www.zostel.com/zostel/sam-desert/"
+    "summary": "Slept in the dunes, not next to them — Sam Desert puts you inside the Thar rather than in the city, with star-filled skies and camel-back sunrises built into the stay.",
+    "bookingUrl": "https://www.zostel.com/destination/jaisalmer/stay/jaisalmer-jslh404"
   },
   {
     "destinationSlug": "jodhpur",
@@ -665,8 +665,8 @@
       "room_type_fit": 0.2
     },
     "tags": ["city", "heritage", "cultural", "budget", "dorm"],
-    "summary": "Heart of the Blue City at \u20b9319 \u2014 Mehrangarh Fort is a 10-minute walk and the dorm price is the second lowest in the entire Zostel India network.",
-    "bookingUrl": "https://www.zostel.com/zostel/jodhpur/"
+    "summary": "Heart of the Blue City at ₹319 — Mehrangarh Fort is a 10-minute walk and the dorm price is the second lowest in the entire Zostel India network.",
+    "bookingUrl": "https://www.zostel.com/destination/jodhpur"
   },
   {
     "destinationSlug": "bundi",
@@ -685,8 +685,8 @@
       "room_type_fit": 0.3
     },
     "tags": ["heritage", "cultural", "quiet", "budget", "dorm"],
-    "summary": "Rajasthan's most underrated stop at the cheapest price in the network \u2014 stepwells, painted havelis, and a town that feels like Jaipur did before everyone arrived.",
-    "bookingUrl": "https://www.zostel.com/zostel/bundi/"
+    "summary": "Rajasthan's most underrated stop at the cheapest price in the network — stepwells, painted havelis, and a town that feels like Jaipur did before everyone arrived.",
+    "bookingUrl": "https://www.zostel.com/destination/bundi"
   },
   {
     "destinationSlug": "udaipur",
@@ -705,8 +705,8 @@
       "room_type_fit": 0.5
     },
     "tags": ["lake", "heritage", "cultural", "romantic", "dorm", "private"],
-    "summary": "Lake Pichola views, white-walled havelis, and a traveler scene that makes Udaipur the Rajasthan stop everyone extends \u2014 priced affordably enough to make extending easy.",
-    "bookingUrl": "https://www.zostel.com/zostel/udaipur/"
+    "summary": "Lake Pichola views, white-walled havelis, and a traveler scene that makes Udaipur the Rajasthan stop everyone extends — priced affordably enough to make extending easy.",
+    "bookingUrl": "https://www.zostel.com/destination/udaipur"
   },
   {
     "destinationSlug": "varanasi",
@@ -725,8 +725,8 @@
       "room_type_fit": 0.4
     },
     "tags": ["cultural", "spiritual", "heritage", "city", "dorm", "private"],
-    "summary": "Ghat mornings and aarti evenings \u2014 Varanasi is the most intense cultural immersion in the Zostel network, a city where even a day stop becomes a multi-night stay.",
-    "bookingUrl": "https://www.zostel.com/zostel/varanasi/"
+    "summary": "Ghat mornings and aarti evenings — Varanasi is the most intense cultural immersion in the Zostel network, a city where even a day stop becomes a multi-night stay.",
+    "bookingUrl": "https://www.zostel.com/destination/varanasi"
   },
   {
     "destinationSlug": "delhi",
@@ -745,8 +745,8 @@
       "room_type_fit": 0.4
     },
     "tags": ["city", "social", "workation", "cultural", "dorm", "private"],
-    "summary": "Central Delhi base with metro access to monuments, markets, and coworking spaces \u2014 the most reliable wifi in the northern network and a transit hub for onward Himalayan trips.",
-    "bookingUrl": "https://www.zostel.com/zostel/delhi/"
+    "summary": "Central Delhi base with metro access to monuments, markets, and coworking spaces — the most reliable wifi in the northern network and a transit hub for onward Himalayan trips.",
+    "bookingUrl": "https://www.zostel.com/destination/delhi"
   },
   {
     "destinationSlug": "mumbai",
@@ -765,8 +765,8 @@
       "room_type_fit": 0.4
     },
     "tags": ["city", "social", "cultural", "workation", "private", "dorm"],
-    "summary": "The most expensive Zostel in the network earns it \u2014 Mumbai's energy, nightlife, and food scene are the draw, and the location keeps both city explorers and remote workers connected.",
-    "bookingUrl": "https://www.zostel.com/zostel/mumbai/"
+    "summary": "The most expensive Zostel in the network earns it — Mumbai's energy, nightlife, and food scene are the draw, and the location keeps both city explorers and remote workers connected.",
+    "bookingUrl": "https://www.zostel.com/destination/mumbai"
   },
   {
     "destinationSlug": "bangalore",
@@ -785,8 +785,8 @@
       "room_type_fit": 0.4
     },
     "tags": ["city", "social", "workation", "tech", "dorm", "private", "cafe"],
-    "summary": "Koramangala's tech-and-caf\u00e9 belt at a dorm price that rivals mid-tier guesthouses \u2014 the best workation-to-nightlife ratio in the Zostel metro network.",
-    "bookingUrl": "https://www.zostel.com/zostel/bangalore/"
+    "summary": "Koramangala's tech-and-café belt at a dorm price that rivals mid-tier guesthouses — the best workation-to-nightlife ratio in the Zostel metro network.",
+    "bookingUrl": "https://www.zostel.com/destination/bangalore"
   },
   {
     "destinationSlug": "hyderabad",
@@ -805,8 +805,8 @@
       "room_type_fit": 0.4
     },
     "tags": ["city", "cultural", "social", "workation", "dorm", "private"],
-    "summary": "Old City biryani routes and HITEC City coworking culture in one metro \u2014 Hyderabad's split personality makes it the most interesting urban Zostel for both remote workers and heritage explorers.",
-    "bookingUrl": "https://www.zostel.com/zostel/hyderabad/"
+    "summary": "Old City biryani routes and HITEC City coworking culture in one metro — Hyderabad's split personality makes it the most interesting urban Zostel for both remote workers and heritage explorers.",
+    "bookingUrl": "https://www.zostel.com/destination/hyderabad"
   },
   {
     "destinationSlug": "kolkata",
@@ -825,8 +825,8 @@
       "room_type_fit": 0.4
     },
     "tags": ["city", "cultural", "heritage", "social", "dorm", "private"],
-    "summary": "The most culturally layered metro in the network \u2014 colonial architecture, street food lanes, and a literary caf\u00e9 culture that rewards slow exploration over quick transit.",
-    "bookingUrl": "https://www.zostel.com/zostel/kolkata/"
+    "summary": "The most culturally layered metro in the network — colonial architecture, street food lanes, and a literary café culture that rewards slow exploration over quick transit.",
+    "bookingUrl": "https://www.zostel.com/destination/kolkata"
   },
   {
     "destinationSlug": "coorg",
@@ -845,8 +845,8 @@
       "room_type_fit": 0.6
     },
     "tags": ["forest", "hills", "quiet", "scenic", "private", "dorm"],
-    "summary": "Wrapped in coffee estates and low mist, Coorg is the south Indian antidote to overstimulation \u2014 best for quiet resets, forest walks, and sleeping deeply.",
-    "bookingUrl": "https://www.zostel.com/zostel/coorg/"
+    "summary": "Wrapped in coffee estates and low mist, Coorg is the south Indian antidote to overstimulation — best for quiet resets, forest walks, and sleeping deeply.",
+    "bookingUrl": "https://www.zostel.com/destination/coorg"
   },
   {
     "destinationSlug": "munnar",
@@ -866,7 +866,7 @@
     },
     "tags": ["hills", "forest", "quiet", "scenic", "private", "dorm"],
     "summary": "Tea terraces at every window, cool air year-round, and a private-room lean that makes Munnar the most couple-friendly nature retreat in the Kerala network.",
-    "bookingUrl": "https://www.zostel.com/zostel/munnar/"
+    "bookingUrl": "https://www.zostel.com/destination/munnar"
   },
   {
     "destinationSlug": "kodaikanal",
@@ -885,8 +885,8 @@
       "room_type_fit": 0.6
     },
     "tags": ["hills", "forest", "lake", "quiet", "scenic", "private", "dorm"],
-    "summary": "Tamil Nadu's hill lake with eucalyptus walks and a cool plateau town that moves slowly \u2014 Kodaikanal costs more but gives you private-room quiet and a lake view most hill stations can't offer.",
-    "bookingUrl": "https://www.zostel.com/zostel/kodaikanal/"
+    "summary": "Tamil Nadu's hill lake with eucalyptus walks and a cool plateau town that moves slowly — Kodaikanal costs more but gives you private-room quiet and a lake view most hill stations can't offer.",
+    "bookingUrl": "https://www.zostel.com/destination/kodaikanal"
   },
   {
     "destinationSlug": "kodaikanal",
@@ -905,8 +905,8 @@
       "room_type_fit": 0.6
     },
     "tags": ["hills", "forest", "quiet", "scenic", "private", "dorm"],
-    "summary": "Out of town in the Vilpatti forest belt \u2014 quieter than main Kodaikanal with the same Nilgiri scenery at a lower price and almost no passing traffic.",
-    "bookingUrl": "https://www.zostel.com/zostel/kodaikanal-vilpatti/"
+    "summary": "Out of town in the Vilpatti forest belt — quieter than main Kodaikanal with the same Nilgiri scenery at a lower price and almost no passing traffic.",
+    "bookingUrl": "https://www.zostel.com/destination/kodaikanal"
   },
   {
     "destinationSlug": "alleppey",
@@ -925,8 +925,8 @@
       "room_type_fit": 0.6
     },
     "tags": ["backwaters", "quiet", "scenic", "romantic", "private", "dorm"],
-    "summary": "Houseboats on the horizon, canoe channels at the back, and a pace of life dictated by the Kerala backwaters \u2014 the most scenically distinct stay in the entire network.",
-    "bookingUrl": "https://www.zostel.com/zostel/alleppey/"
+    "summary": "Houseboats on the horizon, canoe channels at the back, and a pace of life dictated by the Kerala backwaters — the most scenically distinct stay in the entire network.",
+    "bookingUrl": "https://www.zostel.com/destination/alleppey"
   },
   {
     "destinationSlug": "kochi",
@@ -945,8 +945,8 @@
       "room_type_fit": 0.6
     },
     "tags": ["backwaters", "village", "quiet", "scenic", "private", "dorm"],
-    "summary": "India's first model tourism village, 20 minutes from Fort Kochi \u2014 Chinese fishing nets, village cycling routes, and backwater silence at a price that beats the main Kochi properties.",
-    "bookingUrl": "https://www.zostel.com/zostel/kochi/"
+    "summary": "India's first model tourism village, 20 minutes from Fort Kochi — Chinese fishing nets, village cycling routes, and backwater silence at a price that beats the main Kochi properties.",
+    "bookingUrl": "https://www.zostel.com/destination/kochi"
   },
   {
     "destinationSlug": "kolad",
@@ -965,8 +965,8 @@
       "room_type_fit": 0.3
     },
     "tags": ["riverside", "forest", "rafting", "adventure", "scenic", "dorm"],
-    "summary": "Maharashtra's white-water rafting base on the Kundalika River \u2014 a short drive from Mumbai and Pune with a genuinely outdoor character that most Western Ghats properties lack.",
-    "bookingUrl": "https://www.zostel.com/zostel/kolad/"
+    "summary": "Maharashtra's white-water rafting base on the Kundalika River — a short drive from Mumbai and Pune with a genuinely outdoor character that most Western Ghats properties lack.",
+    "bookingUrl": "https://www.zostel.com/destination/kolad"
   },
   {
     "destinationSlug": "pondicherry",
@@ -985,8 +985,8 @@
       "room_type_fit": 0.6
     },
     "tags": ["city", "cultural", "workation", "quiet", "private", "dorm", "cafe"],
-    "summary": "French Quarter cafes and Auroville proximity make Pondicherry the south Indian workation answer to Mcleodganj \u2014 good wifi, slow mornings, and a town designed for deliberate living.",
-    "bookingUrl": "https://www.zostel.com/zostel/pondicherry/"
+    "summary": "French Quarter cafes and Auroville proximity make Pondicherry the south Indian workation answer to Mcleodganj — good wifi, slow mornings, and a town designed for deliberate living.",
+    "bookingUrl": "https://www.zostel.com/destination/pondicherry"
   },
   {
     "destinationSlug": "hampi",
@@ -1005,7 +1005,7 @@
       "room_type_fit": 0.4
     },
     "tags": ["heritage", "scenic", "cultural", "rocky", "cycling", "dorm", "private"],
-    "summary": "Vijayanagara empire ruins scattered across a boulder landscape unlike anywhere else in India \u2014 Hampi is visually unlike every other Zostel property and rewards at least three days of exploration.",
-    "bookingUrl": "https://www.zostel.com/zostel/hampi/"
+    "summary": "Vijayanagara empire ruins scattered across a boulder landscape unlike anywhere else in India — Hampi is visually unlike every other Zostel property and rewards at least three days of exploration.",
+    "bookingUrl": "https://www.zostel.com/destination/hampi"
   }
 ]

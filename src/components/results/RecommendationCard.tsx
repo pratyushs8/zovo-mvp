@@ -1,4 +1,9 @@
+"use client";
+
+import { useRef } from "react";
 import type { StayCard, CardReason } from "@/types/api";
+import { buildViewStayUrl } from "@/lib/buildViewStayUrl";
+import { trackHandoffClick } from "@/lib/api";
 
 // ─── Reason chip ──────────────────────────────────────────────────────────────
 
@@ -26,9 +31,46 @@ function ReasonChip({ reason }: { reason: CardReason }) {
 
 interface Props {
   card: StayCard;
+  requestId: number;
+  sessionId?: string | null;
+  explanationSource?: "model" | "fallback";
+  onCardClick?: () => void;
 }
 
-export function RecommendationCard({ card }: Props) {
+export function RecommendationCard({
+  card,
+  requestId,
+  sessionId,
+  explanationSource,
+  onCardClick,
+}: Props) {
+  const ctaResult = buildViewStayUrl({
+    bookingUrl: card.bookingUrl,
+    rank: card.rank,
+    sessionId,
+  });
+
+  // Prevents duplicate booking_handoff_clicked events on double-click or
+  // back-and-click-again within the same card mount.
+  const handoffFired = useRef(false);
+
+  function handleCtaClick() {
+    onCardClick?.();
+    if (handoffFired.current) return;
+    handoffFired.current = true;
+    trackHandoffClick(
+      {
+        propertyId: card.id,
+        bookingUrl: card.bookingUrl,
+        rank: card.rank,
+        destinationSlug: card.destinationSlug,
+        requestId,
+        ...(explanationSource ? { explanationSource } : {}),
+      },
+      sessionId
+    );
+  }
+
   return (
     <article
       className={`rounded-xl border bg-zinc-900 px-5 py-4 ${
@@ -52,7 +94,7 @@ export function RecommendationCard({ card }: Props) {
       {/* Summary — replaced by AI-generated explanation when available */}
       <p className="mb-3 text-xs leading-relaxed text-zinc-400">{card.summary}</p>
 
-      {/* Reason chips — hover for sentence explanation */}
+      {/* Reason chips */}
       {card.reasons.length > 0 && (
         <div className="mb-4 flex flex-wrap gap-x-3 gap-y-1">
           {card.reasons.map((r, i) => (
@@ -62,15 +104,24 @@ export function RecommendationCard({ card }: Props) {
       )}
 
       {/* Primary CTA */}
-      {/* Day 10: add click tracking wrapper around this anchor */}
-      <a
-        href={card.bookingUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block w-full rounded-lg bg-[#E84B2B] px-4 py-2.5 text-center text-xs font-medium text-white transition-colors hover:bg-[#c73b1f] focus-visible:ring-2 focus-visible:ring-[#E84B2B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f0f0f] focus-visible:outline-none"
-      >
-        View on Zostel →
-      </a>
+      {ctaResult.ok ? (
+        <a
+          href={ctaResult.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={handleCtaClick}
+          className="block w-full rounded-lg bg-[#E84B2B] px-4 py-2.5 text-center text-xs font-medium text-white transition-colors hover:bg-[#c73b1f] focus-visible:ring-2 focus-visible:ring-[#E84B2B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f0f0f] focus-visible:outline-none"
+        >
+          View Stay →
+        </a>
+      ) : (
+        <div
+          aria-disabled="true"
+          className="block w-full rounded-lg border border-zinc-700 px-4 py-2.5 text-center text-xs text-zinc-600"
+        >
+          Not available right now
+        </div>
+      )}
     </article>
   );
 }
