@@ -261,7 +261,7 @@ describe("RecommendationCard — Day 9 explanation copy", () => {
     ).toBeInTheDocument();
   });
 
-  test("chip sentence is rendered as visible text when present", () => {
+  test("chip sentence is not rendered (removed for MVP)", () => {
     const withSentence = {
       ...base,
       reasons: [
@@ -275,8 +275,8 @@ describe("RecommendationCard — Day 9 explanation copy", () => {
     };
     render(<RecommendationCard card={withSentence} requestId={REQUEST_ID} />);
     expect(
-      screen.getByText("Lively communal vibe — great for meeting fellow travelers.")
-    ).toBeInTheDocument();
+      screen.queryByText("Lively communal vibe — great for meeting fellow travelers.")
+    ).not.toBeInTheDocument();
   });
 
   test("chip renders no sentence element when sentence is absent", () => {

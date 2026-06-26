@@ -16,13 +16,8 @@ function ReasonChip({ reason }: { reason: CardReason }) {
     : "text-zinc-600";
 
   return (
-    <span className="flex flex-col gap-0.5">
-      <span className={`text-[11px] font-medium ${color}`}>
-        {isUp ? "↑" : "↓"} {reason.label}
-      </span>
-      {reason.sentence && (
-        <span className="text-[10px] leading-snug text-zinc-500">{reason.sentence}</span>
-      )}
+    <span className={`text-[11px] font-medium ${color}`}>
+      {isUp ? "↑" : "↓"} {reason.label}
     </span>
   );
 }

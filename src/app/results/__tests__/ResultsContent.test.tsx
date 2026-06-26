@@ -268,7 +268,7 @@ describe("ResultsContent — Day 9 explanation merge", () => {
     expect(screen.queryByText("A lively mountain stay.")).not.toBeInTheDocument();
   });
 
-  test("shows chip sentence as visible text after explanation loads", async () => {
+  test("chip sentence is not rendered (removed for MVP)", async () => {
     mockFetchExplanations.mockResolvedValueOnce(explainResponse());
     mockGet.mockReturnValue("abc");
     setSession(response());
@@ -276,8 +276,8 @@ describe("ResultsContent — Day 9 explanation merge", () => {
       render(<ResultsContent />);
     });
     expect(
-      screen.getByText("Lively communal vibe — well-suited to meeting fellow travelers.")
-    ).toBeInTheDocument();
+      screen.queryByText("Lively communal vibe — well-suited to meeting fellow travelers.")
+    ).not.toBeInTheDocument();
   });
 
   test("falls back to original summary when fetch rejects", async () => {
