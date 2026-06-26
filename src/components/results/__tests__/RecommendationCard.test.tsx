@@ -57,7 +57,7 @@ describe("RecommendationCard", () => {
 describe("RecommendationCard — CTA URL", () => {
   test("booking link includes UTM source and medium", () => {
     render(<RecommendationCard card={base} />);
-    const link = screen.getByRole("link", { name: /View on Zostel/i });
+    const link = screen.getByRole("link", { name: /View Stay/i });
     const href = link.getAttribute("href") ?? "";
     const url = new URL(href);
     expect(url.searchParams.get("utm_source")).toBe("zoco");
@@ -66,35 +66,35 @@ describe("RecommendationCard — CTA URL", () => {
 
   test("booking link includes utm_content with rank", () => {
     render(<RecommendationCard card={{ ...base, rank: 2 }} />);
-    const link = screen.getByRole("link", { name: /View on Zostel/i });
+    const link = screen.getByRole("link", { name: /View Stay/i });
     const href = link.getAttribute("href") ?? "";
     expect(new URL(href).searchParams.get("utm_content")).toBe("rank_2");
   });
 
   test("booking link includes utm_campaign when sessionId is provided", () => {
     render(<RecommendationCard card={base} sessionId={SESSION} />);
-    const link = screen.getByRole("link", { name: /View on Zostel/i });
+    const link = screen.getByRole("link", { name: /View Stay/i });
     const href = link.getAttribute("href") ?? "";
     expect(new URL(href).searchParams.get("utm_campaign")).toBe(SESSION);
   });
 
   test("booking link omits utm_campaign when sessionId is absent", () => {
     render(<RecommendationCard card={base} />);
-    const link = screen.getByRole("link", { name: /View on Zostel/i });
+    const link = screen.getByRole("link", { name: /View Stay/i });
     const href = link.getAttribute("href") ?? "";
     expect(new URL(href).searchParams.has("utm_campaign")).toBe(false);
   });
 
   test("booking link base path is preserved", () => {
     render(<RecommendationCard card={base} sessionId={SESSION} />);
-    const link = screen.getByRole("link", { name: /View on Zostel/i });
+    const link = screen.getByRole("link", { name: /View Stay/i });
     const href = link.getAttribute("href") ?? "";
     expect(href.startsWith("https://www.zostel.com/destination/manali")).toBe(true);
   });
 
   test("booking link opens in new tab with noopener", () => {
     render(<RecommendationCard card={base} />);
-    const link = screen.getByRole("link", { name: /View on Zostel/i });
+    const link = screen.getByRole("link", { name: /View Stay/i });
     expect(link).toHaveAttribute("target", "_blank");
     expect(link).toHaveAttribute("rel", "noopener noreferrer");
   });
@@ -105,7 +105,7 @@ describe("RecommendationCard — CTA URL", () => {
       bookingUrl: "https://www.zostel.com/destination/mcleodganj/stay/zostel-mcleodganj-mclh045",
     };
     render(<RecommendationCard card={deepLink} sessionId={SESSION} />);
-    const link = screen.getByRole("link", { name: /View on Zostel/i });
+    const link = screen.getByRole("link", { name: /View Stay/i });
     const href = link.getAttribute("href") ?? "";
     expect(href.startsWith("https://www.zostel.com/destination/mcleodganj/stay/")).toBe(true);
     expect(new URL(href).searchParams.get("utm_source")).toBe("zoco");
@@ -113,12 +113,12 @@ describe("RecommendationCard — CTA URL", () => {
 
   test("CTA is hidden when bookingUrl is empty", () => {
     render(<RecommendationCard card={{ ...base, bookingUrl: "" }} />);
-    expect(screen.queryByRole("link", { name: /View on Zostel/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /View Stay/i })).not.toBeInTheDocument();
   });
 
   test("CTA is hidden when bookingUrl is not a zostel.com URL", () => {
     render(<RecommendationCard card={{ ...base, bookingUrl: "https://evil.com/kasol" }} />);
-    expect(screen.queryByRole("link", { name: /View on Zostel/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /View Stay/i })).not.toBeInTheDocument();
   });
 
   test("card still renders title and summary when CTA is hidden", () => {

@@ -77,7 +77,7 @@ export function RecommendationCard({ card, sessionId }: Props) {
           rel="noopener noreferrer"
           className="block w-full rounded-lg bg-[#E84B2B] px-4 py-2.5 text-center text-xs font-medium text-white transition-colors hover:bg-[#c73b1f] focus-visible:ring-2 focus-visible:ring-[#E84B2B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f0f0f] focus-visible:outline-none"
         >
-          View on Zostel →
+          View Stay →
         </a>
       ) : null}
     </article>
