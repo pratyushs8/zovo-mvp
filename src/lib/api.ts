@@ -49,6 +49,8 @@ export async function fetchExplanations(req: ExplainRequest): Promise<ExplainRes
 }
 
 // Fire-and-forget — must never throw or block navigation.
+// keepalive: true ensures the request completes even if the user closes the tab
+// immediately after clicking, which can happen when _blank opens on mobile.
 export function trackHandoffClick(
   properties: EventProperties<"booking_handoff_clicked">,
   sessionId?: string | null
@@ -57,6 +59,7 @@ export function trackHandoffClick(
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ properties, ...(sessionId ? { sessionId } : {}) }),
+    keepalive: true,
   }).catch(() => undefined);
 }
 
