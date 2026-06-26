@@ -86,7 +86,7 @@ export function RecommendationCard({ card, requestId, sessionId, explanationSour
         </div>
       )}
 
-      {/* Primary CTA — hidden if URL validation fails */}
+      {/* Primary CTA */}
       {ctaResult.ok ? (
         <a
           href={ctaResult.url}
@@ -97,7 +97,14 @@ export function RecommendationCard({ card, requestId, sessionId, explanationSour
         >
           View Stay →
         </a>
-      ) : null}
+      ) : (
+        <div
+          aria-disabled="true"
+          className="block w-full rounded-lg border border-zinc-700 px-4 py-2.5 text-center text-xs text-zinc-600"
+        >
+          Not available right now
+        </div>
+      )}
     </article>
   );
 }

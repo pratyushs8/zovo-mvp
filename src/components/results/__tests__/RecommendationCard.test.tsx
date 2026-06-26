@@ -119,12 +119,13 @@ describe("RecommendationCard — CTA URL", () => {
     expect(new URL(href).searchParams.get("utm_source")).toBe("zoco");
   });
 
-  test("CTA is hidden when bookingUrl is empty", () => {
+  test("shows disabled fallback when bookingUrl is empty", () => {
     render(<RecommendationCard card={{ ...base, bookingUrl: "" }} requestId={REQUEST_ID} />);
     expect(screen.queryByRole("link", { name: /View Stay/i })).not.toBeInTheDocument();
+    expect(screen.getByText(/Not available right now/i)).toBeInTheDocument();
   });
 
-  test("CTA is hidden when bookingUrl is not a zostel.com URL", () => {
+  test("shows disabled fallback when bookingUrl is not a zostel.com URL", () => {
     render(
       <RecommendationCard
         card={{ ...base, bookingUrl: "https://evil.com/kasol" }}
@@ -132,9 +133,16 @@ describe("RecommendationCard — CTA URL", () => {
       />
     );
     expect(screen.queryByRole("link", { name: /View Stay/i })).not.toBeInTheDocument();
+    expect(screen.getByText(/Not available right now/i)).toBeInTheDocument();
   });
 
-  test("card still renders title and summary when CTA is hidden", () => {
+  test("disabled fallback has aria-disabled set", () => {
+    render(<RecommendationCard card={{ ...base, bookingUrl: "" }} requestId={REQUEST_ID} />);
+    const fallback = screen.getByText(/Not available right now/i);
+    expect(fallback).toHaveAttribute("aria-disabled", "true");
+  });
+
+  test("card still renders title and summary when CTA is unavailable", () => {
     render(<RecommendationCard card={{ ...base, bookingUrl: "" }} requestId={REQUEST_ID} />);
     expect(screen.getByText("Zostel Manali")).toBeInTheDocument();
     expect(screen.getByText("A lively social hub in the mountains.")).toBeInTheDocument();
