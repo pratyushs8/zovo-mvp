@@ -11,9 +11,13 @@ function ReasonChip({ reason }: { reason: CardReason }) {
     : "text-zinc-600";
 
   return (
-    // Day 9: wrap this in a <details> or tooltip using reason.sentence when available
-    <span className={`text-[11px] font-medium ${color}`}>
-      {isUp ? "↑" : "↓"} {reason.label}
+    <span className="flex flex-col gap-0.5">
+      <span className={`text-[11px] font-medium ${color}`}>
+        {isUp ? "↑" : "↓"} {reason.label}
+      </span>
+      {reason.sentence && (
+        <span className="text-[10px] leading-snug text-zinc-500">{reason.sentence}</span>
+      )}
     </span>
   );
 }
@@ -26,19 +30,29 @@ interface Props {
 
 export function RecommendationCard({ card }: Props) {
   return (
-    <article className="rounded-xl border border-zinc-800 bg-zinc-900 px-5 py-4">
+    <article
+      className={`rounded-xl border bg-zinc-900 px-5 py-4 ${
+        card.lowConfidence ? "border-zinc-700" : "border-zinc-800"
+      }`}
+    >
       {/* Header — rank + title + location */}
       <header className="mb-3">
-        <span className="mb-1 block text-xs text-zinc-600">#{card.rank}</span>
+        <div className="mb-1 flex items-center gap-2">
+          <span className="text-xs text-zinc-600">#{card.rank}</span>
+          {card.lowConfidence && (
+            <span className="rounded bg-zinc-800 px-1.5 py-0.5 text-[10px] text-zinc-500">
+              limited info
+            </span>
+          )}
+        </div>
         <p className="text-sm font-semibold text-zinc-100">{card.title}</p>
         <p className="text-xs text-zinc-500">{card.location}</p>
       </header>
 
-      {/* Summary — property blurb; Day 9 replaces with AI-generated explanation */}
-      {/* Day 9: card.lowConfidence → muted border or "limited info" chip */}
+      {/* Summary — replaced by AI-generated explanation when available */}
       <p className="mb-3 text-xs leading-relaxed text-zinc-400">{card.summary}</p>
 
-      {/* Reason chips — up signals then down signals */}
+      {/* Reason chips — hover for sentence explanation */}
       {card.reasons.length > 0 && (
         <div className="mb-4 flex flex-wrap gap-x-3 gap-y-1">
           {card.reasons.map((r, i) => (

@@ -1,4 +1,5 @@
 import type { RecommendationRequest, RecommendationResponse } from "@/types/api";
+import type { ExplainRequest, ExplainResponse } from "@/types/explain";
 import type { IntakeAnswers } from "@/hooks/useIntakeSession";
 
 export async function submitRecommendation(
@@ -34,6 +35,16 @@ export async function createSession(
     body: JSON.stringify({ sessionId, ...opts }),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
+}
+
+export async function fetchExplanations(req: ExplainRequest): Promise<ExplainResponse> {
+  const res = await fetch("/api/explain", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(req),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json() as Promise<ExplainResponse>;
 }
 
 // Persists current step + accumulated answers on each step advance.
