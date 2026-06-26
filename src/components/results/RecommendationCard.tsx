@@ -1,4 +1,5 @@
 import type { StayCard, CardReason } from "@/types/api";
+import { buildViewStayUrl } from "@/lib/buildViewStayUrl";
 
 // ─── Reason chip ──────────────────────────────────────────────────────────────
 
@@ -26,9 +27,16 @@ function ReasonChip({ reason }: { reason: CardReason }) {
 
 interface Props {
   card: StayCard;
+  sessionId?: string | null;
 }
 
-export function RecommendationCard({ card }: Props) {
+export function RecommendationCard({ card, sessionId }: Props) {
+  const ctaResult = buildViewStayUrl({
+    bookingUrl: card.bookingUrl,
+    rank: card.rank,
+    sessionId,
+  });
+
   return (
     <article
       className={`rounded-xl border bg-zinc-900 px-5 py-4 ${
@@ -52,7 +60,7 @@ export function RecommendationCard({ card }: Props) {
       {/* Summary — replaced by AI-generated explanation when available */}
       <p className="mb-3 text-xs leading-relaxed text-zinc-400">{card.summary}</p>
 
-      {/* Reason chips — hover for sentence explanation */}
+      {/* Reason chips */}
       {card.reasons.length > 0 && (
         <div className="mb-4 flex flex-wrap gap-x-3 gap-y-1">
           {card.reasons.map((r, i) => (
@@ -61,16 +69,17 @@ export function RecommendationCard({ card }: Props) {
         </div>
       )}
 
-      {/* Primary CTA */}
-      {/* Day 10: add click tracking wrapper around this anchor */}
-      <a
-        href={card.bookingUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block w-full rounded-lg bg-[#E84B2B] px-4 py-2.5 text-center text-xs font-medium text-white transition-colors hover:bg-[#c73b1f] focus-visible:ring-2 focus-visible:ring-[#E84B2B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f0f0f] focus-visible:outline-none"
-      >
-        View on Zostel →
-      </a>
+      {/* Primary CTA — hidden if URL validation fails */}
+      {ctaResult.ok ? (
+        <a
+          href={ctaResult.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block w-full rounded-lg bg-[#E84B2B] px-4 py-2.5 text-center text-xs font-medium text-white transition-colors hover:bg-[#c73b1f] focus-visible:ring-2 focus-visible:ring-[#E84B2B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f0f0f] focus-visible:outline-none"
+        >
+          View on Zostel →
+        </a>
+      ) : null}
     </article>
   );
 }

@@ -157,7 +157,11 @@ export default function ResultsContent() {
         ) : (
           <div className="flex flex-col gap-3">
             {cards.map((card) => (
-              <RecommendationCard key={card.id} card={mergeExplanation(card)} />
+              <RecommendationCard
+                key={card.id}
+                card={mergeExplanation(card)}
+                sessionId={sessionId}
+              />
             ))}
           </div>
         )}

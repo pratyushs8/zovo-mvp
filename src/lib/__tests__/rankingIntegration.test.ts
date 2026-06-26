@@ -274,9 +274,10 @@ describe("destination filter — real data", () => {
     }
   });
 
-  test("Manali pool has exactly 3 properties (matches data file)", () => {
+  test("Manali pool has exactly 1 property after slug corrections (matches data file)", () => {
+    // Old Manali → slug "old-manali", Vashisht → slug "vashisht", Dobhi stays "manali"
     const manaliCount = PROPERTIES.filter((p) => p.destinationSlug === "manali").length;
-    expect(manaliCount).toBe(3);
+    expect(manaliCount).toBe(1);
     const { poolSize, fallback } = run(
       req({
         personaKey: "solo_social",
@@ -286,7 +287,7 @@ describe("destination filter — real data", () => {
       }),
       "manali"
     );
-    expect(poolSize).toBe(3);
+    expect(poolSize).toBe(1);
     expect(fallback).toBe("thin_pool");
   });
 });
