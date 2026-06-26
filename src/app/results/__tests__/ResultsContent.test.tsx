@@ -75,6 +75,7 @@ const debugBlock = {
     confidence: "high" as const,
     confidenceReason: "top_score_high" as const,
   },
+  requestId: 1,
   cards: [],
 };
 
