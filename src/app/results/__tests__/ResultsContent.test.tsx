@@ -4,10 +4,12 @@ import type { ExplainResponse } from "@/types/explain";
 
 // ─── api mock — prevents real network calls from tests ───────────────────────
 
-const mockFetchExplanations = jest.fn<Promise<ExplainResponse>, [unknown]>();
+import type { ExplainRequest } from "@/types/explain";
+
+const mockFetchExplanations = jest.fn<Promise<ExplainResponse>, [ExplainRequest]>();
 
 jest.mock("@/lib/api", () => ({
-  fetchExplanations: (...args: unknown[]) => mockFetchExplanations(...args),
+  fetchExplanations: (req: ExplainRequest) => mockFetchExplanations(req),
 }));
 
 // ─── Next.js navigation mocks ─────────────────────────────────────────────────
