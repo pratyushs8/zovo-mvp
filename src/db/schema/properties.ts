@@ -15,7 +15,7 @@ export const properties = pgTable(
     archetype: text("archetype").$type<Archetype>().notNull(),
     scoring: jsonb("scoring").$type<ScoringVector>().notNull(),
     tags: jsonb("tags").$type<string[]>().notNull().default([]),
-    bookingUrl: text("booking_url").notNull().unique(),
+    bookingUrl: text("booking_url").notNull(),
     summary: text("summary"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },

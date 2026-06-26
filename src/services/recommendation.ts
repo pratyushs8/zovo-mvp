@@ -80,11 +80,17 @@ export async function recommendStays(req: RecommendationRequest): Promise<Recomm
           direction: "up" as const,
         }));
 
-      const downReasons = r.explanation.topMisses.slice(0, 2).map((m) => ({
-        label: DIMENSIONS[m.dim].label,
-        strength: m.strength,
-        direction: "down" as const,
-      }));
+      const upDims = new Set(
+        r.explanation.topMatches.filter((m) => m.strength !== "weak").slice(0, 2).map((m) => m.dim)
+      );
+      const downReasons = r.explanation.topMisses
+        .filter((m) => !upDims.has(m.dim))
+        .slice(0, 2)
+        .map((m) => ({
+          label: DIMENSIONS[m.dim].label,
+          strength: m.strength,
+          direction: "down" as const,
+        }));
 
       // Always have at least one up reason — fall back to the top match even if weak.
       if (upReasons.length === 0 && r.explanation.topMatches[0]) {

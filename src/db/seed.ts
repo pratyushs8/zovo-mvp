@@ -38,18 +38,7 @@ async function seed() {
   const results = await db
     .insert(properties)
     .values(propertyRows)
-    .onConflictDoUpdate({
-      target: properties.bookingUrl,
-      set: {
-        name: sql`excluded.name`,
-        location: sql`excluded.location`,
-        priceInr: sql`excluded.price_inr`,
-        archetype: sql`excluded.archetype`,
-        scoring: sql`excluded.scoring`,
-        tags: sql`excluded.tags`,
-        summary: sql`excluded.summary`,
-      },
-    })
+    .onConflictDoNothing()
     .returning({ id: properties.id, name: properties.name });
 
   console.log(`✓ ${results.length} properties upserted`);

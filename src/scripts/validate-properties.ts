@@ -57,13 +57,9 @@ export function validate(): void {
 
   const fail = (msg: string) => errors.push(msg);
 
-  // 1. Unique booking URLs
-  const urls = PROPERTIES.map((p) => p.bookingUrl);
-  const urlSet = new Set(urls);
-  if (urlSet.size !== urls.length) {
-    const dupes = urls.filter((u, i) => urls.indexOf(u) !== i);
-    fail(`Duplicate bookingUrl(s): ${dupes.join(", ")}`);
-  }
+  // 1. Booking URLs — duplicates are allowed when multiple properties share a
+  // city landing page (e.g. two Zostel locations in Kasol, Rishikesh, etc.).
+  // ZoCo tracks the individual property via propertyId in analytics events.
 
   // 2. Per-property checks
   for (const p of PROPERTIES) {
