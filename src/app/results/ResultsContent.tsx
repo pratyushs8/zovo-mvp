@@ -160,7 +160,9 @@ export default function ResultsContent() {
               <RecommendationCard
                 key={card.id}
                 card={mergeExplanation(card)}
+                requestId={response._debug.requestId}
                 sessionId={sessionId}
+                explanationSource={explanations.get(card.id)?.explanationSource}
               />
             ))}
           </div>

@@ -32,6 +32,8 @@ export async function recommendStays(req: RecommendationRequest): Promise<Recomm
 
   const payload = rankProperties({ userVector }, candidates);
 
+  let requestId = 0;
+
   await db.transaction(async (tx) => {
     const [reqRow] = await tx
       .insert(requestsTable)
@@ -44,6 +46,8 @@ export async function recommendStays(req: RecommendationRequest): Promise<Recomm
         budget: req.budget ?? null,
       })
       .returning({ id: requestsTable.id });
+
+    requestId = reqRow.id;
 
     if (payload.results.length > 0) {
       await tx.insert(resultsTable).values(
@@ -105,6 +109,7 @@ export async function recommendStays(req: RecommendationRequest): Promise<Recomm
     _debug: {
       userVector,
       rankingExplanation: payload.rankingExplanation,
+      requestId,
       cards: payload.results.map((r) => ({
         id: r.property.id,
         score: r.score,

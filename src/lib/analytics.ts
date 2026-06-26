@@ -12,7 +12,17 @@ export type AnalyticsEvent =
       name: "recommendation_clicked";
       properties: { requestId: number; propertyId: number; rank: number };
     }
-  | { name: "booking_handoff_clicked"; properties: { propertyId: number; bookingUrl: string } };
+  | {
+      name: "booking_handoff_clicked";
+      properties: {
+        propertyId: number;
+        bookingUrl: string; // raw base URL before UTM append
+        rank: number;
+        destinationSlug: string;
+        requestId: number;
+        explanationSource?: "model" | "fallback"; // present only when explanation layer has loaded
+      };
+    };
 
 export type EventName = AnalyticsEvent["name"];
 

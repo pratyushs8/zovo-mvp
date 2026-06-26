@@ -1,5 +1,6 @@
 import type { StayCard, CardReason } from "@/types/api";
 import { buildViewStayUrl } from "@/lib/buildViewStayUrl";
+import { trackHandoffClick } from "@/lib/api";
 
 // ─── Reason chip ──────────────────────────────────────────────────────────────
 
@@ -27,15 +28,31 @@ function ReasonChip({ reason }: { reason: CardReason }) {
 
 interface Props {
   card: StayCard;
+  requestId: number;
   sessionId?: string | null;
+  explanationSource?: "model" | "fallback";
 }
 
-export function RecommendationCard({ card, sessionId }: Props) {
+export function RecommendationCard({ card, requestId, sessionId, explanationSource }: Props) {
   const ctaResult = buildViewStayUrl({
     bookingUrl: card.bookingUrl,
     rank: card.rank,
     sessionId,
   });
+
+  function handleCtaClick() {
+    trackHandoffClick(
+      {
+        propertyId: card.id,
+        bookingUrl: card.bookingUrl,
+        rank: card.rank,
+        destinationSlug: card.destinationSlug,
+        requestId,
+        ...(explanationSource ? { explanationSource } : {}),
+      },
+      sessionId
+    );
+  }
 
   return (
     <article
@@ -75,6 +92,7 @@ export function RecommendationCard({ card, sessionId }: Props) {
           href={ctaResult.url}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={handleCtaClick}
           className="block w-full rounded-lg bg-[#E84B2B] px-4 py-2.5 text-center text-xs font-medium text-white transition-colors hover:bg-[#c73b1f] focus-visible:ring-2 focus-visible:ring-[#E84B2B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f0f0f] focus-visible:outline-none"
         >
           View Stay →
