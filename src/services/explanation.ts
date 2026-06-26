@@ -108,7 +108,7 @@ function validateModelCard(
 
   if (typeof obj.cardSummary !== "string") return null;
 
-  const summaryOpts = { maxLength: 120, lowConfidence: card.lowConfidence };
+  const summaryOpts = { maxLength: 300, lowConfidence: card.lowConfidence };
   const sentenceOpts = { maxLength: 100, lowConfidence: card.lowConfidence };
 
   const summaryResult = sanitizeAndValidate(obj.cardSummary, summaryOpts);

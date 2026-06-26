@@ -269,8 +269,8 @@ describe("generateExplanations — malformed model output", () => {
 // ─── Per-card validation failures ─────────────────────────────────────────────
 
 describe("generateExplanations — per-card validation", () => {
-  it("falls back for a card whose cardSummary exceeds 200 characters", async () => {
-    const tooLong = { ...validCard(1), cardSummary: "A".repeat(201) };
+  it("falls back for a card whose cardSummary exceeds 300 characters", async () => {
+    const tooLong = { ...validCard(1), cardSummary: "A".repeat(301) };
     setOpenAIClient(makeOpenAIFake(modelEnvelope([tooLong])));
     const results = await generateExplanations([makeCard(1, 1)], [makeDebug(1)], USER_VECTOR);
     expect(results[0].explanationSource).toBe("fallback");
@@ -326,7 +326,7 @@ describe("generateExplanations — per-card validation", () => {
   });
 
   it("falls back individual cards independently — sibling card with valid output uses model source", async () => {
-    const tooLong = { ...validCard(1), cardSummary: "A".repeat(201) };
+    const tooLong = { ...validCard(1), cardSummary: "A".repeat(301) };
     setOpenAIClient(makeOpenAIFake(modelEnvelope([tooLong, validCard(2)])));
     const results = await generateExplanations(
       [makeCard(1, 1), makeCard(2, 2)],

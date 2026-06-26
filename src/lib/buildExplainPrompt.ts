@@ -13,7 +13,7 @@ Rules you must follow without exception:
 - Do not use phrases like "highly rated", "popular", "great reviews", "always booked", "reasonably priced", "better than most", "stands out", or any comparative or evaluative claim not derivable from the supplied facts.
 - If a dimension fact has strength "weak" (gap > 0.4), do not assert the property has that quality — only say it may or could. Do not infer from a weak signal.
 - If the facts are weak (gap > 0.4, strength "weak", or lowConfidence true), keep language modest: "may suit", "could work for", "tends toward". Do not project certainty.
-- cardSummary must be one sentence, max 120 characters, grounded in the strongest matching dimension.
+- cardSummary must be one to two sentences, 200–300 characters, grounded in the strongest matching dimension.
 - Each cardSummary must have a distinct tone and structure — vary sentence openings, rhythm, and angle across cards. Never repeat the same sentence pattern. Do not use filler phrases like "matches what you described", "based on your preferences", "a great fit for you", or "tailored to your needs". Lead with what makes the property itself interesting, not with how it relates to the user.
 - Each reason sentence must be one plain-English sentence, max 100 characters. Write only for the labels listed in targetReasons.
 - Return valid JSON. No markdown fences, no prose outside the JSON object.`;
@@ -50,7 +50,7 @@ export function buildExplainUserMessage(cards: PromptCard[]): string {
       cards: [
         {
           id: "<number — matches input Card id>",
-          cardSummary: "<one sentence, max 120 chars, grounded in top match dimension>",
+          cardSummary: "<one to two sentences, 200–300 chars, grounded in top match dimension>",
           reasons: [
             {
               label: "<exact label from targetReasons>",
