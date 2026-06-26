@@ -46,13 +46,13 @@ function makeBreakdown(overrides: Partial<ScoringBreakdown> = {}): ScoringBreakd
     contribution: 0.1,
   });
   return {
-    scenic:        dim(0.85, 0.05),
-    calm:          dim(0.6,  0.3),
-    social:        dim(0.75, 0.05),
-    workation:     dim(0.5,  0.1),
-    adventure:     dim(0.3,  0.4),
-    budget_fit:    dim(0.7,  0.1),
-    room_type_fit: dim(0.6,  0.0),
+    scenic: dim(0.85, 0.05),
+    calm: dim(0.6, 0.3),
+    social: dim(0.75, 0.05),
+    workation: dim(0.5, 0.1),
+    adventure: dim(0.3, 0.4),
+    budget_fit: dim(0.7, 0.1),
+    room_type_fit: dim(0.6, 0.0),
     ...overrides,
   };
 }
@@ -65,17 +65,23 @@ function makeDebug(id: number, overrides: Partial<StayDebug> = {}): StayDebug {
     breakdown: makeBreakdown(),
     explanation: {
       dimensions: [
-        { dim: "scenic",   contribution: 0.15, matchScore: 0.14, gap: 0.05, strength: "strong" },
-        { dim: "social",   contribution: 0.12, matchScore: 0.11, gap: 0.05, strength: "strong" },
-        { dim: "calm",     contribution: 0.08, matchScore: 0.07, gap: 0.3,  strength: "moderate" },
+        { dim: "scenic", contribution: 0.15, matchScore: 0.14, gap: 0.05, strength: "strong" },
+        { dim: "social", contribution: 0.12, matchScore: 0.11, gap: 0.05, strength: "strong" },
+        { dim: "calm", contribution: 0.08, matchScore: 0.07, gap: 0.3, strength: "moderate" },
         { dim: "budget_fit", contribution: 0.09, matchScore: 0.08, gap: 0.1, strength: "strong" },
-        { dim: "workation",  contribution: 0.06, matchScore: 0.05, gap: 0.1, strength: "strong" },
-        { dim: "adventure",  contribution: 0.04, matchScore: 0.03, gap: 0.4, strength: "moderate" },
-        { dim: "room_type_fit", contribution: 0.07, matchScore: 0.06, gap: 0.0, strength: "strong" },
+        { dim: "workation", contribution: 0.06, matchScore: 0.05, gap: 0.1, strength: "strong" },
+        { dim: "adventure", contribution: 0.04, matchScore: 0.03, gap: 0.4, strength: "moderate" },
+        {
+          dim: "room_type_fit",
+          contribution: 0.07,
+          matchScore: 0.06,
+          gap: 0.0,
+          strength: "strong",
+        },
       ],
       topMatches: [
-        { dim: "scenic",  contribution: 0.15, matchScore: 0.14, gap: 0.05, strength: "strong" },
-        { dim: "social",  contribution: 0.12, matchScore: 0.11, gap: 0.05, strength: "strong" },
+        { dim: "scenic", contribution: 0.15, matchScore: 0.14, gap: 0.05, strength: "strong" },
+        { dim: "social", contribution: 0.12, matchScore: 0.11, gap: 0.05, strength: "strong" },
       ],
       topMisses: [],
       filterTrace: {
@@ -100,7 +106,7 @@ function makeCard(id: number, rank: number, overrides: Partial<StayCard> = {}): 
     lowConfidence: false,
     bookingUrl: "https://zostel.com",
     reasons: [
-      { label: "Scenic",      strength: "strong",   direction: "up" },
+      { label: "Scenic", strength: "strong", direction: "up" },
       { label: "Social vibe", strength: "moderate", direction: "up" },
     ],
     ...overrides,
@@ -136,8 +142,11 @@ function validCard(id: number) {
     id,
     cardSummary: "A scenic stay well-suited to what you described.",
     reasons: [
-      { label: "Scenic",      sentence: "Sits amid mountain scenery that matches your preference." },
-      { label: "Social vibe", sentence: "Communal spaces tend toward a lively, sociable atmosphere." },
+      { label: "Scenic", sentence: "Sits amid mountain scenery that matches your preference." },
+      {
+        label: "Social vibe",
+        sentence: "Communal spaces tend toward a lively, sociable atmosphere.",
+      },
     ],
   };
 }
@@ -192,7 +201,7 @@ describe("generateExplanations — valid model output", () => {
       id: 1,
       cardSummary: "A **scenic** stay.",
       reasons: [
-        { label: "Scenic",      sentence: "Great *mountain* setting." },
+        { label: "Scenic", sentence: "Great *mountain* setting." },
         { label: "Social vibe", sentence: "Lively communal spaces." },
       ],
     };
@@ -272,7 +281,7 @@ describe("generateExplanations — per-card validation", () => {
       id: 1,
       cardSummary: "A scenic stay.",
       reasons: [
-        { label: "Scenic",      sentence: "Costs ₹1200 per night." },
+        { label: "Scenic", sentence: "Costs ₹1200 per night." },
         { label: "Social vibe", sentence: "Lively communal spaces." },
       ],
     };
@@ -286,8 +295,8 @@ describe("generateExplanations — per-card validation", () => {
       id: 1,
       cardSummary: "A scenic stay.",
       reasons: [
-        { label: "Scenic",         sentence: "Scenic mountain setting." },
-        { label: "InventedLabel",   sentence: "Something the model made up." },
+        { label: "Scenic", sentence: "Scenic mountain setting." },
+        { label: "InventedLabel", sentence: "Something the model made up." },
       ],
     };
     setOpenAIClient(makeOpenAIFake(modelEnvelope([invented])));
@@ -367,9 +376,7 @@ describe("generateExplanations — lowConfidence overconfidence rejection", () =
 describe("generateExplanations — ranking order preservation", () => {
   it("returns cards in the same order as the input regardless of model output order", async () => {
     // Model returns card 3 first, then 1, then 2 — should not reorder results
-    setOpenAIClient(
-      makeOpenAIFake(modelEnvelope([validCard(3), validCard(1), validCard(2)]))
-    );
+    setOpenAIClient(makeOpenAIFake(modelEnvelope([validCard(3), validCard(1), validCard(2)])));
     const results = await generateExplanations(
       [makeCard(1, 1), makeCard(2, 2), makeCard(3, 3)],
       [makeDebug(1), makeDebug(2), makeDebug(3)],

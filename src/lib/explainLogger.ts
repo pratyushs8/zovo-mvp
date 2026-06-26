@@ -19,10 +19,10 @@ import { isProduction, isLocal, isStaging } from "@/lib/env";
 // Keep these stable — Day 12 QA and Day 14 review will filter/group by them.
 
 export type ExplainFailureCategory =
-  | "api_error"     // network error, auth failure, rate limit, server 5xx
-  | "api_timeout"   // request exceeded EXPLAIN_TIMEOUT_MS
-  | "json_parse"    // model returned non-JSON or structurally invalid envelope
-  | "validation"    // per-card text failed sanitize/validate checks
+  | "api_error" // network error, auth failure, rate limit, server 5xx
+  | "api_timeout" // request exceeded EXPLAIN_TIMEOUT_MS
+  | "json_parse" // model returned non-JSON or structurally invalid envelope
+  | "validation" // per-card text failed sanitize/validate checks
   | "missing_card"; // model returned fewer cards than were requested
 
 export interface ExplainFailure {

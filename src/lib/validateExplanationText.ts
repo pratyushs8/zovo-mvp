@@ -11,9 +11,7 @@
 
 // ─── Result type ──────────────────────────────────────────────────────────────
 
-export type TextValidationResult =
-  | { ok: true; text: string }
-  | { ok: false; reason: string };
+export type TextValidationResult = { ok: true; text: string } | { ok: false; reason: string };
 
 export interface TextValidationOptions {
   // Hard character limit applied after sanitization. Exceeding it is a reject,
@@ -92,7 +90,10 @@ const UNSUPPORTED_FACT_PATTERNS: Array<[RegExp, string]> = [
   // Popularity — not a fact in our data model
   [/\b(popular|well-known|famous|trending)\b/i, "popularity claim"],
   // Soft budget language — implies a price assessment we were never given
-  [/\b(affordable|budget-friendly|inexpensive|cheap|great value|value for money|reasonably priced|good deal)\b/i, "implied price claim"],
+  [
+    /\b(affordable|budget-friendly|inexpensive|cheap|great value|value for money|reasonably priced|good deal)\b/i,
+    "implied price claim",
+  ],
 ];
 
 // Overconfidence markers blocked unconditionally — no card should claim certainty
@@ -104,7 +105,10 @@ const ALWAYS_OVERCONFIDENT_PATTERNS: Array<[RegExp, string]> = [
   [/\bbetter than (most|average|others?|the rest)\b/i, "comparative: better than"],
   [/\bone of the (quieter|calmer|more\s+\w+|best|top)\b/i, "comparative: one of the"],
   [/\bstands?\s+out\b/i, "comparative: stands out"],
-  [/\b(your|the)\s+(top|best|strongest|number[\s-]?one)\s+(match|pick|choice|option)\b/i, "comparative: top match claim"],
+  [
+    /\b(your|the)\s+(top|best|strongest|number[\s-]?one)\s+(match|pick|choice|option)\b/i,
+    "comparative: top match claim",
+  ],
 ];
 
 // Overconfidence markers — only checked when lowConfidence is true.
@@ -153,7 +157,10 @@ export function validateText(text: string, opts: TextValidationOptions): TextVal
 //
 // Sanitize then validate. This is what the explanation service calls per field.
 
-export function sanitizeAndValidate(raw: string, opts: TextValidationOptions): TextValidationResult {
+export function sanitizeAndValidate(
+  raw: string,
+  opts: TextValidationOptions
+): TextValidationResult {
   const clean = sanitize(raw);
   return validateText(clean, opts);
 }

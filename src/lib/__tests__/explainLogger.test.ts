@@ -6,9 +6,15 @@ import type { ExplainFailure, ExplainBatchSummary } from "@/lib/explainLogger";
 const envState = { isLocal: true, isStaging: false, isProduction: false };
 
 jest.mock("@/lib/env", () => ({
-  get isLocal() { return envState.isLocal; },
-  get isStaging() { return envState.isStaging; },
-  get isProduction() { return envState.isProduction; },
+  get isLocal() {
+    return envState.isLocal;
+  },
+  get isStaging() {
+    return envState.isStaging;
+  },
+  get isProduction() {
+    return envState.isProduction;
+  },
 }));
 
 // Import after mock so module picks up the mocked env
@@ -21,7 +27,11 @@ function cleanEnv() {
 }
 
 const noFailures: ExplainBatchSummary = {
-  total: 3, model: 3, fallback: 0, durationMs: 420, failures: [],
+  total: 3,
+  model: 3,
+  fallback: 0,
+  durationMs: 420,
+  failures: [],
 };
 
 const withFailures: ExplainBatchSummary = {
@@ -38,7 +48,11 @@ const withFailures: ExplainBatchSummary = {
 // ─── logExplainFailure ────────────────────────────────────────────────────────
 
 describe("logExplainFailure — local env", () => {
-  beforeEach(() => { cleanEnv(); envState.isLocal = true; jest.clearAllMocks(); });
+  beforeEach(() => {
+    cleanEnv();
+    envState.isLocal = true;
+    jest.clearAllMocks();
+  });
 
   it("emits a console.warn", () => {
     const spy = jest.spyOn(console, "warn").mockImplementation(() => {});
@@ -77,7 +91,11 @@ describe("logExplainFailure — local env", () => {
 });
 
 describe("logExplainFailure — production env", () => {
-  beforeEach(() => { cleanEnv(); envState.isProduction = true; jest.clearAllMocks(); });
+  beforeEach(() => {
+    cleanEnv();
+    envState.isProduction = true;
+    jest.clearAllMocks();
+  });
 
   it("does not emit in production", () => {
     const spy = jest.spyOn(console, "warn").mockImplementation(() => {});
@@ -88,7 +106,11 @@ describe("logExplainFailure — production env", () => {
 });
 
 describe("logExplainFailure — staging env", () => {
-  beforeEach(() => { cleanEnv(); envState.isStaging = true; jest.clearAllMocks(); });
+  beforeEach(() => {
+    cleanEnv();
+    envState.isStaging = true;
+    jest.clearAllMocks();
+  });
 
   it("emits in staging", () => {
     const spy = jest.spyOn(console, "warn").mockImplementation(() => {});
@@ -101,7 +123,11 @@ describe("logExplainFailure — staging env", () => {
 // ─── logExplainBatch ──────────────────────────────────────────────────────────
 
 describe("logExplainBatch — local env", () => {
-  beforeEach(() => { cleanEnv(); envState.isLocal = true; jest.clearAllMocks(); });
+  beforeEach(() => {
+    cleanEnv();
+    envState.isLocal = true;
+    jest.clearAllMocks();
+  });
 
   it("emits a console.info on a clean run", () => {
     const spy = jest.spyOn(console, "info").mockImplementation(() => {});
@@ -143,7 +169,11 @@ describe("logExplainBatch — local env", () => {
 });
 
 describe("logExplainBatch — production env, clean run", () => {
-  beforeEach(() => { cleanEnv(); envState.isProduction = true; jest.clearAllMocks(); });
+  beforeEach(() => {
+    cleanEnv();
+    envState.isProduction = true;
+    jest.clearAllMocks();
+  });
 
   it("does not emit when all cards served by model", () => {
     const spy = jest.spyOn(console, "info").mockImplementation(() => {});
@@ -161,7 +191,11 @@ describe("logExplainBatch — production env, clean run", () => {
 });
 
 describe("logExplainBatch — staging env", () => {
-  beforeEach(() => { cleanEnv(); envState.isStaging = true; jest.clearAllMocks(); });
+  beforeEach(() => {
+    cleanEnv();
+    envState.isStaging = true;
+    jest.clearAllMocks();
+  });
 
   it("emits even on a clean run in staging", () => {
     const spy = jest.spyOn(console, "info").mockImplementation(() => {});

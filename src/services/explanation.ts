@@ -9,7 +9,12 @@
 
 import type { StayCard, StayDebug } from "@/types/api";
 import type { ScoringVector } from "@/types";
-import type { PromptCard, PromptDimensionFact, ExplainedCard, ModelCardOutput } from "@/types/explain";
+import type {
+  PromptCard,
+  PromptDimensionFact,
+  ExplainedCard,
+  ModelCardOutput,
+} from "@/types/explain";
 import type { DimensionKey } from "@/config/scoring";
 import { DIMENSIONS, DIMENSION_KEYS } from "@/config/scoring";
 import { classifyStrength } from "@/lib/generateExplanation";
@@ -17,11 +22,7 @@ import { EXPLAIN_SYSTEM_PROMPT, buildExplainUserMessage } from "@/lib/buildExpla
 import { buildFallbackCard } from "@/lib/deterministicCopy";
 import { getOpenAIClient, EXPLAIN_MODEL, EXPLAIN_TIMEOUT_MS } from "@/lib/openaiClient";
 import { sanitizeAndValidate } from "@/lib/validateExplanationText";
-import {
-  logExplainFailure,
-  logExplainBatch,
-  type ExplainFailure,
-} from "@/lib/explainLogger";
+import { logExplainFailure, logExplainBatch, type ExplainFailure } from "@/lib/explainLogger";
 
 // ─── Build PromptCard ─────────────────────────────────────────────────────────
 //
@@ -198,7 +199,12 @@ async function callResponsesAPI(promptCards: PromptCard[]): Promise<APIResult> {
     );
     const text = response.output_text ?? null;
     if (text === null) {
-      return { text: null, category: "api_error", detail: "empty output_text", durationMs: Date.now() - t0 };
+      return {
+        text: null,
+        category: "api_error",
+        detail: "empty output_text",
+        durationMs: Date.now() - t0,
+      };
     }
     return { text, durationMs: Date.now() - t0 };
   } catch (err) {
@@ -245,17 +251,25 @@ export async function generateExplanations(
   // If every card is missing debug data there is nothing to send to the model.
   const promptCards = promptCardResults.filter((p): p is NonNullable<typeof p> => p !== null);
   if (promptCards.length === 0) {
-    logExplainBatch({ total: cards.length, model: 0, fallback: cards.length, durationMs: Date.now() - t0, failures });
+    logExplainBatch({
+      total: cards.length,
+      model: 0,
+      fallback: cards.length,
+      durationMs: Date.now() - t0,
+      failures,
+    });
     // Return deterministic fallback for every card using a minimal PromptCard.
-    return cards.map((card) => buildFallbackCard({
-      propertyId: card.id,
-      title: card.title,
-      location: card.location,
-      score: 0,
-      lowConfidence: card.lowConfidence,
-      targetReasons: card.reasons.map((r) => ({ label: r.label, direction: r.direction })),
-      facts: [],
-    }));
+    return cards.map((card) =>
+      buildFallbackCard({
+        propertyId: card.id,
+        title: card.title,
+        location: card.location,
+        score: 0,
+        lowConfidence: card.lowConfidence,
+        targetReasons: card.reasons.map((r) => ({ label: r.label, direction: r.direction })),
+        facts: [],
+      })
+    );
   }
 
   // Transport: one call covers all cards. failure → full-batch fallback.
@@ -271,20 +285,30 @@ export async function generateExplanations(
       durationMs: apiResult.durationMs,
       failures,
     });
-    return cards.map((card, i) => buildFallbackCard(promptCardResults[i] ?? {
-      propertyId: card.id, title: card.title, location: card.location,
-      score: 0, lowConfidence: card.lowConfidence,
-      targetReasons: card.reasons.map((r) => ({ label: r.label, direction: r.direction })),
-      facts: [],
-    }));
+    return cards.map((card, i) =>
+      buildFallbackCard(
+        promptCardResults[i] ?? {
+          propertyId: card.id,
+          title: card.title,
+          location: card.location,
+          score: 0,
+          lowConfidence: card.lowConfidence,
+          targetReasons: card.reasons.map((r) => ({ label: r.label, direction: r.direction })),
+          facts: [],
+        }
+      )
+    );
   }
 
   // Parse the JSON envelope. On failure, retry once — transient truncations
   // or whitespace-padded responses can produce valid JSON on a second attempt.
   let parsed: { cards?: unknown[] } | null = null;
   const parseAttempt = (text: string) => {
-    try { return JSON.parse(text) as { cards?: unknown[] }; }
-    catch { return null; }
+    try {
+      return JSON.parse(text) as { cards?: unknown[] };
+    } catch {
+      return null;
+    }
   };
 
   parsed = parseAttempt(apiResult.text);
@@ -304,12 +328,19 @@ export async function generateExplanations(
       durationMs: Date.now() - t0,
       failures,
     });
-    return cards.map((card, i) => buildFallbackCard(promptCardResults[i] ?? {
-      propertyId: card.id, title: card.title, location: card.location,
-      score: 0, lowConfidence: card.lowConfidence,
-      targetReasons: card.reasons.map((r) => ({ label: r.label, direction: r.direction })),
-      facts: [],
-    }));
+    return cards.map((card, i) =>
+      buildFallbackCard(
+        promptCardResults[i] ?? {
+          propertyId: card.id,
+          title: card.title,
+          location: card.location,
+          score: 0,
+          lowConfidence: card.lowConfidence,
+          targetReasons: card.reasons.map((r) => ({ label: r.label, direction: r.direction })),
+          facts: [],
+        }
+      )
+    );
   }
 
   const modelCards: unknown[] = Array.isArray(parsed?.cards) ? parsed.cards : [];

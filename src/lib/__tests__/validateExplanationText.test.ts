@@ -173,7 +173,9 @@ describe("validateText — unsupported facts", () => {
 
   // Should PASS — budget language without price specifics
   it("allows general budget-fit language", () => {
-    expect(validateText("Fits comfortably within the budget you described.", OK_OPTS).ok).toBe(true);
+    expect(validateText("Fits comfortably within the budget you described.", OK_OPTS).ok).toBe(
+      true
+    );
   });
 
   it("allows 'priced' without 'at'", () => {

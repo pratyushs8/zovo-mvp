@@ -77,7 +77,10 @@ describe("buildExplainUserMessage", () => {
   });
 
   it("handles multiple cards", () => {
-    const msg = buildExplainUserMessage([makeCard({ propertyId: 1 }), makeCard({ propertyId: 2, title: "Zostel Kasol" })]);
+    const msg = buildExplainUserMessage([
+      makeCard({ propertyId: 1 }),
+      makeCard({ propertyId: 2, title: "Zostel Kasol" }),
+    ]);
     expect(msg).toContain("id=1");
     expect(msg).toContain("id=2");
     expect(msg).toContain("Zostel Kasol");

@@ -78,19 +78,31 @@ describe("RecommendationCard — Day 9 explanation copy", () => {
     const withSentence = {
       ...base,
       reasons: [
-        { label: "Social vibe", strength: "strong" as const, direction: "up" as const, sentence: "Lively communal vibe — great for meeting fellow travelers." },
+        {
+          label: "Social vibe",
+          strength: "strong" as const,
+          direction: "up" as const,
+          sentence: "Lively communal vibe — great for meeting fellow travelers.",
+        },
       ],
     };
     render(<RecommendationCard card={withSentence} />);
     // Sentence is now rendered as visible text, not a tooltip
-    expect(screen.getByText("Lively communal vibe — great for meeting fellow travelers.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Lively communal vibe — great for meeting fellow travelers.")
+    ).toBeInTheDocument();
   });
 
   test("sentence text is visually present beneath the chip label", () => {
     const withSentence = {
       ...base,
       reasons: [
-        { label: "Social vibe", strength: "strong" as const, direction: "up" as const, sentence: "Lively vibe." },
+        {
+          label: "Social vibe",
+          strength: "strong" as const,
+          direction: "up" as const,
+          sentence: "Lively vibe.",
+        },
       ],
     };
     render(<RecommendationCard card={withSentence} />);

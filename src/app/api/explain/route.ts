@@ -77,7 +77,11 @@ export async function POST(req: NextRequest): Promise<OkResponse | ErrResponse> 
   }
 
   try {
-    const explained = await generateExplanations(body.cards, body.debug.cards, body.debug.userVector);
+    const explained = await generateExplanations(
+      body.cards,
+      body.debug.cards,
+      body.debug.userVector
+    );
     return NextResponse.json({ cards: explained });
   } catch {
     return NextResponse.json({ error: "internal_error" }, { status: 500 });
