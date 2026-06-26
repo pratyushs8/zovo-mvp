@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import type { RecommendationResponse } from "@/types/api";
+import { buildViewStayUrl } from "@/lib/buildViewStayUrl";
 
-type Tab = "meta" | "cards" | "debug";
+type Tab = "meta" | "cards" | "debug" | "handoff";
 
 interface Props {
   response: RecommendationResponse;
+  sessionId?: string | null;
 }
 
-export function ResultsDebugPanel({ response }: Props) {
+export function ResultsDebugPanel({ response, sessionId }: Props) {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<Tab>("meta");
 
@@ -35,7 +37,22 @@ export function ResultsDebugPanel({ response }: Props) {
       .map((f) => `card[${i}].${f}`);
   });
 
-  const hasContractIssue = missingKeys.length > 0 || cardsMissingFields.length > 0;
+  // Handoff URL check — flags cards whose bookingUrl won't produce a valid CTA.
+  const handoffResults = cards.map((card) => ({
+    card,
+    urlResult: buildViewStayUrl({ bookingUrl: card.bookingUrl, rank: card.rank, sessionId }),
+    attribution: {
+      propertyId: card.id,
+      bookingUrl: card.bookingUrl,
+      rank: card.rank,
+      destinationSlug: card.destinationSlug,
+      requestId: _debug.requestId,
+    },
+  }));
+  const handoffFailCount = handoffResults.filter((r) => !r.urlResult.ok).length;
+
+  const hasContractIssue =
+    missingKeys.length > 0 || cardsMissingFields.length > 0 || handoffFailCount > 0;
 
   if (!open) {
     return (
@@ -68,6 +85,7 @@ export function ResultsDebugPanel({ response }: Props) {
             {hasContractIssue && (
               <span className="text-red-400">
                 ⚠ contract issues: {[...missingKeys, ...cardsMissingFields].join(", ")}
+                {handoffFailCount > 0 && ` · ${handoffFailCount} handoff URL(s) invalid`}
               </span>
             )}
             {!hasContractIssue && <span className="text-emerald-400">✓ contract ok</span>}
@@ -83,7 +101,7 @@ export function ResultsDebugPanel({ response }: Props) {
 
         {/* Tabs */}
         <div className="flex border-b border-zinc-700">
-          {(["meta", "cards", "debug"] as Tab[]).map((t) => (
+          {(["meta", "cards", "debug", "handoff"] as Tab[]).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
@@ -91,9 +109,10 @@ export function ResultsDebugPanel({ response }: Props) {
                 tab === t
                   ? "border-b-2 border-zinc-100 text-zinc-100"
                   : "text-zinc-500 hover:text-zinc-300"
-              }`}
+              } ${t === "handoff" && handoffFailCount > 0 ? "text-red-400" : ""}`}
             >
               {t}
+              {t === "handoff" && handoffFailCount > 0 && ` ⚠`}
             </button>
           ))}
         </div>
@@ -158,6 +177,68 @@ export function ResultsDebugPanel({ response }: Props) {
                   {JSON.stringify(_debug.rankingExplanation, null, 2)}
                 </pre>
               </div>
+            </div>
+          )}
+
+          {tab === "handoff" && (
+            <div className="space-y-4">
+              {/* Session + request context */}
+              <div className="rounded border border-zinc-700 p-2">
+                <p className="mb-1.5 text-zinc-500">attribution context</p>
+                <div className="space-y-0.5">
+                  <p>
+                    <span className="text-zinc-500">requestId </span>
+                    <span className="text-zinc-200">{_debug.requestId}</span>
+                  </p>
+                  <p>
+                    <span className="text-zinc-500">sessionId </span>
+                    {sessionId ? (
+                      <span className="text-zinc-200">{sessionId}</span>
+                    ) : (
+                      <span className="text-zinc-600">absent — utm_campaign will be omitted</span>
+                    )}
+                  </p>
+                </div>
+              </div>
+
+              {/* Per-card handoff inspection */}
+              {handoffResults.map(({ card, urlResult, attribution }) => (
+                <div
+                  key={card.id}
+                  className={`rounded border p-2 ${
+                    urlResult.ok ? "border-zinc-700" : "border-red-800"
+                  }`}
+                >
+                  <p className="mb-1.5 text-zinc-100">
+                    #{card.rank} {card.title}
+                    {urlResult.ok ? (
+                      <span className="ml-2 text-emerald-400">✓ url ok</span>
+                    ) : (
+                      <span className="ml-2 text-red-400">✗ {urlResult.reason}</span>
+                    )}
+                  </p>
+
+                  {urlResult.ok && (
+                    <div className="mb-2">
+                      <p className="mb-0.5 text-zinc-500">outbound url</p>
+                      <p className="break-all text-zinc-300">{urlResult.url}</p>
+                      {/* UTM params decoded for quick reading */}
+                      <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-zinc-600">
+                        {Array.from(new URL(urlResult.url).searchParams.entries()).map(([k, v]) => (
+                          <span key={k}>
+                            {k}=<span className="text-zinc-400">{v}</span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div>
+                    <p className="mb-0.5 text-zinc-500">event payload</p>
+                    <pre className="text-zinc-400">{JSON.stringify(attribution, null, 2)}</pre>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>

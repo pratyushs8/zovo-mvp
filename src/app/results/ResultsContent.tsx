@@ -176,7 +176,9 @@ export default function ResultsContent() {
         </Link>
       </div>
 
-      {process.env.NODE_ENV === "development" && <ResultsDebugPanel response={response} />}
+      {process.env.NODE_ENV === "development" && (
+        <ResultsDebugPanel response={response} sessionId={sessionId} />
+      )}
     </main>
   );
 }
