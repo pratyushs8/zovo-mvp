@@ -8,14 +8,21 @@ export default function HomePage() {
       <div className="w-full max-w-sm">
         <TypewriterQuote />
 
-        <Image src="/zostel-logo.avif" alt="Zostel" width={48} height={48} className="mb-4 mx-auto animate-spin" style={{ animationDuration: "6s", animationTimingFunction: "linear" }} />
-        <p className="mb-6 text-sm text-zinc-400 text-center">ZoCo by Zostel</p>
+        <Image
+          src="/zostel-logo.avif"
+          alt="Zostel"
+          width={48}
+          height={48}
+          className="mx-auto mb-4 animate-spin"
+          style={{ animationDuration: "6s", animationTimingFunction: "linear" }}
+        />
+        <p className="mb-6 text-center text-sm text-zinc-400">ZoCo by Zostel</p>
 
-        <h1 className="mb-3 text-2xl font-semibold text-white text-center">
+        <h1 className="mb-3 text-center text-2xl font-semibold text-white">
           Find the right Zostel for your trip.
         </h1>
 
-        <p className="mb-10 text-base leading-relaxed text-zinc-400 text-center">
+        <p className="mb-10 text-center text-base leading-relaxed text-zinc-400">
           Answer five quick questions about your travel style and we&apos;ll match you to Zostel
           properties that fit.
         </p>
