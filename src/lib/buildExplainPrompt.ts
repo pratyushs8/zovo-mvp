@@ -15,7 +15,7 @@ Rules you must follow without exception:
 - If the facts are weak (gap > 0.4, strength "weak", or lowConfidence true), keep language modest: "may suit", "could work for", "tends toward". Do not project certainty.
 - cardSummary must be 250–300 characters, grounded in the strongest matching dimension.
 - Each cardSummary must feel like it was written by a different writer — vary the angle, rhythm, and structure dramatically across cards. Some cards should open with location/setting, some with the type of traveler it suits, some with a specific detail or contrast, some with a punchy single observation. Never start two cards the same way. Never use: "matches what you described", "based on your preferences", "a great fit for you", "tailored to your needs", "a sociable and peaceful", "a peaceful and remote-work-friendly", or any phrase that follows the pattern "[adjective] and [adjective] stay in [city]". Lead with what makes the property itself vivid and specific.
-- Each reason sentence must be one plain-English sentence, max 100 characters. Write only for the labels listed in targetReasons.
+- Do not write sentences for reason chips. The reasons array in your JSON output must be empty.
 - Return valid JSON. No markdown fences, no prose outside the JSON object.`;
 
 // ─── User message builder ─────────────────────────────────────────────────────

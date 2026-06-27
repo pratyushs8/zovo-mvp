@@ -156,7 +156,7 @@ export default function ResultsContent() {
     return {
       ...card,
       summary: ex.cardSummary,
-      reasons: card.reasons.map((r) => ({ ...r, sentence: ex.sentences[r.label] })),
+      reasons: card.reasons,
     };
   }
 
