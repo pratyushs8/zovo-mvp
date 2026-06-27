@@ -81,7 +81,10 @@ export async function recommendStays(req: RecommendationRequest): Promise<Recomm
         }));
 
       const upDims = new Set(
-        r.explanation.topMatches.filter((m) => m.strength !== "weak").slice(0, 2).map((m) => m.dim)
+        r.explanation.topMatches
+          .filter((m) => m.strength !== "weak")
+          .slice(0, 2)
+          .map((m) => m.dim)
       );
       const downReasons = r.explanation.topMisses
         .filter((m) => !upDims.has(m.dim))

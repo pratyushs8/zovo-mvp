@@ -19,13 +19,11 @@ export function TypewriterQuote() {
 
   return (
     <p
-      className="mb-10 text-center text-sm italic text-zinc-700"
+      className="mb-10 text-center text-sm text-zinc-700 italic"
       style={{ fontFamily: "'Georgia', 'Times New Roman', serif", minHeight: "1.5rem" }}
     >
       {displayed}
-      {displayed.length < QUOTE.length && (
-        <span className="animate-pulse">|</span>
-      )}
+      {displayed.length < QUOTE.length && <span className="animate-pulse">|</span>}
     </p>
   );
 }
